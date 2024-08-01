@@ -437,7 +437,7 @@ export class QorusAuthenticator {
     if (!endpointId) endpointId = this.selectedEndpoint?.endpointId;
     if (isValidString(endpointId) && this.validateVersion(version)) {
       const endpoint = this.getEndpointById(endpointId!);
-      //await this.logout();
+      await this.logout();
 
       if (endpoint && isValidString(endpoint.url)) {
         this.endpoints[this.endpoints.indexOf(endpoint)].version = version;
