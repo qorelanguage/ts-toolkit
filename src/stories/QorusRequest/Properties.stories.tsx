@@ -1,5 +1,5 @@
 import { Documentation } from '../components/documentation';
-import { IDocumentationMeta, IDocumentationStory } from '../types';
+import { IDocumentationMeta } from '../types';
 import { argsData, getClassData, newClassPropertyStory } from '../utils';
 
 export default {
@@ -27,7 +27,7 @@ export default {
   },
 } as IDocumentationMeta;
 
-const Template: IDocumentationStory = 'Property';
+const Template = 'Property';
 const prepareStory = newClassPropertyStory(Template, 'QorusRequest');
 
 export const defaultHeaders = prepareStory('defaultHeaders');

@@ -1,6 +1,6 @@
 import { DocumentationItem } from '../components/item';
 import { DocumentationWrapper } from '../components/wrapper';
-import { IDocumentationMeta, IDocumentationStory } from '../types';
+import { IDocumentationMeta } from '../types';
 import { argsData, prepareTypeStory } from '../utils';
 
 export default {
@@ -18,7 +18,7 @@ export default {
   },
 } as IDocumentationMeta;
 
-const Template: IDocumentationStory = 'Type';
+const Template = 'Type';
 
 export const TVersion = prepareTypeStory(Template, 'TVersion');
 TVersion.storyName = 'TVersion';

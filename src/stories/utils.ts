@@ -3,7 +3,6 @@ import {
   IDocumentationClass,
   IDocumentationProperty,
   IDocumentationProps,
-  IDocumentationStory,
   IInterfaceDocs,
   IMethodDocs,
   ITypeAliasDocs,
@@ -135,7 +134,7 @@ export const getClassPropertyData = (propertyName: string, className: string): I
   return property;
 };
 
-export const prepareMethodStory = (_template: IDocumentationStory, methodName: string, className: string) => {
+export const prepareMethodStory = (_template: any, methodName: string, className: string) => {
   const selectedMethod = getMethodData(methodName, className);
 
   const story: any = {};
@@ -157,7 +156,7 @@ export const getTypeOrInterfaceData = (typeOrInterfaceName: string) => {
   return getTypeAliasData(typeOrInterfaceName);
 };
 
-export const prepareInterfaceStory = (_template: IDocumentationStory, interfaceName: string) => {
+export const prepareInterfaceStory = (_template: any, interfaceName: string) => {
   const selectedInterface = getInterfaceData(interfaceName);
 
   const story: any = {};
@@ -169,7 +168,7 @@ export const prepareInterfaceStory = (_template: IDocumentationStory, interfaceN
   return story;
 };
 
-export const prepareTypeStory = (_template: IDocumentationStory, typeAliasName: string) => {
+export const prepareTypeStory = (_template: any, typeAliasName: string) => {
   const selectedTypeAlias = getTypeAliasData(typeAliasName);
 
   const story: any = {};
@@ -181,7 +180,7 @@ export const prepareTypeStory = (_template: IDocumentationStory, typeAliasName: 
   return story;
 };
 
-export const prepareClassPropertyStory = (_template: IDocumentationStory, propertyName: string, className: string) => {
+export const prepareClassPropertyStory = (_template: any, propertyName: string, className: string) => {
   const propertyDocs = getClassPropertyData(propertyName, className);
 
   const story: any = {};
@@ -193,18 +192,18 @@ export const prepareClassPropertyStory = (_template: IDocumentationStory, proper
   return story;
 };
 
-export const newMethodStory = (template: IDocumentationStory, className: string) => (methodName: string) => {
+export const newMethodStory = (template: any, className: string) => (methodName: string) => {
   return prepareMethodStory(template, methodName, className);
 };
 
-export const newClassPropertyStory = (template: IDocumentationStory, className: string) => (propertyName: string) => {
+export const newClassPropertyStory = (template: any, className: string) => (propertyName: string) => {
   return prepareClassPropertyStory(template, propertyName, className);
 };
 
-export const newTypeAliasStory = (template: IDocumentationStory) => (typeAliasName: string) => {
+export const newTypeAliasStory = (template: any) => (typeAliasName: string) => {
   return prepareTypeStory(template, typeAliasName);
 };
-export const newInterfaceStory = (template: IDocumentationStory) => (interfaceName: string) => {
+export const newInterfaceStory = (template: any) => (interfaceName: string) => {
   return prepareInterfaceStory(template, interfaceName);
 };
 

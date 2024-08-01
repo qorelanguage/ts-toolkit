@@ -1,4 +1,5 @@
 import { TReqoreIntent } from '@qoretechnologies/reqore/dist/constants/theme';
+import { Meta } from '@storybook/react';
 
 export interface IDocumentationParam {
   // TODO: Type is now optional but needs to be REQUIRED in the future
@@ -26,8 +27,8 @@ export type TDocumentationLabel =
 
 export interface IDocumentationProps extends IMethodDocs {}
 
-export interface IDocumentationMeta {}
-export interface IDocumentationStory {}
+export interface IDocumentationMeta extends Meta {}
+export interface IDocumentationStory extends Meta {}
 
 export interface IDocumentationProperty {
   name: string;
