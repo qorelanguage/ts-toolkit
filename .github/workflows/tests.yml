@@ -1,4 +1,3 @@
-
 name: Tests
 
 on:
@@ -23,12 +22,12 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha }}
-      
+
       # Get head commit message
       - name: Print head git commit message
         id: get_head_commit_message
         run: echo "::set-output name=HEAD_COMMIT_MESSAGE::$(git show -s --format=%s)"
-      
+
       # Setup git user
       - name: Setup git user
         run: |
@@ -40,7 +39,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: latest
-      
+
       # Install modules
       - name: Installing modules
         id: install_modules
@@ -52,7 +51,7 @@ jobs:
       - name: Save release version to outputs
         id: save_release_version
         run: echo ::set-output name=version::$(node -pe "require('./pullRequestRelease.json').version")
-      
+
       # Run Unit Tests
       - name: Running tests
         env:
@@ -61,7 +60,7 @@ jobs:
           API_USER_PASS: ${{ secrets.API_USER_PASS }}
         id: tests
         run: yarn run test
-      
+
       # Test the build
       - name: Build test
         env:
@@ -70,12 +69,12 @@ jobs:
           API_USER_PASS: ${{ secrets.API_USER_PASS }}
         id: build_test
         run: yarn run build:test
-      
+
       # Build storybook documentation
       - name: Build documentation JSON
         id: build_docs_json
         run: yarn docs
-      
+
       # Publish documentation to chromatic
       - name: Publish to Chromatic
         env:
@@ -83,17 +82,17 @@ jobs:
           API_USER_NAME: ${{ secrets.API_USER_NAME}}
           API_USER_PASS: ${{ secrets.API_USER_PASS }}
         id: chromatic_publish
-        uses: chromaui/action@v1
+        uses: chromaui/action@latest
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           exitZeroOnChanges: true
-      
+
       # Change package version to make release
       - name: Change npm version
         id: change_npm_version
         run: npm version ${{ steps.save_release_version.outputs.version }} --no-git-tag-version --force
-      
+
       # Publish new release to NPM
       - name: Publish to NPM
         id: npm_publish
@@ -102,7 +101,7 @@ jobs:
           token: ${{ secrets.NPM_TOKEN }}
           tag: pull_request_${{ steps.save_release_version.outputs.version }}
           access: public
-      
+
       # Notify discord if all steps succeeded
       - name: Discord notification
         env:

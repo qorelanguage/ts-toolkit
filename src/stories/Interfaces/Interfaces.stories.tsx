@@ -1,23 +1,25 @@
 import { DocumentationItem } from '../components/item';
 import { DocumentationWrapper } from '../components/wrapper';
-import { IDocumentationMeta, IDocumentationStory } from '../types';
+import { IDocumentationMeta } from '../types';
 import { argsData, prepareInterfaceStory } from '../utils';
 
 export default {
+  component: DocumentationWrapper,
   title: 'Typings/Interfaces',
   id: 'interfaces',
   argTypes: {
     ...argsData,
   },
+  render: ({ comments, ...rest }) => {
+    return (
+      <DocumentationWrapper title="Qorus Interfaces" description="Validates the DataProvider properties">
+        <DocumentationItem {...rest}>{comments?.summary ?? ''}</DocumentationItem>
+      </DocumentationWrapper>
+    );
+  },
 } as IDocumentationMeta;
 
-const Template: IDocumentationStory = ({ comments, ...rest }) => {
-  return (
-    <DocumentationWrapper title="Qorus Interfaces" description="Validates the DataProvider properties">
-      <DocumentationItem {...rest}>{comments.summary ?? ''}</DocumentationItem>
-    </DocumentationWrapper>
-  );
-};
+const Template: any = 'Interface';
 
 export const IQorusPropertyOptions = prepareInterfaceStory(Template, 'IQorusPropertyOptions');
 IQorusPropertyOptions.storyName = 'IQorusPropertyOptions';

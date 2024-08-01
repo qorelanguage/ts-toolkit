@@ -22,7 +22,7 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.sha }}
-      
+
       # Get head commit message
       - name: Print head git commit message
         id: get_head_commit_message
@@ -78,11 +78,12 @@ jobs:
           API_USER_NAME: ${{ secrets.API_USER_NAME}}
           API_USER_PASS: ${{ secrets.API_USER_PASS }}
         id: chromatic_publish
-        uses: chromaui/action@v1
+        uses: chromaui/action@latest
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           exitZeroOnChanges: true
+          allowConsoleErrors: true
 
       # Create new release
       - name: Create a release

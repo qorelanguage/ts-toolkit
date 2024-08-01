@@ -1,7 +1,6 @@
 import { Documentation } from '../components/documentation';
 import { IDocumentationMeta, IDocumentationStory } from '../types';
 import { argsData, getClassData, newClassPropertyStory } from '../utils';
-import { QorusAuthenticatorDemo } from './demo';
 
 export default {
   title: 'API/QorusAuthenticator/Properties',
@@ -9,27 +8,27 @@ export default {
   argTypes: {
     ...argsData,
   },
+  render: ({ comments, ...rest }, context) => {
+    const {
+      name,
+      comments: { summary },
+    } = getClassData('QorusAuthenticator');
+
+    return (
+      <Documentation
+        {...rest}
+        itemName={rest.name}
+        name={name}
+        description={summary || undefined}
+        summary={comments.summary}
+        story={context.story}
+      ></Documentation>
+    );
+  },
 } as IDocumentationMeta;
 
-const Template: IDocumentationStory = ({ comments, ...rest }, context) => {
-  const {
-    name,
-    comments: { summary },
-  } = getClassData('QorusAuthenticator');
+const Template: IDocumentationStory = 'Property';
 
-  return (
-    <Documentation
-      {...rest}
-      itemName={rest.name}
-      name={name}
-      description={summary || undefined}
-      summary={comments.summary}
-      story={context.story}
-    >
-      <QorusAuthenticatorDemo />
-    </Documentation>
-  );
-};
 const prepareStory = newClassPropertyStory(Template, 'QorusAuthenticator');
 
 export const allApiPaths = prepareStory('allApiPaths');

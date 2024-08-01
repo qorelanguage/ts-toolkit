@@ -1,5 +1,4 @@
 import { ReqoreSpacer } from '@qoretechnologies/reqore';
-import { DocumentationExample } from './example';
 import { DocumentationItem } from './item';
 import { DocumentationTip } from './tip';
 import { DocumentationWrapper } from './wrapper';
@@ -35,8 +34,6 @@ export const Documentation = ({
         {summary}
       </DocumentationItem>
       {tip && <DocumentationTip>{tip}</DocumentationTip>}
-      <ReqoreSpacer height={20} />
-      <DocumentationExample label={story} name={name} />
       <ReqoreSpacer height={20} />
       {children}
     </DocumentationWrapper>

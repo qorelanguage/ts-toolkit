@@ -1,7 +1,6 @@
 import { Documentation } from '../components/documentation';
-import { IDocumentationMeta, IDocumentationStory } from '../types';
+import { IDocumentationMeta } from '../types';
 import { argsData, getClassData, newMethodStory } from '../utils';
-import { QorusAuthenticatorDemo } from './demo';
 
 export default {
   title: 'API/QorusAuthenticator/Methods',
@@ -9,27 +8,26 @@ export default {
   argTypes: {
     ...argsData,
   },
+  render: ({ comments, ...rest }, context) => {
+    const {
+      name,
+      comments: { summary },
+    } = getClassData('QorusAuthenticator');
+
+    return (
+      <Documentation
+        {...rest}
+        itemName={rest.name}
+        name={name}
+        description={summary || undefined}
+        summary={comments.summary}
+        story={context.story}
+      ></Documentation>
+    );
+  },
 } as IDocumentationMeta;
 
-const Template: IDocumentationStory = ({ comments, ...rest }, context) => {
-  const {
-    name,
-    comments: { summary },
-  } = getClassData('QorusAuthenticator');
-
-  return (
-    <Documentation
-      {...rest}
-      itemName={rest.name}
-      name={name}
-      description={summary || undefined}
-      summary={comments.summary}
-      story={context.story}
-    >
-      <QorusAuthenticatorDemo />
-    </Documentation>
-  );
-};
+const Template = 'Method';
 
 const prepareStory = newMethodStory(Template, 'QorusAuthenticator');
 

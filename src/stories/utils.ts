@@ -135,10 +135,10 @@ export const getClassPropertyData = (propertyName: string, className: string): I
   return property;
 };
 
-export const prepareMethodStory = (template: IDocumentationStory, methodName: string, className: string) => {
+export const prepareMethodStory = (_template: IDocumentationStory, methodName: string, className: string) => {
   const selectedMethod = getMethodData(methodName, className);
 
-  const story = template.bind({});
+  const story: any = {};
   const docData: IMethodDocs | undefined = selectedMethod?.data;
 
   story.storyName = methodName;
@@ -157,10 +157,10 @@ export const getTypeOrInterfaceData = (typeOrInterfaceName: string) => {
   return getTypeAliasData(typeOrInterfaceName);
 };
 
-export const prepareInterfaceStory = (template: IDocumentationStory, interfaceName: string) => {
+export const prepareInterfaceStory = (_template: IDocumentationStory, interfaceName: string) => {
   const selectedInterface = getInterfaceData(interfaceName);
 
-  const story = template.bind({});
+  const story: any = {};
   const docData: IInterfaceDocs | undefined = selectedInterface;
 
   story.storyName = interfaceName;
@@ -169,10 +169,10 @@ export const prepareInterfaceStory = (template: IDocumentationStory, interfaceNa
   return story;
 };
 
-export const prepareTypeStory = (template: IDocumentationStory, typeAliasName: string) => {
+export const prepareTypeStory = (_template: IDocumentationStory, typeAliasName: string) => {
   const selectedTypeAlias = getTypeAliasData(typeAliasName);
 
-  const story = template.bind({});
+  const story: any = {};
   const docData: IInterfaceDocs | undefined = selectedTypeAlias;
 
   story.storyName = typeAliasName;
@@ -181,10 +181,10 @@ export const prepareTypeStory = (template: IDocumentationStory, typeAliasName: s
   return story;
 };
 
-export const prepareClassPropertyStory = (template: IDocumentationStory, propertyName: string, className: string) => {
+export const prepareClassPropertyStory = (_template: IDocumentationStory, propertyName: string, className: string) => {
   const propertyDocs = getClassPropertyData(propertyName, className);
 
-  const story = template.bind({});
+  const story: any = {};
   const docData: IDocumentationProperty | undefined = propertyDocs as IDocumentationProperty;
 
   story.storyName = propertyName;

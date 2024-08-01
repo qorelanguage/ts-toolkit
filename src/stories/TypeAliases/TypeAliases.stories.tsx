@@ -9,15 +9,16 @@ export default {
   argTypes: {
     ...argsData,
   },
+  render: ({ comments, ...rest }) => {
+    return (
+      <DocumentationWrapper title="Qorus Type Aliases" description="Custom Type Aliases for QorusToolkit">
+        <DocumentationItem {...rest}>{comments.summary}</DocumentationItem>
+      </DocumentationWrapper>
+    );
+  },
 } as IDocumentationMeta;
 
-const Template: IDocumentationStory = ({ comments, ...rest }) => {
-  return (
-    <DocumentationWrapper title="Qorus Type Aliases" description="Custom Type Aliases for QorusToolkit">
-      <DocumentationItem {...rest}>{comments.summary}</DocumentationItem>
-    </DocumentationWrapper>
-  );
-};
+const Template: IDocumentationStory = 'Type';
 
 export const TVersion = prepareTypeStory(Template, 'TVersion');
 TVersion.storyName = 'TVersion';
