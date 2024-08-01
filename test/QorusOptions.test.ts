@@ -9,7 +9,7 @@ if (!(process.env.ENDPOINT && process.env.TESTUSER && process.env.TESTPASS)) {
   throw new Error('Missing required environment variables');
 }
 
-describe('QorusDataProvider Utility Class Tests', () => {
+describe('QorusOptions', () => {
   beforeAll(async () => {
     await QorusAuth.addEndpoint({
       url: process.env.ENDPOINT!,

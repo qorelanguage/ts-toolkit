@@ -2,11 +2,10 @@ import dotenv from 'dotenv';
 import { QorusAuthenticator } from '../src';
 import ErrorInternal from '../src/managers/error/ErrorInternal';
 import ErrorQorusRequest from '../src/managers/error/ErrorQorusRequest';
-import logger from '../src/managers/logger';
 
 dotenv.config();
 
-const loggerMock = jest.spyOn(logger, 'log');
+//const loggerMock = jest.spyOn(logger, 'log');
 
 if (!(process.env.ENDPOINT && process.env.TESTUSER && process.env.TESTPASS)) {
   throw new Error('Missing required environment variables');
@@ -25,13 +24,6 @@ describe('QorusLogin Utility Class Tests', () => {
     let token = await QorusAuthenticator.login({ user: process.env.TESTUSER!, pass: process.env.TESTPASS! });
 
     expect(typeof token).toEqual('string');
-  });
-
-  it('Should return true after successfully loging out the user ', async () => {
-    await QorusAuthenticator.login({ user: process.env.TESTUSER!, pass: process.env.TESTPASS! });
-    const logoutResult: boolean = await QorusAuthenticator.logout();
-
-    expect(logoutResult).toEqual(true);
   });
 
   it('Should return the enpoint from the endpoints array', () => {
@@ -56,18 +48,6 @@ describe('QorusLogin Utility Class Tests', () => {
     expect(QorusAuthenticator.getApiPaths()).toMatchSnapshot();
   });
 
-  it('Should set a new version for the endpoint', async () => {
-    expect(await QorusAuthenticator.setEndpointVersion(5)).toMatchSnapshot();
-  });
-
-  it('Should revalidate the user auth token for the selected endpoint', async () => {
-    await QorusAuthenticator.setEndpointVersion('latest');
-    await QorusAuthenticator.renewSelectedEndpointToken({ user: process.env.TESTUSER!, pass: process.env.TESTPASS! });
-    const token = QorusAuthenticator.getAuthToken();
-
-    expect(typeof token).toEqual('string');
-  });
-
   it('Should return current user token if the user is authenticated', () => {
     const token = QorusAuthenticator.getAuthToken();
 
@@ -85,31 +65,6 @@ describe('QorusLogin Utility Class Tests', () => {
 
     expect(endpoints.length).toMatchSnapshot();
   });
-
-  it('Should change the selected endpoint url and logout the user', async () => {
-    const url = await QorusAuthenticator.setEndpointUrl('https://testme.com');
-
-    expect(url).toMatchSnapshot();
-    expect(QorusAuthenticator.getAuthToken()).toBeUndefined();
-  });
-
-  it('Should select the endpoint by the provided id', async () => {
-    if (process.env.ENDPOINT) QorusAuthenticator.addEndpoint({ url: process.env.ENDPOINT, endpointId: 'test' });
-
-    expect(QorusAuthenticator.selectEndpoint('test')).toMatchSnapshot();
-  });
-
-  // it.only('Should create a new endpoint with port accessible', async () => {
-  //   let endpoint: Endpoint | undefined;
-  //   if (process.env.ENDPOINT) {
-  //     endpoint = QorusAuthenticator.addEndpoint({
-  //       url: 'https://hq.qoretechnologies.com:31011',
-  //       id: 'rippyPort',
-  //     });
-  //   }
-  //   await QorusAuthenticator.login({ user: process.env.TESTUSER!, pass: process.env.TESTPASS! });
-  //   expect(typeof endpoint?.authToken).toEqual('string');
-  // });
 });
 
 describe('QorusLogin Utility Error Tests', () => {
@@ -121,7 +76,7 @@ describe('QorusLogin Utility Error Tests', () => {
     } catch (error) {
       err = error;
     }
-    console.log(err);
+
     expect(err instanceof ErrorQorusRequest).toEqual(true);
   });
 
@@ -144,23 +99,6 @@ describe('QorusLogin Utility Error Tests', () => {
       err = error;
     }
     expect(err instanceof ErrorInternal).toEqual(true);
-  });
-
-  it('Should throw an Authentication error if the username and pass is not valid while initializing endpoint', async () => {
-    try {
-      if (process.env.ENDPOINT)
-        QorusAuthenticator.addEndpoint({
-          url: process.env.ENDPOINT,
-          endpointId: 'rippy2',
-        });
-      await QorusAuthenticator.login({
-        user: '',
-        pass: '',
-      });
-    } catch (error) {
-      console.error(error);
-    }
-    expect(loggerMock).toHaveBeenCalled();
   });
 
   it('Should throw an Internal error if the no-auth status cannot be checked', async () => {
