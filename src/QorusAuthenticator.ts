@@ -97,6 +97,14 @@ export class QorusAuthenticator {
   /** No auth identifier to identify if the no-auth is enabled for the user */
   noauth = false;
 
+  reset() {
+    this.endpoints = [];
+    this.allApiPaths = apiPathsInitial;
+    this.apiPathsAuthenticator = apiPathsInitial.authenticator;
+    this.selectedEndpoint = undefined;
+    this.noauth = false;
+  }
+
   /**
    * A getter to get the endpoint if it exist in the Endpoints array
    * @param id ID of the endpoint ex: "rippy"
@@ -311,6 +319,7 @@ export class QorusAuthenticator {
       path: `${this.apiPathsAuthenticator.login}`,
       data: { user, pass },
     });
+
     const responseData = resp as IQorusRequestResponse;
     if (typeof responseData?.data === 'undefined') {
       throw new ErrorInternal(`${responseData ?? ''}`);
@@ -428,7 +437,7 @@ export class QorusAuthenticator {
     if (!endpointId) endpointId = this.selectedEndpoint?.endpointId;
     if (isValidString(endpointId) && this.validateVersion(version)) {
       const endpoint = this.getEndpointById(endpointId!);
-      await this.logout();
+      //await this.logout();
 
       if (endpoint && isValidString(endpoint.url)) {
         this.endpoints[this.endpoints.indexOf(endpoint)].version = version;
@@ -457,8 +466,10 @@ export class QorusAuthenticator {
    */
   async setEndpointUrl(url: string, endpointId?: string): Promise<string | undefined> {
     if (!isValidString(endpointId)) endpointId = this.selectedEndpoint?.endpointId;
+
     if (isValidStringArray([endpointId, url])) {
       const endpoint = this.getEndpointById(endpointId!);
+
       await this.logout();
 
       if (endpoint && isValidString(endpoint.url)) {

@@ -1,6 +1,6 @@
 import fetch, { HeadersInit } from 'node-fetch';
 import ErrorInternal from './managers/error/ErrorInternal';
-import ErrorQorusRequest, { IErrorQorusRequestParams } from './managers/error/ErrorQorusRequest';
+import ErrorQorusRequest from './managers/error/ErrorQorusRequest';
 import QorusAuthenticator, { IEndpoint } from './QorusAuthenticator';
 import { isValidStringArray } from './utils';
 
@@ -99,9 +99,12 @@ export class QorusRequest {
 
       const requestParams = new URLSearchParams(params).toString();
       let fetchUrl: string;
+
       if (requestParams.length) {
         fetchUrl = `${selectedEndpoint?.url}${path}?${requestParams}`;
-      } else fetchUrl = `${selectedEndpoint?.url}${path}`;
+      } else {
+        fetchUrl = `${selectedEndpoint?.url}${path}`;
+      }
 
       const promise = await fetch(fetchUrl, {
         method: type,
@@ -111,11 +114,11 @@ export class QorusRequest {
 
       if (!promise.ok) {
         const text = await promise.text();
-        const parsedText = JSON.parse(text);
-        throw new ErrorQorusRequest(parsedText as IErrorQorusRequestParams);
+        throw new ErrorQorusRequest(text);
       }
 
       const json = await promise.json();
+
       return { data: json };
     }
 
