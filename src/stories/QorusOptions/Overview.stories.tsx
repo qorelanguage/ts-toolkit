@@ -8,8 +8,9 @@ export default {
   argTypes: {
     ...argsData,
   },
+  render: () => {
+    return <DocumentationOverview name="QorusOptions" />;
+  },
 } as IDocumentationMeta;
 
-export const Overview: IDocumentationStory = () => {
-  return <DocumentationOverview name="QorusOptions" />;
-};
+export const Overview: IDocumentationStory = {};

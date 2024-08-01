@@ -29,7 +29,7 @@ export const decorators = [
   (Story) => (
     <ReqoreUIProvider theme={{ main: '#111111', intents: { info: '#7f4098' } }}>
       <ReqoreLayoutContent>
-        <ReqoreContent style={{ padding: '20px' }}>
+        <ReqoreContent style={{ padding: '20px', height: '100%' }}>
           <Story />
         </ReqoreContent>
       </ReqoreLayoutContent>

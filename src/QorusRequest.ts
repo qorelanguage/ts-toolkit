@@ -1,4 +1,3 @@
-import fetch, { HeadersInit } from 'node-fetch';
 import ErrorInternal from './managers/error/ErrorInternal';
 import ErrorQorusRequest from './managers/error/ErrorQorusRequest';
 import QorusAuthenticator, { IEndpoint } from './QorusAuthenticator';
@@ -108,7 +107,7 @@ export class QorusRequest {
 
       const promise = await fetch(fetchUrl, {
         method: type,
-        headers: headers as HeadersInit,
+        headers: headers as any,
         body: data ? JSON.stringify(data) : undefined,
       });
 

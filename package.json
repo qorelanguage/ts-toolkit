@@ -1,6 +1,6 @@
 {
   "name": "@qoretechnologies/ts-toolkit",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Utility library to interact with Qorus Integration Engine & Qore Language",
   "keywords": [
     "qoretechnologies",
@@ -24,7 +24,9 @@
     "updatePullRequestVersion"
   ],
   "pre-push": [
-    "test"
+    "test",
+    "lint",
+    "build:test"
   ],
   "scripts": {
     "typedoc": "typedoc",
@@ -39,11 +41,12 @@
     "docs:watch": "npm run css & typedoc --watch",
     "prepublishOnly": "npm test && npm run lint",
     "updatePullRequestVersion": "chmod +x prePush.sh && ./prePush.sh",
-    "storybook": "yarn docs && start-storybook -p 6006 --no-dll",
-    "build-storybook": "build-storybook",
+    "storybook": "yarn docs && storybook dev -p 6006",
+    "build-storybook": "storybook build",
     "prepare": "npm run build",
     "chromatic": "npx chromatic --project-token=59cd7005d0f1",
-    "update-reqore": "yarn add -D @qoretechnologies/reqore@beta"
+    "update-reqore": "yarn add -D @qoretechnologies/reqore@beta",
+    "precheck": "yarn run lint && yarn run test && yarn build:test"
   },
   "repository": {
     "type": "git",
@@ -57,17 +60,18 @@
   "homepage": "https://github.com/qoretechnologies/ts-toolkit#readme",
   "devDependencies": {
     "@babel/core": "^7.20.2",
-    "@qoretechnologies/reqore": "^0.30.16",
-    "@storybook/addon-actions": "^6.5.13",
-    "@storybook/addon-essentials": "^6.5.13",
-    "@storybook/addon-interactions": "^6.5.13",
-    "@storybook/addon-jest": "^6.5.13",
-    "@storybook/addon-links": "^6.5.13",
-    "@storybook/addon-storysource": "^6.5.13",
-    "@storybook/builder-webpack5": "^6.5.14",
-    "@storybook/manager-webpack5": "^6.5.14",
-    "@storybook/react": "^6.5.13",
-    "@storybook/testing-library": "^0.0.13",
+    "@chromatic-com/storybook": "^1",
+    "@qoretechnologies/reqore": "^0.48.3",
+    "@storybook/addon-actions": "^8.2.7",
+    "@storybook/addon-essentials": "^8.2.7",
+    "@storybook/addon-interactions": "^8.2.7",
+    "@storybook/addon-jest": "^8.2.7",
+    "@storybook/addon-links": "^8.2.7",
+    "@storybook/addon-storysource": "^8.2.7",
+    "@storybook/addon-webpack5-compiler-swc": "^1.0.5",
+    "@storybook/react": "^8.2.7",
+    "@storybook/react-webpack5": "^8.2.7",
+    "@storybook/test": "^8.2.7",
     "@tsconfig/node16": "^1.0.3",
     "@types/jest": "^28.1.7",
     "@types/node": "^18.7.11",
@@ -92,6 +96,7 @@
     "react-runkit": "^0.9.0",
     "react-syntax-highlighter": "^15.5.0",
     "sass": "^1.55.0",
+    "storybook": "^8.2.7",
     "storybook-addon-outline": "^1.4.2",
     "storybook-dark-mode": "^1.1.2",
     "ts-file-parser": "^0.0.21",
@@ -99,7 +104,8 @@
     "ts-node": "^10.9.1",
     "typedoc": "^0.23.10",
     "typedoc-json-parser": "^7.0.2",
-    "typescript": "^4.7.4"
+    "typescript": "^4.7.4",
+    "webpack-node-externals": "^3.0.0"
   },
   "dependencies": {
     "async": "^3.2.4",
@@ -107,7 +113,6 @@
     "cron-validator": "^1.3.1",
     "js-yaml": "^4.1.0",
     "lodash": "^4.17.21",
-    "node-fetch": "2",
     "react-markdown": "^8.0.4"
   }
 }

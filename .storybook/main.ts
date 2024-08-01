@@ -1,17 +1,31 @@
-import type { StorybookConfig } from '@storybook/core-common';
+export default {
+  stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx)'],
+  addons: [
+    '@storybook/addon-links',
+    '@storybook/addon-essentials',
+    '@storybook/addon-jest',
+    '@storybook/addon-webpack5-compiler-swc',
+    '@chromatic-com/storybook',
+  ],
+  core: {},
 
-module.exports = {
-  stories: ['../src/**/*.stories.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx)'],
-  addons: ['@storybook/addon-links', '@storybook/addon-essentials', '@storybook/addon-jest'],
-  features: {
-    storyStoreV7: true,
-    modernInlineRender: true,
+  framework: {
+    name: '@storybook/react-webpack5',
+    options: {},
   },
-  core: {
-    builder: {
-      name: 'webpack5',
-      lazyCompilation: true,
-    },
+
+  // webpackFinal: async (config) => {
+  //   // Add node externals to webpack config
+  //   config.externals = [
+  //     nodeExternals({
+  //       allowlist: [/^node:/],
+  //     }),
+  //   ];
+
+  //   // Return the altered config
+  //   return config;
+  // },
+  typescript: {
+    reactDocgen: 'react-docgen-typescript',
   },
-  framework: '@storybook/react',
-} as StorybookConfig;
+};
