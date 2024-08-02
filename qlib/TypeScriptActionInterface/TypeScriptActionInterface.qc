@@ -1,0 +1,160 @@
+# -*- mode: qore; indent-tabs-mode: nil -*-
+#! Qore TypeScriptActionInterface module definition
+
+/*  TypeScriptActionInterface.qc Copyright 2024 Qore Technologies, s.r.o.
+
+    Permission is hereby granted, free of charge, to any person obtaining a
+    copy of this software and associated documentation files (the "Software"),
+    to deal in the Software without restriction, including without limitation
+    the rights to use, copy, modify, merge, publish, distribute, sublicense,
+    and/or sell copies of the Software, and to permit persons to whom the
+    Software is furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in
+    all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+    FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+    DEALINGS IN THE SOFTWARE.
+*/
+
+#! Main namespace for the TypeScriptActionInterface module
+public namespace TypeScriptActionInterface {
+#! Interface class
+public class TypeScriptActionInterface {
+    public {
+        static hash<string, code> Api = TypeScriptActionInterface::getInterface();
+
+        static TypeScriptActionRootDataProvider root();
+
+        const TypeKeys = (
+            "name", "display_name", "short_desc", "desc", "type", "example_value",
+            "default_value", "allowed_values", "attr"
+        );
+    }
+
+    static registerApp(JavaScriptObject app) {
+        TypeScriptActionInterface::registerApp(app.toData());
+    }
+
+    static registerAction(JavaScriptObject action) {
+        TypeScriptActionInterface::registerAction(action.toData());
+    }
+
+    static registerApp(hash<auto> app) {
+        hash<auto> app0 += app;
+        if (app.logo) {
+            app0.logo = parse_base64_string(app.logo);
+        }
+        DataProviderActionCatalog::registerApp(cast<hash<DataProviderAppInfo>>(app0));
+    }
+
+    static registerAction(hash<auto> action) {
+        action.path = TypeScriptActionInterface::generateDataProvider(\action);
+        DataProviderActionCatalog::registerAction(cast<hash<DataProviderActionInfo>>(action));
+    }
+
+    #! Returns the path to the data provider
+    static string generateDataProvider(reference<hash<auto>> action) {
+        string path;
+        switch (action.action_code) {
+            case DPAT_API: {
+                path = TypeScriptActionInterface::generateApiDataProvider(\action);
+                break;
+            }
+
+            default:
+                throw "TYPESCRIPT-ACTION-ERROR", sprintf("App %y action %y action_code: %y is unsupported",
+                    action.app, action.action, action.action_code);
+        }
+        return "/";
+    }
+
+    static string generateApiDataProvider(reference<hash<auto>> action) {
+        auto api_function = remove action.api_function;
+        if (!api_function.callp()) {
+            throw "TYPESCRIPT-ACTION-ERROR", sprintf("App %y action %y has an invalid \"api_function\" "
+                "attribute; got type %y; expecting a callable value", action.app, action.action,
+                api_function.fullType());
+        }
+
+        *AbstractDataProviderType request_type;
+        if (action.options) {
+            action.options = action.options;
+
+            request_type = TypeScriptActionInterface::getType(map {$1.key: $1.value{TypeKeys}},
+                action.options.pairIterator());
+            action.convenience_options = TypeScriptActionInterface::getOptions(remove action.options);
+        }
+        *AbstractDataProviderType response_type;
+        if (action.response_type) {
+            action.response_type = action.response_type;
+            response_type = TypeScriptActionInterface::getType(remove action.response_type);
+            action.output_type = response_type;
+        }
+
+        TypeScriptActionAppDataProvider prov = TypeScriptActionInterface::getAppDataProvider(action.app,
+            action.action);
+
+        prov.registerChild(action.action, new TypeScriptActionApiDataProvider(action.action, api_function,
+            request_type, response_type));
+
+        # return path to data provider
+        return sprintf("%s/%s/%s", TypeScriptActionRootDataProvider::Root, action.app, action.action);
+    }
+
+    static TypeScriptActionAppDataProvider getAppDataProvider(string app, string action) {
+        if (*AbstractDataProvider app_prov = root.getChildProvider(app)) {
+            return app_prov;
+        }
+        return new TypeScriptActionAppDataProvider(app);
+    }
+
+    static hash<string, hash<ActionOptionInfo>> getOptions(hash<auto> opts) {
+        return map {$1.key: TypeScriptActionInterface::getOptionInfo($1.value)}, opts.pairIterator();
+    }
+
+    static hash<ActionOptionInfo> getOptionInfo(hash<auto> opt) {
+        opt.type = TypeScriptActionInterface::getType(opt.type);
+        return cast<hash<ActionOptionInfo>>(opt);
+    }
+
+    static AbstractDataProviderType getType(string name) {
+        *AbstractDataProviderType type = AbstractDataProviderTypeMap{name};
+        if (!type) {
+            throw "TYPE-ERROR", sprintf("Cannot match type %y to a known Qore type", name);
+        }
+        return type;
+    }
+
+    static AbstractDataProviderType getType(hash<auto> h) {
+        on_error rethrow $1.err, sprintf("%s (type: %y)", $1.desc, h);
+        HashDataType type();
+        type.addQoreFields(map {$1.key: TypeScriptActionInterface::getField($1.value)}, h.pairIterator());
+        return type;
+    }
+
+    static AbstractDataProviderType getType(auto v) {
+        throw "TYPE-ERROR", sprintf("Expecting \"string\" or \"hash\" for the option \"type\"; got %y "
+            "instead", v.fullType());
+    }
+
+    static hash<auto> getField(hash<auto> h) {
+        on_error rethrow $1.err, sprintf("%s (field: %y)", $1.desc, h);
+        h.type = TypeScriptActionInterface::getType(h.type);
+        return h;
+    }
+
+    #! Returns a hash that can be used to access these methods in JavaScript
+    static hash<string, code> getInterface() {
+        return {
+            "registerApp": \TypeScriptActionInterface::registerApp(),
+            "registerAction": \TypeScriptActionInterface::registerAction(),
+        };
+    }
+}
+}
