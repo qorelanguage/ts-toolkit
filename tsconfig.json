@@ -23,6 +23,6 @@
     "jsx": "react-jsx"
   },
   "extends": "@tsconfig/node16/tsconfig.json",
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", "qlib"],
   "include": ["./src/**/*", ".storybook/**/*", "./src/stories/**/*", "docs", "docs", "DocGenerator.ts"]
 }
