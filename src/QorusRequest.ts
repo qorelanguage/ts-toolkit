@@ -94,7 +94,9 @@ export class QorusRequest {
     }
 
     if (selectedEndpoint?.url) {
-      Object.assign(headers, { ...headers, 'Qorus-Token': selectedEndpoint?.authToken ?? '' });
+      if (selectedEndpoint?.authToken) {
+        Object.assign(headers, { ...headers, 'Qorus-Token': selectedEndpoint?.authToken });
+      }
 
       const requestParams = new URLSearchParams(params).toString();
       let fetchUrl: string;
