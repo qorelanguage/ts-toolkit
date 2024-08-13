@@ -34,6 +34,8 @@
 %enable-all-warnings
 
 %requires(reexport) DataProvider
+%requires ConnectionProvider
+%requires RestClient
 %requires v8
 
 module TypeScriptActionInterface {

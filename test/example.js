@@ -10,6 +10,74 @@ const obj = {
             "logo": "AA==",
             "logo_file_name": "test.svg",
             "logo_mime_type": "image/svg+xml",
+            /* "rest" is an optional object giving information about REST communication with the server; set this if
+                the action uses OAuth2, and you need Qorus to create a REST connection that can be used to maintain
+                the authentication token and other information for communicating with the server; valid keys are:
+                - content_encoding?: string -> use to encode message bodies when sending: "gzip", "bzip2", "deflate",
+                  "identity"
+                - data?: string -> set to specify message body serialization: "auto" (the default - meaning JSON),
+                  "json", "yaml", "rawxml", "xml", "url", "text", "bin"
+                - disable_automatic_pings?: bool -> set to disable automatic pings; for rate-limited, metered, or
+                  other connections that should not be pinged regularly (default: false)
+                - encode_chars?: bool -> "A set of additional characters to subject to percent encoding in URLs
+                - headers?: object -> an optional data object of headers to send with every request
+                - oauth2_auth_args?: object -> an optional data object with argument to be serialized as query
+                  arguments in the request to the \c oauth2_auth_url for the \c authentication_code grant type
+                - oauth2_auth_url?: string -> the OAuth2 authorization URL for the \c authorization_code grant type;
+                  ignored if the \c token option is set
+                - oauth2_auto_refresh?: bool -> If OAuth2 tokens should be automatically refreshed (default: true)
+                - oauth2_client_id?: string -> The OAuth2 client ID; ignored if the \c token option is set; this
+                  should be for an OAuth2 client associated with Qorus
+                - oauth2_client_secret?: string -> the OAuth2 client secret; ignored if the \c token option is set
+                - oauth2_grant_type?: string- > the OAuth2 grant type; ignored if the \c token option is set; possible
+                  values:
+                  - "authorization_code": requires \c oauth2_client_id, \c oauth2_client_secret,
+                    \c oauth2_auth_url, as well as \c oauth2_token_url; note that this grant type cannot be handled
+                    automatically but rather must be handled by external code that redirects the user to the
+                    authentication server and then updates the connection with token information retrieved
+                  - "client_credentials": requires \c oauth2_client_id, \c oauth2_client_secret, as well as
+                    \c oauth2_token_url
+                  - "password": requires a username, password, \c oauth2_client_id, \c oauth2_client_secret, as well
+                    as \c oauth2_token_url
+                - oauth2_redirect_url?: string -> The OAuth2 redirect URL for the \c authorization_code grant type;
+                  ignored if the \c token option is set
+                - oauth2_refresh_token?: string -> An OAuth2 refresh token (complements option \c token)
+                - oauth2_scopes?: string[] -> A list of OAuth2 scopes to request; ignored if the \c token option is
+                  set
+                - oauth2_token_args?: object -> Extra arguments for OAuth2 token requests to \c oauth2_token_url; if
+                  this option is set as well as \c oauth2_alt_token_url, then the \c oauth2_token_url value will be
+                  added to this as well when the request is made to the \c oauth2_alt_token_url
+                - oauth2_token_url?: string -> The token URL OAuth2 flows; ignored if the \c token option is set
+                - password?: string -> The password for authentication; do not use with an OAuth2 config
+                - ping_method?: string -> The HTTP method to use for pings
+                - ping_headers?: object -> Any HTTP headers to send with pings
+                - ping_body?: any -> The message body to send with pings
+                - proxy?: string -> The proxy URL for connecting through a proxy
+                - ssl_cert_data?: string -> a PEM-encoded string for an X.509 client certificate
+                - ssl_key_data?: string -> a PEM-encoded string for an X.509 client key
+                - ssl_verify_cert?: bool -> if true then server certificates will only be accepted if they pass
+                  verification
+                - token?: string -> Any bearer token to use for the connection; will be passed as
+                  <tt>Authorization: Bearer ...</tt> in request headers; conflicts with username and password options
+                  or authentication credentials in the URL; if this option is set then any OAuth2 options are ignored
+                - token_type?: string -> The type of token to use for the \c Authentication header; ignored if no
+                  \c token option is set
+                - url: string -> A string giving the URL to connect to
+                - username?: string -> The username for authentication; only used if no username or password is set in
+                  the URL and if the \c password option is also used
+            */
+            "rest": {
+                "data": "json",
+                "encode_chars": "+",
+                "oauth2_auth_args": {
+                    "access_type": "offline",
+                    "prompt": "consent",
+                },
+                "oauth2_auth_url":  "https://example.com/oauth2/auth",
+                "oauth2_grant_type": "authorization_code",
+                "oauth2_token_url": "https://example.com/token",
+                "url": "https://www.example.com/api",
+            },
         });
 
         api.registerAction({
@@ -70,7 +138,7 @@ const obj = {
                     - desc: string - a description of the value (if unknown just use the value again)
                   - depends_on?: string[] - an optional list of other options that must be set before this option can
                     be set
-                  - get_allowed_values?: function (): AllowedValues[] | null - a function that will return the allowed
+                  - get_allowed_values?: function (): AllowedValues[] | undefined - a function that will return the allowed
                     values when called
                   - attr?: Attributes - an optional data object with any properties
 

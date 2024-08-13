@@ -35,6 +35,50 @@ public class TypeScriptActionInterface {
             "name", "display_name", "short_desc", "desc", "type", "example_value",
             "default_value", "allowed_values", "attr"
         );
+
+        const TypeScriptAppRestConnectionOptions = RestConnection::ConnectionScheme.options;
+
+        const TypeScriptAppRestOptionKeys = (
+            "content_encoding",
+            "data",
+            "disable_automatic_pings",
+            "encode_chars",
+            "headers",
+            "oauth2_auth_args",
+            "oauth2_auth_url",
+            "oauth2_auto_refresh",
+            "oauth2_client_id",
+            "oauth2_client_secret",
+            "oauth2_grant_type",
+            "oauth2_redirect_url",
+            "oauth2_refresh_token",
+            "oauth2_scopes",
+            "oauth2_token_args",
+            "oauth2_token_url",
+            "password",
+            "ping_method",
+            "ping_headers",
+            "ping_body",
+            "proxy",
+            "ssl_cert_data",
+            "ssl_key_data",
+            "ssl_verify_cert",
+            "token",
+            "token_type",
+            "url",
+            "username",
+        );
+    }
+
+    private {
+        #! Maps from app names to schemes
+        static hash<string, string> asmap;
+
+        #! Maps from scheme names to apps
+        static hash<string, string> samap;
+
+        #! Maps from app names to rest getOptions
+        static hash<string, hash<auto>> armap;
     }
 
     static registerApp(JavaScriptObject app) {
@@ -49,6 +93,27 @@ public class TypeScriptActionInterface {
         hash<auto> app0 += app;
         if (app.logo) {
             app0.logo = parse_base64_string(app.logo);
+        }
+        if (*hash<auto> rest = remove app0.rest) {
+            string sname = "rest-" + app.name;
+            hash<ConnectionSchemeInfo> scheme = <ConnectionSchemeInfo>{
+                "display_name": app.display_name,
+                "short_desc": app.short_desc,
+                "desc": app.desc,
+                "cls": Class::forName("TypeScriptAppRestConnection"),
+                "schemes": {
+                    sname: True,
+                },
+                "base_scheme_map": {
+                    "https": sname,
+                },
+                "options": TypeScriptAppRestConnectionOptions,
+                "auto_url": exists rest.url,
+            };
+            ConnectionSchemeCache::registerScheme(sname, scheme);
+            asmap{app.name} = sname;
+            samap{sname} = app.name;
+            armap{sname} = rest{TypeScriptAppRestOptionKeys};
         }
         DataProviderActionCatalog::registerApp(cast<hash<DataProviderAppInfo>>(app0));
     }
@@ -88,7 +153,7 @@ public class TypeScriptActionInterface {
         if (*hash<auto> opts = remove action.options) {
             request_type = TypeScriptActionInterface::getType(map {$1.key: $1.value{TypeKeys}},
                 opts.pairIterator());
-            action.convenience_options = TypeScriptActionInterface::getOptions(action, opts, \omap);
+            action.options = TypeScriptActionInterface::getOptions(action, opts, \omap);
         }
         *AbstractDataProviderType response_type;
         if (action.response_type) {
@@ -168,6 +233,15 @@ public class TypeScriptActionInterface {
             "registerApp": \TypeScriptActionInterface::registerApp(),
             "registerAction": \TypeScriptActionInterface::registerAction(),
         };
+    }
+
+    #! Returns REST options for the given app
+    static hash<auto> getRestOptions(string app) {
+        *hash<auto> rv = armap{app};
+        if (!rv) {
+            throw "TYPESCRIPT-APP-ERROR", sprintf("Cannot find any REST options for app %y", app);
+        }
+        return rv;
     }
 }
 }
