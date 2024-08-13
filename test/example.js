@@ -68,6 +68,10 @@ const obj = {
                     - short_desc?: string - a short plain-text description of the field
                     - value: any - (must be present and must use the field's type); one of the allowed values
                     - desc: string - a description of the value (if unknown just use the value again)
+                  - depends_on?: string[] - an optional list of other options that must be set before this option can
+                    be set
+                  - get_allowed_values?: function (): AllowedValues[] | null - a function that will return the allowed
+                    values when called
                   - attr?: Attributes - an optional data object with any properties
 
                   Note that this data will also be used to create the API request type
@@ -80,7 +84,55 @@ const obj = {
                     "desc": "A count of something",
                     "required": true,
                     "preselected": true,
+                    "get_allowed_values": function() {
+                        return [
+                            {
+                                "display_name": "1",
+                                "short_desc": "1",
+                                "desc": "1",
+                                "value": 1,
+                            },
+                            {
+                                "display_name": "2",
+                                "short_desc": "2",
+                                "desc": "2",
+                                "value": 2,
+                            },
+                        ];
+                    },
                     "example_value": 1,
+                },
+                "other": {
+                    "type": "string",
+                    "display_name": "Other",
+                    "short_desc": "another value",
+                    "desc": "another value",
+                    "required": true,
+                    "preselected": true,
+                    "depends_on": ["count"],
+                    "get_allowed_values": function() {
+                        return [
+                            {
+                                "display_name": "this",
+                                "short_desc": "this",
+                                "desc": "this",
+                                "value": "this",
+                            },
+                            {
+                                "display_name": "that",
+                                "short_desc": "that",
+                                "desc": "that",
+                                "value": "that",
+                            },
+                        ];
+                    },
+                },
+                "unimportant": {
+                    "type": "bool",
+                    "display_name": "Unimportant?",
+                    "short_desc": "another option",
+                    "desc": "another option",
+                    "depends_on": ["count", "other"],
                 },
             },
             /* "response_type" defines the response type when "action_code" == DPAT_API

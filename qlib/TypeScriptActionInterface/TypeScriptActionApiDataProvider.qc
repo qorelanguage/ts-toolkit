@@ -44,14 +44,16 @@ class TypeScriptActionApiDataProvider inherits AbstractDataProvider {
         code api_function;
         *AbstractDataProviderType request_type;
         *AbstractDataProviderType response_type;
+        *hash<string, code> omap;
     }
 
     constructor(string name, code api_function, *AbstractDataProviderType request_type,
-            *AbstractDataProviderType response_type) {
+            *AbstractDataProviderType response_type, *hash<string, code> omap) {
         self.name = name;
         self.api_function = api_function;
         self.request_type = request_type;
         self.response_type = response_type;
+        self.omap = omap;
     }
 
     #! Returns the data provider name
@@ -67,6 +69,22 @@ class TypeScriptActionApiDataProvider inherits AbstractDataProvider {
     */
     private auto doRequestImpl(auto req, *hash<auto> request_options) {
         return api_function(req);
+    }
+
+    #! Returns reference data of the given kind if available
+    /** @param type the unique type name of the reference data
+
+        @return a list of allowed values for this data
+
+        @since DataProvider 3.0
+    */
+    private *list<hash<AllowedValueInfo>> getReferenceDataImpl(string type) {
+        *code get_ref_data = omap{type};
+        if (!get_ref_data) {
+            throw "INVALID-REFERENCE-DATA-TAG", sprintf("Tag %y is not registered as a reference data tag; known "
+                "tags: %y", keys omap);
+        }
+        return cast<*list<hash<AllowedValueInfo>>>(get_ref_data());
     }
 
     #! Returns the description of a successful request message, if any

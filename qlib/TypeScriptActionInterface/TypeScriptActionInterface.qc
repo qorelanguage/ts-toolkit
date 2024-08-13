@@ -82,13 +82,13 @@ public class TypeScriptActionInterface {
                 api_function.fullType());
         }
 
+        # maps from options to "get_allowed_values" code for each option
+        hash<string, code> omap;
         *AbstractDataProviderType request_type;
-        if (action.options) {
-            action.options = action.options;
-
+        if (*hash<auto> opts = remove action.options) {
             request_type = TypeScriptActionInterface::getType(map {$1.key: $1.value{TypeKeys}},
-                action.options.pairIterator());
-            action.convenience_options = TypeScriptActionInterface::getOptions(remove action.options);
+                opts.pairIterator());
+            action.convenience_options = TypeScriptActionInterface::getOptions(action, opts, \omap);
         }
         *AbstractDataProviderType response_type;
         if (action.response_type) {
@@ -101,7 +101,7 @@ public class TypeScriptActionInterface {
             action.action);
 
         prov.registerChild(action.action, new TypeScriptActionApiDataProvider(action.action, api_function,
-            request_type, response_type));
+            request_type, response_type, omap));
 
         # return path to data provider
         return sprintf("%s/%s/%s", TypeScriptActionRootDataProvider::Root, action.app, action.action);
@@ -114,8 +114,21 @@ public class TypeScriptActionInterface {
         return new TypeScriptActionAppDataProvider(app);
     }
 
-    static hash<string, hash<ActionOptionInfo>> getOptions(hash<auto> opts) {
-        return map {$1.key: TypeScriptActionInterface::getOptionInfo($1.value)}, opts.pairIterator();
+    static *hash<string, hash<ActionOptionInfo>> getOptions(hash<auto> action, hash<auto> opts,
+            reference<hash<string, code>> omap) {
+        hash<string, hash<ActionOptionInfo>> rv;
+        foreach hash<auto> i in (opts.pairIterator()) {
+            if (exists (auto get_allowed_values = remove i.value.get_allowed_values)) {
+                if (!get_allowed_values.callp()) {
+                    throw "TYPESCRIPT-ACTION-ERROR", sprintf("App %y action %y option %y has an invalid "
+                        "\"get_allowed_values\" attribute; got type %y; expecting a callable value", action.app,
+                        action.action, i.key, get_allowed_values.fullType());
+                }
+                omap{i.key} = get_allowed_values;
+            }
+            rv{i.key} = TypeScriptActionInterface::getOptionInfo(i.value);
+        }
+        return rv;
     }
 
     static hash<ActionOptionInfo> getOptionInfo(hash<auto> opt) {
