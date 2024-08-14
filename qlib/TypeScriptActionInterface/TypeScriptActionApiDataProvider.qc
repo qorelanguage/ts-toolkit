@@ -24,6 +24,21 @@
 
 #! Main namespace for the TypeScriptActionInterface module
 public namespace TypeScriptActionInterface {
+#! Data provider reference data context info
+public hashdecl RefDataContextInfo {
+    #! Connection name
+    *string conn_name;
+
+    #! Connection option info
+    *hash<auto> conn_opts;
+
+    #! Options with known values for the current action
+    *hash<auto> opts;
+
+    #! User-defined information
+    *hash<auto> info;
+}
+
 #! Generic API data provider for TypeScript actions
 class TypeScriptActionApiDataProvider inherits AbstractDataProvider {
     public {
@@ -45,6 +60,9 @@ class TypeScriptActionApiDataProvider inherits AbstractDataProvider {
         *AbstractDataProviderType request_type;
         *AbstractDataProviderType response_type;
         *hash<string, code> omap;
+
+        #! connection for the action
+        AbstractConnection conn;
     }
 
     constructor(string name, code api_function, *AbstractDataProviderType request_type,
@@ -54,6 +72,11 @@ class TypeScriptActionApiDataProvider inherits AbstractDataProvider {
         self.request_type = request_type;
         self.response_type = response_type;
         self.omap = omap;
+    }
+
+    #! Sets the connection
+    setConnection(AbstractConnection conn) {
+        self.conn = conn;
     }
 
     #! Returns the data provider name
@@ -68,7 +91,7 @@ class TypeScriptActionApiDataProvider inherits AbstractDataProvider {
         @return the response to the request
     */
     private auto doRequestImpl(auto req, *hash<auto> request_options) {
-        return api_function(req);
+        return api_function(req, request_options, getCallContextInfo());
     }
 
     #! Returns reference data of the given kind if available
@@ -84,7 +107,7 @@ class TypeScriptActionApiDataProvider inherits AbstractDataProvider {
             throw "INVALID-REFERENCE-DATA-TAG", sprintf("Tag %y is not registered as a reference data tag; known "
                 "tags: %y", keys omap);
         }
-        return cast<*list<hash<AllowedValueInfo>>>(get_ref_data());
+        return cast<*list<hash<AllowedValueInfo>>>(get_ref_data(getCallContextInfo()));
     }
 
     #! Returns the description of a successful request message, if any
@@ -104,6 +127,17 @@ class TypeScriptActionApiDataProvider inherits AbstractDataProvider {
     #! Returns data provider static info
     private hash<DataProviderInfo> getStaticInfoImpl() {
         return ProviderInfo;
+    }
+
+    #! Returns call context info
+    private *hash<RefDataContextInfo> getCallContextInfo() {
+        if (conn) {
+            return <RefDataContextInfo>{
+                "conn_name": conn.name,
+                "conn_opts": conn.getRealOptions(),
+                #"opts": xxx,
+            };
+        }
     }
 }
 }

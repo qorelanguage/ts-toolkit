@@ -78,15 +78,24 @@ public class TypeScriptAppRestConnection inherits RestConnection {
         return scheme;
     }
 
+    #! returns a data provider object for this connection
+    /** @param constructor_options any additional constructor options for the data provider
+
+        @return a data provider object for this connection
+    */
+    DataProvider::AbstractDataProvider getDataProvider(*hash<auto> constructor_options) {
+        return TypeScriptActionInterface::getDataProvider(app, self);
+    }
+
     #! Set up the generic object from the app config
     private setupTs(string url) {
-        *string scheme = (url =~ x/^(rest-[^:]+):/)[0];
+        *string scheme = (url =~ x/^(tsrest-[^:]+):/)[0];
         if (!exists scheme) {
-            throw "TYPESCRIPT-REST-CONNECTION-ERROR", sprintf("Cannot determine TypeScript REST scheme from url %y",
+            throw "TYPESCRIPT-REST-CONNECTION-ERROR", sprintf("Cannot determine TypeScript REST scheme from URL %y",
                 url);
         }
         self.scheme = scheme;
-        *string app = (scheme =~ x/^rest-(.+)$/)[0];
+        *string app = (scheme =~ x/^tsrest-(.+)$/)[0];
         if (!exists app) {
             throw "TYPESCRIPT-REST-CONNECTION-ERROR", sprintf("Cannot determine TypeScript REST app from scheme %y "
                 "in URL %y", scheme, url);
@@ -117,7 +126,7 @@ public class TypeScriptAppRestConnection inherits RestConnection {
 
     #! returns options for @ref GoogleRestConnection::constructor()
     static private hash<auto> getOptions(string url, hash<auto> opts) {
-        return TypeScriptActionInterface::getRestOptions((url =~ x/^rest-([^:]+):$/)[0]) + opts;
+        return TypeScriptActionInterface::getRestOptions((url =~ x/^tsrest-([^:]+):$/)[0]) + opts;
     }
 }
 }

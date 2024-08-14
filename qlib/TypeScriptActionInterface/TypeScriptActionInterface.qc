@@ -174,9 +174,16 @@ public class TypeScriptActionInterface {
 
     static TypeScriptActionAppDataProvider getAppDataProvider(string app, string action) {
         if (*AbstractDataProvider app_prov = root.getChildProvider(app)) {
-            return app_prov;
+            return cast<TypeScriptActionAppDataProvider>(app_prov);
         }
         return new TypeScriptActionAppDataProvider(app);
+    }
+
+    static TypeScriptActionAppDataProvider getDataProvider(string app, TypeScriptAppRestConnection conn) {
+        TypeScriptActionAppDataProvider rv = cast<TypeScriptActionAppDataProvider>(root.getChildProviderEx(app));
+        rv = rv.copy();
+        rv.setConnection(conn);
+        return rv;
     }
 
     static *hash<string, hash<ActionOptionInfo>> getOptions(hash<auto> action, hash<auto> opts,

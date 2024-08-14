@@ -44,6 +44,9 @@ class TypeScriptActionAppDataProvider inherits AbstractDataProvider {
         #! The name of this app
         string name;
 
+        #! connection for the action
+        AbstractConnection conn;
+
         #! Dynamic child data providers
         hash<string, DataProvider::AbstractDataProvider> childMap;
     }
@@ -51,6 +54,19 @@ class TypeScriptActionAppDataProvider inherits AbstractDataProvider {
     #! Creates the object
     constructor(string name) {
         self.name = name;
+    }
+
+    #! Copies the object
+    copy() {
+        if (*hash<string, DataProvider::AbstractDataProvider> cmap = remove childMap) {
+            map childMap{$1.key} = $1.value.copy(), cmap.pairIterator();
+        }
+    }
+
+    #! Sets the connection
+    setConnection(AbstractConnection conn) {
+        self.conn = conn;
+        map $1.setConnection(conn), childMap.iterator();
     }
 
     #! Returns the data provider name
