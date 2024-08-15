@@ -32,7 +32,7 @@ public hashdecl RefDataContextInfo {
     #! Connection option info
     *hash<auto> conn_opts;
 
-    #! Options with known values for the current action
+    #! Action options with known values
     *hash<auto> opts;
 
     #! User-defined information
@@ -91,23 +91,24 @@ class TypeScriptActionApiDataProvider inherits AbstractDataProvider {
         @return the response to the request
     */
     private auto doRequestImpl(auto req, *hash<auto> request_options) {
-        return api_function(req, request_options, getCallContextInfo());
+        return api_function(req, request_options, getCallContextInfo(req));
     }
 
     #! Returns reference data of the given kind if available
     /** @param type the unique type name of the reference data
+        @param action_opts an optional hash of action options when called when working with an app action
 
         @return a list of allowed values for this data
 
         @since DataProvider 3.0
     */
-    private *list<hash<AllowedValueInfo>> getReferenceDataImpl(string type) {
+    private *list<hash<AllowedValueInfo>> getReferenceDataImpl(string type, *hash<auto> action_opts) {
         *code get_ref_data = omap{type};
         if (!get_ref_data) {
             throw "INVALID-REFERENCE-DATA-TAG", sprintf("Tag %y is not registered as a reference data tag; known "
                 "tags: %y", keys omap);
         }
-        return cast<*list<hash<AllowedValueInfo>>>(get_ref_data(getCallContextInfo()));
+        return cast<*list<hash<AllowedValueInfo>>>(get_ref_data(getCallContextInfo(action_opts)));
     }
 
     #! Returns the description of a successful request message, if any
@@ -130,12 +131,12 @@ class TypeScriptActionApiDataProvider inherits AbstractDataProvider {
     }
 
     #! Returns call context info
-    private *hash<RefDataContextInfo> getCallContextInfo() {
+    private *hash<RefDataContextInfo> getCallContextInfo(*hash<auto> action_opts) {
         if (conn) {
             return <RefDataContextInfo>{
                 "conn_name": conn.name,
                 "conn_opts": conn.getRealOptions(),
-                #"opts": xxx,
+                "opts": action_opts,
             };
         }
     }

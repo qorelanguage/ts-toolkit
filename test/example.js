@@ -92,13 +92,17 @@ const obj = {
                 @param obj: any - is the main argument used to call the API and must correspond to the request
                 type, which can be any serializable data type (including no value). It is normally a data object
                 @param opts?: object - currently unused
+                @param ctx?: object with the following properties:
+                - conn_name?: string -> the connection name, if any is defined
+                - conn_opts?: object -> connection options; for REST connections, see the 'rest' object definition
+                - opts?: object -> a data object with option values set for the current action
 
                 @return the return value for the API; can be of any serializable data type that the API returns
                 (including no value)
 
                 @note the function here will be called with no "this" context; "this" cannot be used in this function
             */
-            "api_function": function(obj, opts) {
+            "api_function": function(obj, opts, ctx) {
                 obj.count += 1;
                 console.log('obj + 1 = %d (%s)', obj, obj.note);
                 return {
@@ -138,8 +142,12 @@ const obj = {
                     - desc: string - a description of the value (if unknown just use the value again)
                   - depends_on?: string[] - an optional list of other options that must be set before this option can
                     be set
-                  - get_allowed_values?: function (): AllowedValues[] | undefined - a function that will return the allowed
-                    values when called
+                  - get_allowed_values?: function (ctx?: object): AllowedValues[] | undefined - a function that will
+                    return the allowed values when called; the 'ctx' parameter has the same format as the third
+                    argument to 'api_function' above:
+                    - conn_name?: string -> the connection name, if any is defined
+                    - conn_opts?: object -> connection options; for REST connections, see the 'rest' object definition
+                    - opts?: object -> a data object with option values set for the current action
                   - attr?: Attributes - an optional data object with any properties
 
                   Note that this data will also be used to create the API request type
