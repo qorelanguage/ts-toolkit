@@ -26,8 +26,25 @@
 namespace TypeScriptActionInterfacePriv {
 #! Internal interface class
 class TypeScriptActionInterfacePriv {
-    static init() {
+    private {
+        #! Static storage for JavaScriptProgram objects for app / actions, to ensure they do not go out of scope
+        static hash<string, JavaScriptProgram> pstore;
+    }
 
+    static init() {
+        *string scripts = ENV.QORE_TYPESCRIPT_ACTION_SCRIPTS;
+        if (scripts.val()) {
+            foreach string path in (scripts.split(":")) {
+                try {
+                    JavaScriptProgram js(File::readTextFile(path), path);
+                    JavaScriptObject obj = js.run();
+                    obj.appActionInit(TypeScriptActionInterface::Api);
+                    pstore{js.uniqueHash()} = js;
+                } catch (hash<ExceptionInfo> ex) {
+                    stderr.printf("Error loading TypeScript action script %y: %s", path, get_exception_string(ex));
+                }
+            }
+        }
     }
 }
 }

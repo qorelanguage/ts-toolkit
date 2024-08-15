@@ -46,6 +46,9 @@ module TypeScriptActionInterface {
     license = "MIT";
     init = sub () {
         TypeScriptActionInterfacePriv::init();
+
+        # register the data provider factory
+        DataProvider::registerFactory(new TypeScriptActionDataProviderFactory());
     };
 }
 

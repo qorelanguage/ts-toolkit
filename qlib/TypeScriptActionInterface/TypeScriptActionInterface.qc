@@ -176,7 +176,9 @@ public class TypeScriptActionInterface {
         if (*AbstractDataProvider app_prov = root.getChildProvider(app)) {
             return cast<TypeScriptActionAppDataProvider>(app_prov);
         }
-        return new TypeScriptActionAppDataProvider(app);
+        TypeScriptActionAppDataProvider prov(app);
+        root.registerChild(app, prov);
+        return prov;
     }
 
     static TypeScriptActionAppDataProvider getDataProvider(string app, TypeScriptAppRestConnection conn) {
