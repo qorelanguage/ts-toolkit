@@ -47,7 +47,6 @@ public class TypeScriptAppRestConnection inherits RestConnection {
     constructor(string name, string description, string url, hash<auto> attributes = {}, hash<auto> options = {})
             : RestConnection(name, description, url, attributes,
                 TypeScriptAppRestConnection::getOptions(url, options)) {
-        setupTs(url);
     }
 
     #! creates the TypeScriptAppRestConnection object
@@ -69,8 +68,7 @@ public class TypeScriptAppRestConnection inherits RestConnection {
         @throw CONNECTION-OPTION-ERROR missing or invalid connection option or attribute
     */
     constructor(hash<auto> config, *hash<auto> attr)
-            : RestConnection(config + TypeScriptAppRestConnection::getOptions(url, config.opts), attr) {
-        setupTs(url);
+            : RestConnection(config + TypeScriptAppRestConnection::getOptions(config.url, config.opts), attr) {
     }
 
     #! returns the type
@@ -85,6 +83,21 @@ public class TypeScriptAppRestConnection inherits RestConnection {
     */
     DataProvider::AbstractDataProvider getDataProvider(*hash<auto> constructor_options) {
         return TypeScriptActionInterface::getDataProvider(app, self);
+    }
+
+    #! performs options validation in the constructor
+    /** @param options a hash with options from the constructor
+        @param check_required check that all required options are set
+
+        @return validated option hash
+
+        This method can be overloaded in connections where are options created dynamically for example
+
+        @throw CONNECTION-OPTION-ERROR missing or invalid connection option
+    */
+    private hash<auto> validateOptions(hash<auto> options, bool check_required = True) {
+        setupTs(url);
+        return RestConnection::validateOptions(options, check_required);
     }
 
     #! Set up the generic object from the app config
@@ -115,8 +128,8 @@ public class TypeScriptAppRestConnection inherits RestConnection {
 
         @return a @ref TypeScriptAppRestConnection object
     */
-    private TypeScriptAppRestConnection getImpl(bool connect = True, *hash<auto> rtopts) {
-        return new TypeScriptAppRestConnection(getConnectionOptions(), !connect);
+    private RestClient getImpl(bool connect = True, *hash<auto> rtopts) {
+        return new RestClient(getConnectionOptions(), !connect);
     }
 
     #! Returns the ConnectionSchemeInfo hash for this object
@@ -126,7 +139,12 @@ public class TypeScriptAppRestConnection inherits RestConnection {
 
     #! returns options for @ref GoogleRestConnection::constructor()
     static private hash<auto> getOptions(string url, hash<auto> opts) {
-        return TypeScriptActionInterface::getRestOptions((url =~ x/^tsrest-([^:]+):$/)[0]) + opts;
+        *string app = (url =~ x/^tsrest-(.+):\/\//)[0];
+        if (!exists app) {
+            throw "TYPESCRIPT-REST-CONNECTION-ERROR", sprintf("Cannot determine TypeScript REST app from URL %y",
+                url);
+        }
+        return TypeScriptActionInterface::getRestOptions(app) + opts;
     }
 }
 }

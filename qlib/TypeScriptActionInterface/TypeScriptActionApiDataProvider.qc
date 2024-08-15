@@ -84,6 +84,14 @@ class TypeScriptActionApiDataProvider inherits AbstractDataProvider {
         return name;
     }
 
+    #! Returns information on supported reference data
+    /** @return a hash of supported reference data; keys in the hash returned are supported in calls to
+        @ref getReferenceData()
+    */
+    *hash<string, bool> getSupportedReferenceData() {
+        return map {$1: True}, keys omap;
+    }
+
     #! Makes a request and returns the response
     /** @param req the request to serialize and make according to the request type
         @param request_options the request options; will be processed by validateRequestOptions()
@@ -103,12 +111,13 @@ class TypeScriptActionApiDataProvider inherits AbstractDataProvider {
         @since DataProvider 3.0
     */
     private *list<hash<AllowedValueInfo>> getReferenceDataImpl(string type, *hash<auto> action_opts) {
-        *code get_ref_data = omap{type};
-        if (!get_ref_data) {
-            throw "INVALID-REFERENCE-DATA-TAG", sprintf("Tag %y is not registered as a reference data tag; known "
-                "tags: %y", keys omap);
+        if (*code get_ref_data = omap{type}) {
+            *list<auto> rv = get_ref_data(getCallContextInfo(action_opts));
+            if (!rv) {
+                return;
+            }
+            return map cast<hash<AllowedValueInfo>>($1.toData()), rv;
         }
-        return cast<*list<hash<AllowedValueInfo>>>(get_ref_data(getCallContextInfo(action_opts)));
     }
 
     #! Returns the description of a successful request message, if any

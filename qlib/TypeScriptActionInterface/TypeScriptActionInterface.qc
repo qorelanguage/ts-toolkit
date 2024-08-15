@@ -95,7 +95,7 @@ public class TypeScriptActionInterface {
             app0.logo = parse_base64_string(app.logo);
         }
         if (*hash<auto> rest = remove app0.rest) {
-            string sname = "rest-" + app.name;
+            string sname = "tsrest-" + app.name;
             hash<ConnectionSchemeInfo> scheme = <ConnectionSchemeInfo>{
                 "display_name": app.display_name,
                 "short_desc": app.short_desc,
@@ -113,22 +113,22 @@ public class TypeScriptActionInterface {
             ConnectionSchemeCache::registerScheme(sname, scheme);
             asmap{app.name} = sname;
             samap{sname} = app.name;
-            armap{sname} = rest{TypeScriptAppRestOptionKeys};
+            armap{app.name} = rest{TypeScriptAppRestOptionKeys};
+            app0.scheme = sname;
         }
         DataProviderActionCatalog::registerApp(cast<hash<DataProviderAppInfo>>(app0));
     }
 
     static registerAction(hash<auto> action) {
-        action.path = TypeScriptActionInterface::generateDataProvider(\action);
+        TypeScriptActionInterface::generateDataProvider(\action);
         DataProviderActionCatalog::registerAction(cast<hash<DataProviderActionInfo>>(action));
     }
 
     #! Returns the path to the data provider
-    static string generateDataProvider(reference<hash<auto>> action) {
-        string path;
+    static generateDataProvider(reference<hash<auto>> action) {
         switch (action.action_code) {
             case DPAT_API: {
-                path = TypeScriptActionInterface::generateApiDataProvider(\action);
+                TypeScriptActionInterface::generateApiDataProvider(\action);
                 break;
             }
 
@@ -136,10 +136,9 @@ public class TypeScriptActionInterface {
                 throw "TYPESCRIPT-ACTION-ERROR", sprintf("App %y action %y action_code: %y is unsupported",
                     action.app, action.action, action.action_code);
         }
-        return "/";
     }
 
-    static string generateApiDataProvider(reference<hash<auto>> action) {
+    static generateApiDataProvider(reference<hash<auto>> action) {
         auto api_function = remove action.api_function;
         if (!api_function.callp()) {
             throw "TYPESCRIPT-ACTION-ERROR", sprintf("App %y action %y has an invalid \"api_function\" "
@@ -168,8 +167,7 @@ public class TypeScriptActionInterface {
         prov.registerChild(action.action, new TypeScriptActionApiDataProvider(action.action, api_function,
             request_type, response_type, omap));
 
-        # return path to data provider
-        return sprintf("%s/%s/%s", TypeScriptActionRootDataProvider::Root, action.app, action.action);
+        action.path = action.action;
     }
 
     static TypeScriptActionAppDataProvider getAppDataProvider(string app, string action) {
