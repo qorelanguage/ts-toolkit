@@ -126,9 +126,15 @@ public class TypeScriptActionInterface {
 
     #! Returns the path to the data provider
     static generateDataProvider(reference<hash<auto>> action) {
+        hash<DataProviderAppInfo> app;
+        {
+            on_error rethrow "TYPESCRIPT-ACTION-ERROR", sprintf("Error registering action %y: %s: %s", action.action,
+                $1.err, $1.desc);
+            app = DataProviderActionCatalog::getAppEx(action.app);
+        }
         switch (action.action_code) {
             case DPAT_API: {
-                TypeScriptActionInterface::generateApiDataProvider(\action);
+                TypeScriptActionInterface::generateApiDataProvider(app, \action);
                 break;
             }
 
@@ -138,7 +144,7 @@ public class TypeScriptActionInterface {
         }
     }
 
-    static generateApiDataProvider(reference<hash<auto>> action) {
+    static generateApiDataProvider(hash<DataProviderAppInfo> app, reference<hash<auto>> action) {
         auto api_function = remove action.api_function;
         if (!api_function.callp()) {
             throw "TYPESCRIPT-ACTION-ERROR", sprintf("App %y action %y has an invalid \"api_function\" "
@@ -152,7 +158,7 @@ public class TypeScriptActionInterface {
         if (*hash<auto> opts = remove action.options) {
             request_type = TypeScriptActionInterface::getType(map {$1.key: $1.value{TypeKeys}},
                 opts.pairIterator());
-            action.options = TypeScriptActionInterface::getOptions(action, opts, \omap);
+            action.options = TypeScriptActionInterface::getOptions(app, action, opts, \omap);
         }
         *AbstractDataProviderType response_type;
         if (action.response_type) {
@@ -186,8 +192,8 @@ public class TypeScriptActionInterface {
         return rv;
     }
 
-    static *hash<string, hash<ActionOptionInfo>> getOptions(hash<auto> action, hash<auto> opts,
-            reference<hash<string, code>> omap) {
+    static *hash<string, hash<ActionOptionInfo>> getOptions(hash<DataProviderAppInfo> app, hash<auto> action,
+            hash<auto> opts, reference<hash<string, code>> omap) {
         hash<string, hash<ActionOptionInfo>> rv;
         foreach hash<auto> i in (opts.pairIterator()) {
             if (exists (auto get_allowed_values = remove i.value.get_allowed_values)) {
@@ -196,7 +202,17 @@ public class TypeScriptActionInterface {
                         "\"get_allowed_values\" attribute; got type %y; expecting a callable value", action.app,
                         action.action, i.key, get_allowed_values.fullType());
                 }
+                if (app.scheme) {
+                    if (i.value.depends_on.val()) {
+                        i.value.depends_on = ("qorus_app_connection",) + i.value.depends_on;
+                    } else {
+                        i.value.depends_on = ("qorus_app_connection",);
+                    };
+                }
                 omap{i.key} = get_allowed_values;
+            }
+            if (i.value.required && !i.value.preselected && !exists i.value.default_value) {
+                i.value.preselected = True;
             }
             rv{i.key} = TypeScriptActionInterface::getOptionInfo(i.value);
         }
