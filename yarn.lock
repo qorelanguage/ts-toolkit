@@ -2001,10 +2001,10 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.6.tgz#cee20bd55e68a1720bdab363ecf0c821ded4cd45"
   integrity sha512-50/17A98tWUfQ176raKiOGXuYpLyyVMkxxG6oylzL3BPOlA6ADGdK7EYunSa4I064xerltq9TGXs8HmOk5E+vw==
 
-"@qoretechnologies/reqore@^0.48.3":
-  version "0.48.3"
-  resolved "https://registry.yarnpkg.com/@qoretechnologies/reqore/-/reqore-0.48.3.tgz#59b505e917f6c4ee762ea633357a8a1365a90811"
-  integrity sha512-DMLVVJw8tE3Ni2K3Zk5h87xn5XRDsAaLy1l1u6NaDBWZMhZaqrXzdJMPfm388EjPiFOCtGoVMUBJqvJXkvfQVg==
+"@qoretechnologies/reqore@^0.48.4":
+  version "0.48.4"
+  resolved "https://registry.yarnpkg.com/@qoretechnologies/reqore/-/reqore-0.48.4.tgz#fbf2e4f259e1e88805819043ba131c8947f7ba16"
+  integrity sha512-Z4oqteVa3GfOJEZlBPeNzkBUKy6VXcRjRBWed88Q+X4eOLjK0o5JiUv1O0XmCg89EuDxxGr2GIryV0LlBrG3Nw==
   dependencies:
     "@internationalized/date" "^3.5.3"
     "@popperjs/core" "^2.11.6"
