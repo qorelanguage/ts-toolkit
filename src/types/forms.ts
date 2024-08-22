@@ -5,16 +5,16 @@ import { TQorusType } from './qorus';
 
 export type TQorusFormOperatorValue = string | string[] | undefined | null;
 
-export type TQorusFormField = {
+export interface IQorusFormField {
   type: TQorusType;
   value: any;
   is_expression?: boolean;
   op?: TQorusFormOperatorValue;
-};
+}
 
-export type IQorusForm =
+export type TQorusForm =
   | {
-      [optionName: string]: TQorusFormField | undefined;
+      [optionName: string]: IQorusFormField | undefined;
     }
   | undefined;
 

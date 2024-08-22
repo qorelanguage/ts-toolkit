@@ -11,6 +11,7 @@ export type TQorusBooleanCompatibleUIType = 'bool' | 'boolean';
 export type TQorusSpecialUIType = 'richtext' | 'data-provider';
 
 export type TQorusType =
+  | TQorusInterfaces
   | TQorusStringCompatibleUIType
   | TQorusNumberCompatibleUIType
   | TQorusListCompatibleUIType
