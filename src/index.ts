@@ -13,18 +13,9 @@ export { TContext } from './QorusDataProvider';
 export { IDefaultHeaders } from './QorusRequest';
 export { IApiPaths, IAuthenticatorApiPaths, IDataProviderApiPaths, IJobsApiPaths, TVersion } from './utils/apiPaths';
 
-export {
-  TQorusAnyCompatibleUIType,
-  TQorusBooleanCompatibleUIType,
-  TQorusHashCompatibleUIType,
-  TQorusInterfaces,
-  TQorusListCompatibleUIType,
-  TQorusNullCompatibleUIType,
-  TQorusNumberCompatibleUIType,
-  TQorusSpecialUIType,
-  TQorusStringCompatibleUIType,
-  TQorusType,
-} from './types/qorus';
+export * from './types/expressions';
+export * from './types/forms';
+export * from './types/qorus';
 
 /**
  * A record of objects with string key and string value
