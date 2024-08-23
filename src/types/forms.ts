@@ -1,5 +1,3 @@
-import type { TReqoreIntent } from '@qoretechnologies/reqore/dist/constants/theme';
-import type { IReqoreAutoFocusRules } from '@qoretechnologies/reqore/dist/hooks/useAutoFocus';
 import { IQorusExpression } from './expressions';
 import { TQorusType } from './qorus';
 
@@ -20,10 +18,10 @@ export type TQorusForm =
 
 export type TQorusFlatForm = Record<string, any>;
 
-export interface IQorusFormFieldMessage {
+export interface IQorusFormFieldMessage<Intent> {
   title?: string;
   content: string;
-  intent?: TReqoreIntent;
+  intent?: Intent;
 }
 
 export interface IQorusAllowedValue {
@@ -33,7 +31,7 @@ export interface IQorusAllowedValue {
   value: unknown;
 }
 
-export interface IQorusFormFieldSchema {
+export interface IQorusFormFieldSchema<Intent, FocusRules> {
   type: TQorusType | TQorusType[];
   element_type?: TQorusType;
   value?: unknown | IQorusExpression;
@@ -47,7 +45,7 @@ export interface IQorusFormFieldSchema {
 
   allowed_values?: IQorusAllowedValue[];
   allowed_schemes?: IQorusAllowedValue[];
-  arg_schema?: IQorusFormSchema;
+  arg_schema?: IQorusFormSchema<Intent, FocusRules>;
 
   supports_templates?: boolean;
   supports_references?: boolean;
@@ -68,12 +66,12 @@ export interface IQorusFormFieldSchema {
   disabled?: boolean;
   readonly?: boolean;
 
-  intent?: TReqoreIntent;
+  intent?: Intent;
   metadata?: Record<string, any>;
   rules?: ['valid_identifier'];
 
-  messages?: IQorusFormFieldMessage[];
-  focusRules?: IReqoreAutoFocusRules;
+  messages?: IQorusFormFieldMessage<Intent>[];
+  focusRules?: FocusRules;
   markdown?: boolean;
 
   get_message?: {
@@ -92,8 +90,8 @@ export interface IQorusFormFieldSchema {
   };
 }
 
-export interface IQorusFormSchema {
-  [optionName: string]: IQorusFormFieldSchema;
+export interface IQorusFormSchema<Intent, FocusRules> {
+  [optionName: string]: IQorusFormFieldSchema<Intent, FocusRules>;
 }
 
 export interface IQorusFormOperator {
