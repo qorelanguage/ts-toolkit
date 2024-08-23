@@ -61,6 +61,7 @@
   "devDependencies": {
     "@babel/core": "^7.20.2",
     "@chromatic-com/storybook": "^1",
+    "@qoretechnologies/reqore": "^0.48.4",
     "@storybook/addon-actions": "^8.2.7",
     "@storybook/addon-essentials": "^8.2.7",
     "@storybook/addon-interactions": "^8.2.7",
