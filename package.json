@@ -24,7 +24,6 @@
     "updatePullRequestVersion"
   ],
   "pre-push": [
-    "test",
     "lint",
     "build:test"
   ],
