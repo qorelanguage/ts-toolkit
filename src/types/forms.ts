@@ -40,6 +40,7 @@ export interface IQorusFormFieldSchema<Intent, FocusRules> {
   default_value_desc?: string;
 
   required?: boolean;
+  required_groups?: string[];
   preselected?: boolean;
   sensitive?: boolean;
 
@@ -55,7 +56,7 @@ export interface IQorusFormFieldSchema<Intent, FocusRules> {
   app?: string;
   action?: string;
 
-  depends_on?: string[];
+  depends_on?: string[] | string[][];
   has_dependents?: boolean;
   on_change?: string[];
 
