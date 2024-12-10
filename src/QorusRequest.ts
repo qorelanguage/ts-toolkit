@@ -118,7 +118,14 @@ export class QorusRequest {
         throw new ErrorQorusRequest(text);
       }
 
-      const json = await promise.json();
+      let json: any;
+
+      // We need to turn the promise to json but if the response is empty we need to return an empty object
+      try {
+        json = await promise.json();
+      } catch (error) {
+        json = {};
+      }
 
       return { data: json };
     }

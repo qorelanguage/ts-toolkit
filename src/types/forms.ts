@@ -26,8 +26,8 @@ export interface IQorusFormFieldMessage<Intent> {
 
 export interface IQorusAllowedValue {
   display_name: string;
-  short_desc: string;
-  desc: string;
+  short_desc?: string;
+  desc?: string;
   value: unknown;
 }
 
@@ -45,6 +45,7 @@ export interface IQorusFormFieldSchema<Intent, FocusRules> {
   sensitive?: boolean;
 
   allowed_values?: IQorusAllowedValue[];
+  allowed_values_creatable?: boolean;
   allowed_schemes?: IQorusAllowedValue[];
   arg_schema?: IQorusFormSchema<Intent, FocusRules>;
 
