@@ -72,18 +72,18 @@ jobs:
           access: public
 
       # Publish to chromatic
-      - name: Publish to Chromatic
-        env:
-          ENDPOINT_API: ${{ secrets.ENDPOINT_API}}
-          API_USER_NAME: ${{ secrets.API_USER_NAME}}
-          API_USER_PASS: ${{ secrets.API_USER_PASS }}
-        id: chromatic_publish
-        uses: chromaui/action@latest
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-          exitZeroOnChanges: true
-          allowConsoleErrors: true
+      # - name: Publish to Chromatic
+      #   env:
+      #     ENDPOINT_API: ${{ secrets.ENDPOINT_API}}
+      #     API_USER_NAME: ${{ secrets.API_USER_NAME}}
+      #     API_USER_PASS: ${{ secrets.API_USER_PASS }}
+      #   id: chromatic_publish
+      #   uses: chromaui/action@latest
+      #   with:
+      #     token: ${{ secrets.GITHUB_TOKEN }}
+      #     projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+      #     exitZeroOnChanges: true
+      #     allowConsoleErrors: true
 
       # Create new release
       - name: Create a release
