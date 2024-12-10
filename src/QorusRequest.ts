@@ -118,6 +118,10 @@ export class QorusRequest {
         throw new ErrorQorusRequest(text);
       }
 
+      if (promise.status === 204 || promise.status === 404) {
+        return { data: {} };
+      }
+
       let json: any;
 
       // We need to turn the promise to json but if the response is empty we need to return an empty object
