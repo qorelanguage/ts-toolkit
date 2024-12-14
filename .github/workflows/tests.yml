@@ -88,20 +88,6 @@ jobs:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           exitZeroOnChanges: true
 
-      # Change package version to make release
-      - name: Change npm version
-        id: change_npm_version
-        run: npm version ${{ steps.save_release_version.outputs.version }} --no-git-tag-version --force
-
-      # Publish new release to NPM
-      - name: Publish to NPM
-        id: npm_publish
-        uses: JS-DevTools/npm-publish@v1
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
-          tag: pull_request_${{ steps.save_release_version.outputs.version }}
-          access: public
-
       # Notify discord if all steps succeeded
       - name: Discord notification
         env:

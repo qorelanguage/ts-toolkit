@@ -33,11 +33,10 @@ export interface IQorusAllowedValue<IMetadata extends Record<string, any> = Reco
   short_desc?: string;
   desc?: string;
   value: unknown;
-  name?: string;
   disabled?: boolean;
   intent?: TReqoreIntent;
   badge?: IReqorePanelProps['badge'];
-  messages?: IQorusFormFieldMessage;
+  messages?: IQorusFormFieldMessage[];
   actions?: IReqorePanelProps['actions'];
   icon?: IReqoreIconName;
   image?: string;
