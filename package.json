@@ -1,6 +1,6 @@
 {
   "name": "@qoretechnologies/ts-toolkit",
-  "version": "0.4.11",
+  "version": "0.4.12",
   "description": "Utility library to interact with Qorus Integration Engine & Qore Language",
   "keywords": [
     "qoretechnologies",
@@ -20,9 +20,6 @@
     ],
     "testTimeout": 60000
   },
-  "pre-commit": [
-    "updatePullRequestVersion"
-  ],
   "pre-push": [
     "lint",
     "build:test"
@@ -60,7 +57,7 @@
   "devDependencies": {
     "@babel/core": "^7.20.2",
     "@chromatic-com/storybook": "^1",
-    "@qoretechnologies/reqore": "^0.48.4",
+    "@qoretechnologies/reqore": "^0.48.20",
     "@storybook/addon-actions": "^8.2.7",
     "@storybook/addon-essentials": "^8.2.7",
     "@storybook/addon-interactions": "^8.2.7",
@@ -106,6 +103,9 @@
     "typedoc-json-parser": "^7.0.2",
     "typescript": "^4.7.4",
     "webpack-node-externals": "^3.0.0"
+  },
+  "peerDependencies": {
+    "@qoretechnologies/reqore": "^0.48.0"
   },
   "dependencies": {
     "async": "^3.2.4",

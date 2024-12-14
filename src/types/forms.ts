@@ -1,3 +1,7 @@
+import { IReqorePanelProps } from '@qoretechnologies/reqore/dist/components/Panel';
+import { TReqoreIntent } from '@qoretechnologies/reqore/dist/constants/theme';
+import { IReqoreAutoFocusRules } from '@qoretechnologies/reqore/dist/hooks/useAutoFocus';
+import { IReqoreIconName } from '@qoretechnologies/reqore/dist/types/icons';
 import { IQorusExpression } from './expressions';
 import { TQorusType } from './qorus';
 
@@ -18,20 +22,31 @@ export type TQorusForm =
 
 export type TQorusFlatForm = Record<string, any>;
 
-export interface IQorusFormFieldMessage<Intent> {
+export interface IQorusFormFieldMessage {
   title?: string;
   content: string;
-  intent?: Intent;
+  intent?: TReqoreIntent;
 }
 
-export interface IQorusAllowedValue {
+export interface IQorusAllowedValue<IMetadata extends Record<string, any> = Record<string, any>> {
   display_name: string;
   short_desc?: string;
   desc?: string;
   value: unknown;
+  name?: string;
+  disabled?: boolean;
+  intent?: TReqoreIntent;
+  badge?: IReqorePanelProps['badge'];
+  messages?: IQorusFormFieldMessage;
+  actions?: IReqorePanelProps['actions'];
+  icon?: IReqoreIconName;
+  image?: string;
+  metadata?: IMetadata;
 }
 
-export interface IQorusFormFieldSchema<Intent, FocusRules> {
+export type TQorusFormFieldOnChangeEvents = 'refetch';
+
+export interface IQorusFormFieldSchema {
   type: TQorusType | TQorusType[];
   element_type?: TQorusType;
   value?: unknown | IQorusExpression;
@@ -47,7 +62,7 @@ export interface IQorusFormFieldSchema<Intent, FocusRules> {
   allowed_values?: IQorusAllowedValue[];
   allowed_values_creatable?: boolean;
   allowed_schemes?: IQorusAllowedValue[];
-  arg_schema?: IQorusFormSchema<Intent, FocusRules>;
+  arg_schema?: IQorusFormSchema;
 
   supports_templates?: boolean;
   supports_references?: boolean;
@@ -59,7 +74,7 @@ export interface IQorusFormFieldSchema<Intent, FocusRules> {
 
   depends_on?: string[] | string[][];
   has_dependents?: boolean;
-  on_change?: string[];
+  on_change?: TQorusFormFieldOnChangeEvents[];
 
   display_name?: string;
   short_desc?: string;
@@ -68,12 +83,12 @@ export interface IQorusFormFieldSchema<Intent, FocusRules> {
   disabled?: boolean;
   readonly?: boolean;
 
-  intent?: Intent;
+  intent?: TReqoreIntent;
   metadata?: Record<string, any>;
   rules?: ['valid_identifier'];
 
-  messages?: IQorusFormFieldMessage<Intent>[];
-  focusRules?: FocusRules;
+  messages?: IQorusFormFieldMessage[];
+  focusRules?: IReqoreAutoFocusRules;
   markdown?: boolean;
 
   get_message?: {
@@ -92,8 +107,8 @@ export interface IQorusFormFieldSchema<Intent, FocusRules> {
   };
 }
 
-export interface IQorusFormSchema<Intent, FocusRules> {
-  [optionName: string]: IQorusFormFieldSchema<Intent, FocusRules>;
+export interface IQorusFormSchema {
+  [optionName: string]: IQorusFormFieldSchema;
 }
 
 export interface IQorusFormOperator {

@@ -1,7 +1,16 @@
 export type TQorusInterfaces = 'mapper' | 'workflow' | 'service' | 'job' | 'connection';
 
 /* Types used in UIs, these are not 1:1 to Qore types */
-export type TQorusStringCompatibleUIType = 'binary' | 'date' | 'url' | 'email' | 'string' | 'file-as-string';
+export type TQorusStringCompatibleUIType =
+  | 'binary'
+  | 'date'
+  | 'url'
+  | 'email'
+  | 'string'
+  | 'file-as-string'
+  | 'long-string'
+  | 'enum'
+  | 'url';
 export type TQorusNumberCompatibleUIType = 'int' | 'integer' | 'float' | 'number';
 export type TQorusListCompatibleUIType = 'list' | 'range';
 export type TQorusHashCompatibleUIType = 'hash' | 'data' | 'rgbcolor';
@@ -19,4 +28,5 @@ export type TQorusType =
   | TQorusNullCompatibleUIType
   | TQorusAnyCompatibleUIType
   | TQorusBooleanCompatibleUIType
-  | TQorusSpecialUIType;
+  | TQorusSpecialUIType
+  | 'context';
