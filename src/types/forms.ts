@@ -1,6 +1,7 @@
 import { IReqorePanelProps } from '@qoretechnologies/reqore/dist/components/Panel';
 import { TReqoreIntent } from '@qoretechnologies/reqore/dist/constants/theme';
 import { IReqoreAutoFocusRules } from '@qoretechnologies/reqore/dist/hooks/useAutoFocus';
+import { IReqoreIconName } from '@qoretechnologies/reqore/dist/types/icons';
 import { IQorusExpression } from './expressions';
 import { TQorusType } from './qorus';
 
@@ -38,6 +39,8 @@ export interface IQorusAllowedValue<IMetadata extends Record<string, any> = Reco
   badge?: IReqorePanelProps['badge'];
   messages?: IQorusFormFieldMessage;
   actions?: IReqorePanelProps['actions'];
+  icon?: IReqoreIconName;
+  image?: string;
   metadata?: IMetadata;
 }
 
