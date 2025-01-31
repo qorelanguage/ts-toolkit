@@ -638,6 +638,7 @@ export interface IQoreAppActionWithEvent<Options extends TQoreOptions = TQoreOpt
 }
 
 export type TQoreOptions = Record<string, IQoreAppActionOption>;
+export type TQoreOptionsNotLocalized = Record<string, IQoreAppActionOption & IQoreAppSharedNotLocalized>;
 export type TQoreResponseType = string | TQoreTypeObject;
 
 export interface IQoreAppActionWithFunction<Options extends TQoreOptions = TQoreOptions, _Response = TQoreResponseType>
