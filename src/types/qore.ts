@@ -298,7 +298,7 @@ export type TQoreAppActionFunctionContext<
 export type TQoreAppActionFunction<Options extends TQoreOptions = TQoreOptions> = (
   obj?: TQoreMappedOptions<Options>,
   options?: never,
-  context?: TQoreAppActionFunctionContext<{}, Options>,
+  context?: TQoreAppActionFunctionContext<TCustomConnOptions, Options>,
 ) => any;
 
 export type TQoreGetAllowedValuesFunction<
@@ -572,7 +572,7 @@ export interface IQoreAppActionWithEventOrWebhook<Options extends TQoreOptions =
   event_info: TQoreAppActionWithEventOrWebhookEventInfo;
   options?: Options;
   get_example_event_data?: (
-    context: TQoreAppActionFunctionContext<{}, Options>,
+    context: TQoreAppActionFunctionContext<TCustomConnOptions, Options>,
   ) => Record<string, any> | Promise<Record<string, any>>;
 }
 
@@ -607,13 +607,13 @@ export type TWebhookDeregisterFunction<CustomConnOptions extends TCustomConnOpti
 ) => Promise<void>;
 
 export interface IQoreAppActionWithWebhookWithoutPerms<Options extends TQoreOptions = TQoreOptions>
-  extends IQoreAppActionWithWebhookBase<{}, Options> {
+  extends IQoreAppActionWithWebhookBase<TCustomConnOptions, Options> {
   webhook_auth?: EQoreAppActionWebhookAuthType.AUTH_NONE;
   webhook_perms?: never;
 }
 
 export interface IQoreAppActionWithWebhookWithPerms<Options extends TQoreOptions = TQoreOptions>
-  extends IQoreAppActionWithWebhookBase<{}, Options> {
+  extends IQoreAppActionWithWebhookBase<TCustomConnOptions, Options> {
   webhook_auth?: EQoreAppActionWebhookAuthType.AUTH_REQUIRE_AUTH;
   webhook_perms?: string[];
 }
@@ -625,7 +625,7 @@ export type TQoreAppActionWithWebhook<Options extends TQoreOptions = TQoreOption
 export interface IQoreAppActionWithEvent<Options extends TQoreOptions = TQoreOptions>
   extends IQoreAppActionWithEventOrWebhook<Options> {
   event_function: (
-    context: TQoreAppActionFunctionContext<{}, Options>,
+    context: TQoreAppActionFunctionContext<TCustomConnOptions, Options>,
     update: (event_data: Record<string, any>) => void,
     should_stop: () => boolean,
   ) => void;
