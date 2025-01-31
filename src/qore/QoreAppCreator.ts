@@ -1,4 +1,10 @@
-import { TQoreAppEventAction, TQoreAppNonEventAction, TQoreAppWithActions, TQoreOptions } from '../types/qore';
+import {
+  TQoreAppAction,
+  TQoreAppEventAction,
+  TQoreAppNonEventAction,
+  TQoreAppWithActions,
+  TQoreOptions,
+} from '../types/qore';
 
 /* A class to create Qore Qog Apps */
 export class QoreAppCreator {
@@ -17,7 +23,9 @@ export class QoreAppCreator {
   }
 
   /* Creates an App with triggers and actions */
-  public static createApp<Actions>(app: TQoreAppWithActions<Actions>): TQoreAppWithActions<Actions> {
+  public static createApp<Actions extends TQoreAppAction<any>[]>(
+    app: TQoreAppWithActions<Actions>,
+  ): TQoreAppWithActions<Actions> {
     return app;
   }
 }
