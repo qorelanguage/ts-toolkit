@@ -263,7 +263,7 @@ export interface IQoreExistingAppWithActions extends IQoreExistingApp {
 }
 
 export interface TQoreAppWithActions<
-  Actions = TQoreAppAction[],
+  Actions extends TQoreAppAction<TQoreOptions>[] = TQoreAppAction<TQoreOptions>[],
   RestModifierOptions extends Record<string, IQoreConnectionOption> = Record<string, IQoreConnectionOption>,
 > extends IQoreApp<RestModifierOptions> {
   actions: Actions;
@@ -401,11 +401,11 @@ export type TQoreOptionType<Option> = Option extends { type: keyof TQoreTypeMapp
   : never;
 
 // Mapped type to map over the keys of the options object and apply the OptionType type
-export type TQoreOptionsType<Options> = {
+export type TQoreOptionsType<Options extends TQoreOptions = TQoreOptions> = {
   [OptionKey in keyof Options]: TQoreOptionType<Options[OptionKey]>;
 };
 
-export type TQoreMappedOptions<T> = TQoreOptionsType<T>;
+export type TQoreMappedOptions<T extends TQoreOptions> = TQoreOptionsType<T>;
 
 export type GetConnectionOptionDefinitionFromQoreType<T extends TQoreType> = T extends TQoreStringCompatibleType
   ? IQoreConnectionOption<T, string>
