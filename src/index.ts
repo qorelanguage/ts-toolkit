@@ -4,6 +4,7 @@ export * as QorusOptions from './QorusOptions';
 export * as HttpRequest from './QorusRequest';
 export * as Validator from './QorusValidator';
 
+export { QoreAppCreator } from './qore/QoreAppCreator';
 export { default as QorusAuthenticator } from './QorusAuthenticator';
 export { default as QorusDataProvider } from './QorusDataProvider';
 export { default as QorusRequest } from './QorusRequest';
