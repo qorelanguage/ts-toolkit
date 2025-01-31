@@ -7,8 +7,8 @@ export interface IQoreAppShared {
   desc?: string;
 }
 
-export interface IQoreAppSharedWithRequiredDescriptions {
-  display_name?: string;
+export interface IQoreAppSharedNotLocalized {
+  display_name: string;
   short_desc: string;
   desc: string;
 }
@@ -238,7 +238,7 @@ export type TStringWithFirstUpperCaseCharacter = `${TFirstAppCharacter}${string}
 
 export interface IQoreApp<
   RestModifierOptions extends Record<string, IQoreConnectionOption> = Record<string, IQoreConnectionOption>,
-> extends IQoreAppSharedWithRequiredDescriptions {
+> extends IQoreAppShared {
   name: TStringWithFirstUpperCaseCharacter;
   logo: string;
   logo_file_name: string;
@@ -285,7 +285,7 @@ export const QoreAppActionCodeToLocale: {
 };
 
 export interface IQoreBaseAppAction<CustomConnOptions extends TCustomConnOptions = TCustomConnOptions>
-  extends IQoreAppSharedWithRequiredDescriptions {
+  extends IQoreAppShared {
   app: string;
   action: string;
   action_code: EQoreAppActionCode;
