@@ -5,12 +5,13 @@ import {
   TQoreAppNonEventAction,
   TQoreAppWithActions,
   TQoreOptions,
+  TQoreOptionsNotLocalized,
 } from '../types/qore';
 
 /* A class to create Qore Qog Apps */
 export class QoreAppCreator {
   /* Creates a trigger function to be used in an App */
-  public static createTrigger<TOptions extends TQoreOptions>(
+  public static createTrigger<TOptions extends TQoreOptionsNotLocalized>(
     trigger: TQoreAppEventAction<TOptions> & IQoreAppSharedNotLocalized,
   ): TQoreAppEventAction<TOptions> & IQoreAppSharedNotLocalized {
     return trigger;
@@ -28,7 +29,7 @@ export class QoreAppCreator {
   }
 
   /* Creates an action function to be used in an App */
-  public static createAction<TOptions extends TQoreOptions>(
+  public static createAction<TOptions extends TQoreOptionsNotLocalized>(
     action: TQoreAppNonEventAction<TOptions> & IQoreAppSharedNotLocalized,
   ): TQoreAppNonEventAction<TOptions> & IQoreAppSharedNotLocalized {
     return action;
