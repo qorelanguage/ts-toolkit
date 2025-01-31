@@ -7,6 +7,12 @@ export interface IQoreAppShared {
   desc?: string;
 }
 
+export interface IQoreAppSharedWithRequiredDescriptions {
+  display_name?: string;
+  short_desc: string;
+  desc: string;
+}
+
 export type THttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
 export type TWebhookHttpMethod = 'POST' | 'PUT' | 'PATCH' | 'GET';
 export type TRestGetAllowedValuesMethod = TWebhookHttpMethod;
@@ -232,7 +238,7 @@ export type TStringWithFirstUpperCaseCharacter = `${TFirstAppCharacter}${string}
 
 export interface IQoreApp<
   RestModifierOptions extends Record<string, IQoreConnectionOption> = Record<string, IQoreConnectionOption>,
-> extends IQoreAppShared {
+> extends IQoreAppSharedWithRequiredDescriptions {
   name: TStringWithFirstUpperCaseCharacter;
   logo: string;
   logo_file_name: string;
@@ -279,7 +285,7 @@ export const QoreAppActionCodeToLocale: {
 };
 
 export interface IQoreBaseAppAction<CustomConnOptions extends TCustomConnOptions = TCustomConnOptions>
-  extends IQoreAppShared {
+  extends IQoreAppSharedWithRequiredDescriptions {
   app: string;
   action: string;
   action_code: EQoreAppActionCode;
