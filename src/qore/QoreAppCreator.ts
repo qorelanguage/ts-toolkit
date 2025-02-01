@@ -1,12 +1,6 @@
-import {
-  IQoreAppSharedNotLocalized,
-  TQoreAppAction,
-  TQoreAppEventAction,
-  TQoreAppNonEventAction,
-  TQoreAppWithActions,
-  TQoreOptions,
-  TQoreOptionsNotLocalized,
-} from '../types/qore';
+import { TQoreAppAction, TQoreAppEventAction, TQoreAppNonEventAction } from '../types/qore/actions';
+import { IQoreAppSharedNotLocalized, TQoreAppWithActions } from '../types/qore/apps';
+import { TQoreOptions, TQoreOptionsNotLocalized } from '../types/qore/options';
 
 /* A class to create Qore Qog Apps */
 export class QoreAppCreator {
