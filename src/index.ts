@@ -16,7 +16,11 @@ export { IApiPaths, IAuthenticatorApiPaths, IDataProviderApiPaths, IJobsApiPaths
 
 export * from './types/expressions';
 export * from './types/forms';
-export * from './types/qore';
+export * from './types/qore/actions';
+export * from './types/qore/apps';
+export * from './types/qore/options';
+export * from './types/qore/types';
+export * from './types/qore/utils';
 export * from './types/qorus';
 export * from './types/utils';
 
