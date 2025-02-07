@@ -155,7 +155,7 @@ export interface IQoreRestConnectionConfig {
 
   // The OAuth2 authorization URL used for the "authorization_code" grant type. This is ignored if a token
   // is provided directly.
-  oauth2_auth_url: string;
+  oauth2_auth_url?: string;
 
   // If set to true, OAuth2 tokens will be automatically refreshed when they expire (default: true).
   oauth2_auto_refresh?: boolean;
@@ -167,7 +167,7 @@ export interface IQoreRestConnectionConfig {
   oauth2_client_secret?: string | 'auto';
 
   // The OAuth2 grant type being used. Possible values are "authorization_code", "client_credentials", "password".
-  oauth2_grant_type: TQoreRestOauth2GrantType;
+  oauth2_grant_type?: TQoreRestOauth2GrantType;
 
   // The OAuth2 redirect URL used for the "authorization_code" grant type.
   oauth2_redirect_url?: string;
@@ -185,7 +185,7 @@ export interface IQoreRestConnectionConfig {
   oauth2_token_auth_secret_only?: boolean;
 
   // The OAuth2 token URL used to obtain access tokens. Ignored if the `token` option is set.
-  oauth2_token_url: string;
+  oauth2_token_url?: string;
 
   // Use basic authorization with the client ID and client secret when making token requests
   oauth2_token_use_basic_auth?: boolean;
