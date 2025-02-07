@@ -30,9 +30,22 @@ const opts: TQoreOptions = {
   },
 };
 
-QoreAppCreator.createLocalizedAction({
+const act = QoreAppCreator.createLocalizedAction({
   action: 'test',
   action_code: EQoreAppActionCode.ACTION,
   app: 'test',
   options: opts,
+});
+
+QoreAppCreator.createLocalizedApp({
+  actions: [act],
+  logo: 'test',
+  logo_file_name: 'test',
+  logo_mime_type: 'test',
+  name: 'Test',
+  swagger_schema_map: {
+    test: {
+      swagger: 'test.yaml',
+    },
+  },
 });

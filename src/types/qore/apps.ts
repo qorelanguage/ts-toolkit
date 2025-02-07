@@ -1,5 +1,5 @@
 import { TQoreAppAction, TQoreAppActionFunctionContext } from './actions';
-import { IQoreConnectionOption, TQoreOptions, TQoreMappedOptions } from './options';
+import { IQoreConnectionOption, TQoreMappedOptions, TQoreOptions } from './options';
 
 export interface IQoreAppShared {
   display_name?: string;
@@ -13,20 +13,39 @@ export interface IQoreAppSharedNotLocalized {
   desc: string;
 }
 
+export interface IQoreSwaggerConfig {
+  // A location to a Swagger 2.0 schema = OpenAPI 2.0
+  swagger?: string;
+  // an optional hash of swagger parsing options
+  swagger_options?: {
+    // this will turn on all lax parsing options - or you can use 128
+    // (LM_ACCEPT_QUERY_OBJECTS = accept "object" as a valid type for query parameters like OpenAPI 3.0)
+    parse_flags?: number;
+  };
+  // a list of swagger paths to build an optimized schema
+  swagger_paths?: string[];
+  /*
+   an object keyed by Swagger type (in dot notation), values are
+   applied to override the given types
+  */
+  swagger_type_overrides?: Record<string, any>;
+  // if date/time values should be serialized in UTC as Swagger query args
+  swagger_utc_dates?: boolean;
+  // the date format to use when serializing Swagger query date args
+  swagger_query_date_format?: string;
+}
+
 export interface IQoreApp<
   RestModifierOptions extends Record<string, IQoreConnectionOption> = Record<string, IQoreConnectionOption>,
-> extends IQoreAppShared {
+> extends IQoreSwaggerConfig,
+    IQoreAppShared {
   name: TStringWithFirstUpperCaseCharacter;
   logo: string;
   logo_file_name: string;
   logo_mime_type: string;
   rest?: IQoreRestConnectionConfig;
   rest_modifiers?: IQoreRestConnectionModifiers<RestModifierOptions>;
-
-  swagger?: string;
-  swagger_options?: object;
-  swagger_paths?: string[];
-  swagger_type_overrides?: object;
+  swagger_schema_map?: Record<string, IQoreSwaggerConfig>;
 }
 
 export interface IQoreExistingApp {
@@ -171,6 +190,9 @@ export interface IQoreRestConnectionConfig {
   // Use basic authorization with the client ID and client secret when making token requests
   oauth2_token_use_basic_auth?: boolean;
 
+  // A separator character for OAuth2 scopes in URI arguments
+  oauth2_scope_separator_char?: string;
+
   // The password for authentication. Not used in conjunction with OAuth2 configurations.
   password?: string;
 
@@ -189,6 +211,9 @@ export interface IQoreRestConnectionConfig {
 
   // The proxy URL for connecting through a proxy server.
   proxy?: string;
+
+  // An object to check all deserialized bodies in 200 OK server responses for authentication errors
+  rest_body_auth_error_check?: Record<string, any>;
 
   // A PEM-encoded string representing an X.509 client certificate.
   ssl_cert_data?: string;
