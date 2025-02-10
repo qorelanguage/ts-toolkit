@@ -28,6 +28,30 @@ const opts: TQoreOptions = {
       },
     ],
   },
+  hash: {
+    type: {
+      type: 'hash',
+      fields: {
+        test: {
+          type: 'softstring',
+          example_value: '123',
+          default_value: '123',
+        },
+        test2: {
+          type: {
+            type: 'hash',
+            fields: {
+              test: {
+                type: 'softstring',
+                example_value: '123',
+                default_value: '123',
+              },
+            },
+          },
+        },
+      },
+    },
+  },
 };
 
 const act = QoreAppCreator.createLocalizedAction({
