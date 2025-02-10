@@ -10,6 +10,7 @@ import {
   TQoreNumberCompatibleType,
   TQoreStringCompatibleType,
   TQoreTypeMapping,
+  TQoreTypeObject,
 } from './types';
 
 export type TCustomConnOptions = Record<string, IQoreConnectionOption>;
@@ -155,7 +156,7 @@ export interface IQoreAppActionListOption<CustomConnOptions extends TCustomConnO
 
 export interface IQoreAppActionObjectOption<CustomConnOptions extends TCustomConnOptions>
   extends IQoreAppActionBaseOption {
-  type: TQoreHashCompatibleType;
+  type: TQoreHashCompatibleType | TQoreTypeObject;
   example_value?: Record<string, unknown>;
   allowed_values?: IQoreAllowedValue<Record<string, unknown>>[];
   default_value?: Record<string, unknown>;
