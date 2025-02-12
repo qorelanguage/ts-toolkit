@@ -2,6 +2,8 @@ import { IReqoreIconName } from '@qoretechnologies/reqore/dist/types/icons';
 import { TQoreAppActionFunctionContext, TWebhookHttpMethod } from './actions';
 import { IQoreAppShared, IQoreAppSharedNotLocalized } from './apps';
 import {
+  IQoreTypeObjectList,
+  IQoreTypeObjectNonList,
   TQoreAnyType,
   TQoreBooleanCompatibleType,
   TQoreHashCompatibleType,
@@ -9,8 +11,7 @@ import {
   TQoreNullableType,
   TQoreNumberCompatibleType,
   TQoreStringCompatibleType,
-  TQoreTypeMapping,
-  TQoreTypeObject,
+  TQoreTypeMapping
 } from './types';
 
 export type TCustomConnOptions = Record<string, IQoreConnectionOption>;
@@ -144,7 +145,7 @@ export interface IQoreAppActionBooleanOption<CustomConnOptions extends TCustomCo
 
 export interface IQoreAppActionListOption<CustomConnOptions extends TCustomConnOptions>
   extends IQoreAppActionBaseOption {
-  type: TQoreListCompatibleType;
+  type: TQoreListCompatibleType | IQoreTypeObjectList;
   example_value?: unknown[];
   allowed_values?: IQoreAllowedValue<unknown>[];
   default_value?: unknown[];
@@ -156,7 +157,7 @@ export interface IQoreAppActionListOption<CustomConnOptions extends TCustomConnO
 
 export interface IQoreAppActionObjectOption<CustomConnOptions extends TCustomConnOptions>
   extends IQoreAppActionBaseOption {
-  type: TQoreHashCompatibleType | TQoreTypeObject;
+  type: TQoreHashCompatibleType | IQoreTypeObjectNonList;
   example_value?: Record<string, unknown>;
   allowed_values?: IQoreAllowedValue<Record<string, unknown>>[];
   default_value?: Record<string, unknown>;

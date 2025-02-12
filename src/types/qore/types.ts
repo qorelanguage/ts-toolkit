@@ -94,6 +94,4 @@ export interface IQoreTypeObjectList<TypeValue = unknown> extends Omit<IQoreShar
   name?: string;
   // description of a list type; only valid if \c type is "list" or "softlist"
   element_type?: TQoreType;
-  // an optional object with the fields of the object
-  fields?: Record<string, TQoreAppActionOption>;
 }
