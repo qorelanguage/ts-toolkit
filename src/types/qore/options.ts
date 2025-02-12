@@ -11,7 +11,7 @@ import {
   TQoreNullableType,
   TQoreNumberCompatibleType,
   TQoreStringCompatibleType,
-  TQoreTypeMapping
+  TQoreTypeMapping,
 } from './types';
 
 export type TCustomConnOptions = Record<string, IQoreConnectionOption>;
