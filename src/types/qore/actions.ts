@@ -120,6 +120,7 @@ export interface IQoreAppActionWithFunction<Options extends TQoreOptions = TQore
 export interface IQoreAppActionWithSwaggerPath extends IQoreBaseAppAction {
   action_code: EQoreAppActionCode.ACTION;
   swagger_path: string;
+  swagger_schema?: string;
   // optional list of vars in swagger_path (ex: '/{id}/{key}') that should not have option dependencies created
   independent_path_vars?: string[];
 }
