@@ -59,6 +59,7 @@ const act = QoreAppCreator.createLocalizedAction({
   action_code: EQoreAppActionCode.ACTION,
   app: 'test',
   options: opts,
+  api_function: () => {},
 });
 
 QoreAppCreator.createLocalizedApp({

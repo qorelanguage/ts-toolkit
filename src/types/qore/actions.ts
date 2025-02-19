@@ -26,7 +26,7 @@ export type TQoreAppActionFunctionContext<
 };
 
 export type TQoreAppActionFunction<Options extends TQoreOptions = TQoreOptions> = (
-  obj?: TQoreMappedOptions<Options>,
+  obj?: Partial<TQoreMappedOptions<Options>>,
   options?: never,
   context?: TQoreAppActionFunctionContext<TCustomConnOptions, Options>,
 ) => any;
@@ -111,7 +111,7 @@ export enum EQoreAppActionWebhookAuthType {
 export interface IQoreAppActionWithFunction<Options extends TQoreOptions = TQoreOptions, _Response = TQoreResponseType>
   extends IQoreBaseAppAction {
   action_code: EQoreAppActionCode.ACTION;
-  api_function?: TQoreAppActionFunction<Options>;
+  api_function: TQoreAppActionFunction<Options>;
   options?: Options;
   response_type?: TQoreResponseType;
   io_timeout_secs?: number;
