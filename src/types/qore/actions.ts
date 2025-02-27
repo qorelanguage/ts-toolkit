@@ -14,7 +14,12 @@ export interface IQoreBaseAppAction<CustomConnOptions extends TCustomConnOptions
   action: string;
   action_code: EQoreAppActionCode;
   override_options?: Record<string, TQoreAppActionOverrideOption<CustomConnOptions>>;
+  get_dynamic_request_type?: TQoreGetDynamicRequestTypeFunction;
 }
+
+export type TQoreGetDynamicRequestTypeFunction = (
+  context?: TQoreAppActionFunctionContext,
+) => Record<string, TQoreAppActionOption> | Promise<Record<string, TQoreAppActionOption>>;
 
 export type TQoreAppActionFunctionContext<
   CustomConnOptions extends TCustomConnOptions = TCustomConnOptions,
