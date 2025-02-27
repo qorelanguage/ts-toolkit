@@ -21,6 +21,12 @@ export interface IQoreSwaggerConfig {
     // this will turn on all lax parsing options - or you can use 128
     // (LM_ACCEPT_QUERY_OBJECTS = accept "object" as a valid type for query parameters like OpenAPI 3.0)
     parse_flags?: number;
+
+    // if date/time values should be serialized in UTC as Swagger query args
+    utc_dates?: boolean;
+
+    // the date format to use when serializing Swagger query date args
+    query_date_format?: string;
   };
   // a list of swagger paths to build an optimized schema
   swagger_paths?: string[];
@@ -29,10 +35,6 @@ export interface IQoreSwaggerConfig {
    applied to override the given types
   */
   swagger_type_overrides?: Record<string, any>;
-  // if date/time values should be serialized in UTC as Swagger query args
-  swagger_utc_dates?: boolean;
-  // the date format to use when serializing Swagger query date args
-  swagger_query_date_format?: string;
 }
 
 export interface IQoreApp<

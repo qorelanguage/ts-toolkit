@@ -32,6 +32,7 @@ export interface IQorusAllowedValue<IMetadata extends Record<string, any> = Reco
   display_name: string;
   short_desc?: string;
   desc?: string;
+  name?: string;
   value: unknown;
   disabled?: boolean;
   intent?: TReqoreIntent;
@@ -64,6 +65,7 @@ export interface IQorusFormFieldSchema {
   allowed_values_creatable?: boolean;
   allowed_schemes?: IQorusAllowedValue[];
   arg_schema?: IQorusFormSchema;
+  multiselect?: boolean;
 
   supports_templates?: boolean;
   supports_references?: boolean;

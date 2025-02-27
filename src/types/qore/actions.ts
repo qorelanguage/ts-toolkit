@@ -26,7 +26,7 @@ export type TQoreAppActionFunctionContext<
 };
 
 export type TQoreAppActionFunction<Options extends TQoreOptions = TQoreOptions> = (
-  obj?: TQoreMappedOptions<Options>,
+  obj?: Partial<TQoreMappedOptions<Options>>,
   options?: never,
   context?: TQoreAppActionFunctionContext<TCustomConnOptions, Options>,
 ) => any;
@@ -60,6 +60,7 @@ export interface IQoreAppActionWithWebhookBase<
   // webhook event location in dot notation (ex: 'data.account.events')
   webhook_event_loc?: string;
   webhook_echo_header?: string;
+  webhook_echo_body_keys?: string[];
 }
 
 export type TWebhookRegisterFunction<
@@ -111,7 +112,7 @@ export enum EQoreAppActionWebhookAuthType {
 export interface IQoreAppActionWithFunction<Options extends TQoreOptions = TQoreOptions, _Response = TQoreResponseType>
   extends IQoreBaseAppAction {
   action_code: EQoreAppActionCode.ACTION;
-  api_function?: TQoreAppActionFunction<Options>;
+  api_function: TQoreAppActionFunction<Options>;
   options?: Options;
   response_type?: TQoreResponseType;
   io_timeout_secs?: number;
@@ -120,6 +121,7 @@ export interface IQoreAppActionWithFunction<Options extends TQoreOptions = TQore
 export interface IQoreAppActionWithSwaggerPath extends IQoreBaseAppAction {
   action_code: EQoreAppActionCode.ACTION;
   swagger_path: string;
+  swagger_schema?: string;
   // optional list of vars in swagger_path (ex: '/{id}/{key}') that should not have option dependencies created
   independent_path_vars?: string[];
 }
