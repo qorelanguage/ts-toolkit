@@ -48,10 +48,12 @@ export type TQorusFormFieldOnChangeEvents = 'refetch';
 export interface IQorusFormFieldSchema {
   type: TQorusType | TQorusType[];
   element_type?: TQorusType;
+
   value?: unknown | IQorusExpression;
   desc?: string;
   default_value?: unknown;
   default_value_desc?: string;
+  default_value_display_name?: string;
 
   required?: boolean;
   required_groups?: string[];
