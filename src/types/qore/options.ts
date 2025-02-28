@@ -11,6 +11,7 @@ import {
   TQoreNullableType,
   TQoreNumberCompatibleType,
   TQoreStringCompatibleType,
+  TQoreType,
   TQoreTypeMapping,
 } from './types';
 
@@ -43,6 +44,10 @@ export type TQoreGetDefaultValueFunction<
   CustomConnOptions extends TCustomConnOptions = TCustomConnOptions,
   TypeValue = unknown,
 > = (context?: TQoreAppActionFunctionContext<CustomConnOptions>) => TypeValue | Promise<TypeValue>;
+
+export type TQoreGetDynamicTypeFunction<CustomConnOptions extends TCustomConnOptions = TCustomConnOptions> = (
+  context?: TQoreAppActionFunctionContext<CustomConnOptions>,
+) => TQoreType | Promise<TQoreType>;
 
 // Type to extract the type of each option using the mapping
 export type TQoreOptionType<Option> = Option extends { type: keyof TQoreTypeMapping }
@@ -105,7 +110,7 @@ export interface IQoreSharedObject<TypeValue = unknown> extends IQoreAppShared {
   default_value?: TypeValue;
 }
 
-export interface IQoreAppActionBaseOption extends IQoreSharedObject {
+export interface IQoreAppActionBaseOption<CustomConnOptions extends TCustomConnOptions> extends IQoreSharedObject {
   get_dependent_options?: TQoreGetDependentOptionsFunction;
   /** Mutually-exclusive with 'get_allowed_values'
    */
@@ -117,10 +122,11 @@ export interface IQoreAppActionBaseOption extends IQoreSharedObject {
   sensitive?: boolean;
   required_groups?: string[];
   on_change?: TQoreOptionOnChangeEvents[];
+  get_dynamic_type?: TQoreGetDynamicTypeFunction<CustomConnOptions>;
 }
 
 export interface IQoreAppActionStringOption<CustomConnOptions extends TCustomConnOptions>
-  extends IQoreAppActionBaseOption {
+  extends IQoreAppActionBaseOption<CustomConnOptions> {
   type: TQoreStringCompatibleType;
   example_value?: string;
   allowed_values?: IQoreAllowedValue<string>[];
@@ -132,7 +138,7 @@ export interface IQoreAppActionStringOption<CustomConnOptions extends TCustomCon
 }
 
 export interface IQoreAppActionBooleanOption<CustomConnOptions extends TCustomConnOptions>
-  extends IQoreAppActionBaseOption {
+  extends IQoreAppActionBaseOption<CustomConnOptions> {
   type: TQoreBooleanCompatibleType;
   example_value?: boolean;
   allowed_values?: IQoreAllowedValue<boolean>[];
@@ -144,7 +150,7 @@ export interface IQoreAppActionBooleanOption<CustomConnOptions extends TCustomCo
 }
 
 export interface IQoreAppActionListOption<CustomConnOptions extends TCustomConnOptions>
-  extends IQoreAppActionBaseOption {
+  extends IQoreAppActionBaseOption<CustomConnOptions> {
   type: TQoreListCompatibleType | IQoreTypeObjectList;
   example_value?: unknown[];
   allowed_values?: IQoreAllowedValue<unknown>[];
@@ -156,7 +162,7 @@ export interface IQoreAppActionListOption<CustomConnOptions extends TCustomConnO
 }
 
 export interface IQoreAppActionObjectOption<CustomConnOptions extends TCustomConnOptions>
-  extends IQoreAppActionBaseOption {
+  extends IQoreAppActionBaseOption<CustomConnOptions> {
   type: TQoreHashCompatibleType | IQoreTypeObjectNonList;
   example_value?: Record<string, unknown>;
   allowed_values?: IQoreAllowedValue<Record<string, unknown>>[];
@@ -168,7 +174,7 @@ export interface IQoreAppActionObjectOption<CustomConnOptions extends TCustomCon
 }
 
 export interface IQoreAppActionNumberOption<CustomConnOptions extends TCustomConnOptions>
-  extends IQoreAppActionBaseOption {
+  extends IQoreAppActionBaseOption<CustomConnOptions> {
   type: TQoreNumberCompatibleType;
   example_value?: number;
   allowed_values?: IQoreAllowedValue<number>[];
@@ -180,7 +186,7 @@ export interface IQoreAppActionNumberOption<CustomConnOptions extends TCustomCon
 }
 
 export interface IQoreAppActionNullOption<CustomConnOptions extends TCustomConnOptions>
-  extends IQoreAppActionBaseOption {
+  extends IQoreAppActionBaseOption<CustomConnOptions> {
   type: TQoreNullableType;
   example_value?: never;
   allowed_values?: IQoreAllowedValue<never>[];
@@ -192,7 +198,7 @@ export interface IQoreAppActionNullOption<CustomConnOptions extends TCustomConnO
 }
 
 export interface IQoreAppActionAnyOption<CustomConnOptions extends TCustomConnOptions>
-  extends IQoreAppActionBaseOption {
+  extends IQoreAppActionBaseOption<CustomConnOptions> {
   type: TQoreAnyType;
   example_value?: any;
   allowed_values?: IQoreAllowedValue<any>[];

@@ -5,6 +5,7 @@ import {
   TQoreAppActionOverrideOption,
   TQoreMappedOptions,
   TQoreOptions,
+  TQoreOptionsNotLocalized,
 } from './options';
 import { TQoreTypeObject } from './types';
 
@@ -19,7 +20,7 @@ export interface IQoreBaseAppAction<CustomConnOptions extends TCustomConnOptions
 
 export type TQoreGetDynamicRequestTypeFunction = (
   context?: TQoreAppActionFunctionContext,
-) => Record<string, TQoreAppActionOption> | Promise<Record<string, TQoreAppActionOption>>;
+) => TQoreOptionsNotLocalized | Promise<TQoreOptionsNotLocalized>;
 
 export type TQoreAppActionFunctionContext<
   CustomConnOptions extends TCustomConnOptions = TCustomConnOptions,
