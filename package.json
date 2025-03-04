@@ -1,6 +1,6 @@
 {
   "name": "@qoretechnologies/ts-toolkit",
-  "version": "0.5.14",
+  "version": "0.5.15",
   "description": "Utility library to interact with Qorus Integration Engine & Qore Language",
   "keywords": [
     "qoretechnologies",
@@ -20,10 +20,6 @@
     ],
     "testTimeout": 60000
   },
-  "pre-push": [
-    "lint",
-    "build:test"
-  ],
   "scripts": {
     "typedoc": "typedoc",
     "test": "./node_modules/.bin/jest --json --outputFile=tests.json",
