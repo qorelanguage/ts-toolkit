@@ -63,6 +63,11 @@ export interface IQorusFormFieldSchema {
 
   allowed_values?: IQorusAllowedValue[];
   allowed_values_creatable?: boolean;
+
+  // When type is 'list' each element in the list can have allowed values
+  element_allowed_values?: IQorusAllowedValue[];
+  element_allowed_values_creatable?: boolean;
+
   allowed_schemes?: IQorusAllowedValue[];
   arg_schema?: IQorusFormSchema;
   multiselect?: boolean;
