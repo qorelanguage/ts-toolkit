@@ -2,6 +2,7 @@ import { IReqorePanelProps } from '@qoretechnologies/reqore/dist/components/Pane
 import { TReqoreIntent } from '@qoretechnologies/reqore/dist/constants/theme';
 import { IReqoreAutoFocusRules } from '@qoretechnologies/reqore/dist/hooks/useAutoFocus';
 import { IReqoreIconName } from '@qoretechnologies/reqore/dist/types/icons';
+import { IReqraftFileFormFieldProps } from '@qoretechnologies/reqraft/dist/components/form/fields/file/File';
 import { IQorusExpression } from './expressions';
 import { TQorusType } from './qorus';
 
@@ -46,8 +47,11 @@ export interface IQorusAllowedValue<IMetadata extends Record<string, any> = Reco
 
 export type TQorusFormFieldOnChangeEvents = 'refetch';
 
-export interface IQorusFormFieldSchema {
-  type: TQorusType | TQorusType[];
+export type IQorusTypeOptionsMapper = {
+  file: IReqraftFileFormFieldProps['options'];
+};
+
+export interface IQorusFormFieldSchemaBase {
   element_type?: TQorusType;
 
   value?: unknown | IQorusExpression;
@@ -95,6 +99,10 @@ export interface IQorusFormFieldSchema {
   metadata?: Record<string, any>;
   rules?: ['valid_identifier'];
 
+  options?: {
+    file?: IReqraftFileFormFieldProps['options'];
+  };
+
   messages?: IQorusFormFieldMessage[];
   focusRules?: IReqoreAutoFocusRules;
   markdown?: boolean;
@@ -115,8 +123,17 @@ export interface IQorusFormFieldSchema {
   };
 }
 
+export type TQorusFormFieldSchema =
+  | ({
+      type: keyof IQorusTypeOptionsMapper;
+      type_options?: IQorusTypeOptionsMapper[keyof IQorusTypeOptionsMapper];
+    } & IQorusFormFieldSchemaBase)
+  | ({
+      type: Exclude<TQorusType, keyof IQorusTypeOptionsMapper>;
+    } & IQorusFormFieldSchemaBase);
+
 export interface IQorusFormSchema {
-  [optionName: string]: IQorusFormFieldSchema;
+  [optionName: string]: TQorusFormFieldSchema;
 }
 
 export interface IQorusFormOperator {
