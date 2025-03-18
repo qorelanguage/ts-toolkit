@@ -3,6 +3,7 @@ import {
   TCustomConnOptions,
   TQoreAppActionOption,
   TQoreAppActionOverrideOption,
+  TQoreGetDynamicTypeFunction,
   TQoreMappedOptions,
   TQoreOptions,
   TQoreOptionsNotLocalized,
@@ -44,6 +45,7 @@ export interface IQoreAppActionWithEventOrWebhook<Options extends TQoreOptions =
   action_code: EQoreAppActionCode.EVENT;
   event_info: TQoreAppActionWithEventOrWebhookEventInfo;
   options?: Options;
+  get_dynamic_type?: TQoreGetDynamicTypeFunction<TCustomConnOptions>;
   get_example_event_data?: (
     context: TQoreAppActionFunctionContext<TCustomConnOptions, Options>,
   ) => Record<string, any> | Promise<Record<string, any>>;
