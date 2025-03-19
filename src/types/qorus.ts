@@ -21,8 +21,8 @@ export type TQorusInterfaces =
 /* Types used in UIs, these are not 1:1 to Qore types */
 export type TQorusStringCompatibleUIType = 'binary' | 'date' | 'email' | 'string' | 'long-string' | 'enum' | 'url';
 export type TQorusNumberCompatibleUIType = 'int' | 'integer' | 'float' | 'number';
-export type TQorusListCompatibleUIType = 'list' | 'range';
-export type TQorusHashCompatibleUIType = 'hash' | 'data' | 'rgbcolor';
+export type TQorusListCompatibleUIType = 'list' | 'range' | 'free-list';
+export type TQorusHashCompatibleUIType = 'hash' | 'data' | 'rgbcolor' | 'free-hash';
 export type TQorusNullCompatibleUIType = 'null' | 'nothing';
 export type TQorusAnyCompatibleUIType = 'any' | 'auto';
 export type TQorusBooleanCompatibleUIType = 'bool' | 'boolean';
