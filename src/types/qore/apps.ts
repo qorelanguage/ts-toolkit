@@ -192,6 +192,9 @@ export interface IQoreRestConnectionConfig {
   // The OAuth2 token URL used to obtain access tokens. Ignored if the `token` option is set.
   oauth2_token_url?: string;
 
+  // an integer in minutes giving the expected lifetime of the token
+  oauth2_token_expiry_hint?: number;
+
   // Use basic authorization with the client ID and client secret when making token requests
   oauth2_token_use_basic_auth?: boolean;
 
