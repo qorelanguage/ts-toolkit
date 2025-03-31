@@ -16,6 +16,8 @@ export interface IQoreBaseAppAction<CustomConnOptions extends TCustomConnOptions
   action: string;
   action_code: EQoreAppActionCode;
   override_options?: Record<string, TQoreAppActionOverrideOption<CustomConnOptions>>;
+  response_type?: TQoreResponseType;
+  request_type?: TQoreResponseType;
   get_dynamic_request_type?: TQoreGetDynamicRequestTypeFunction;
 }
 
@@ -128,14 +130,16 @@ export type TQoreRequestDataConverterFunction<
 export type TQoreResponseDataConverterFunction<
   CustomConnOptions extends TCustomConnOptions = TCustomConnOptions,
   Options extends TQoreOptions = TQoreOptions,
-> = (response: any, ctx: TQoreAppActionFunctionContext<CustomConnOptions, Options>) => any;
+> = (
+  response: { body?: Record<string, any>; headers?: Record<string, any>; 'headers-raw'?: Record<string, any> },
+  ctx: TQoreAppActionFunctionContext<CustomConnOptions, Options>,
+) => any;
 
 export interface IQoreAppActionWithFunction<Options extends TQoreOptions = TQoreOptions, _Response = TQoreResponseType>
   extends IQoreBaseAppAction {
   action_code: EQoreAppActionCode.ACTION;
   api_function: TQoreAppActionFunction<Options>;
   options?: Options;
-  response_type?: TQoreResponseType;
   io_timeout_secs?: number;
 }
 
