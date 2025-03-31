@@ -17,7 +17,7 @@ export interface IQoreBaseAppAction<CustomConnOptions extends TCustomConnOptions
   action_code: EQoreAppActionCode;
   override_options?: Record<string, TQoreAppActionOverrideOption<CustomConnOptions>>;
   response_type?: TQoreResponseType;
-  request_type?: TQoreResponseType;
+  request_type?: TQoreOptionsNotLocalized;
   get_dynamic_request_type?: TQoreGetDynamicRequestTypeFunction;
 }
 
