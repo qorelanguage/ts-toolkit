@@ -6,6 +6,8 @@ import {
   IQoreTypeObjectNonList,
   TQoreAnyType,
   TQoreBooleanCompatibleType,
+  TQoreFile,
+  TQoreFileType,
   TQoreHashCompatibleType,
   TQoreListCompatibleType,
   TQoreNullableType,
@@ -213,6 +215,16 @@ export interface IQoreAppActionAnyOption<CustomConnOptions extends TCustomConnOp
   get_default_value?: TQoreGetDefaultValueFunction<CustomConnOptions, any>;
 }
 
+export interface IQoreAppActionFileOption<CustomConnOptions extends TCustomConnOptions>
+  extends IQoreAppActionBaseOption<CustomConnOptions> {
+  type: TQoreFileType;
+  example_value?: TQoreFile;
+  allowed_values?: IQoreAllowedValue<TQoreFile>[];
+  default_value?: TQoreFile;
+  get_allowed_values?: TQoreGetAllowedValuesFunction<CustomConnOptions, TQoreFile>;
+  get_default_value?: TQoreGetDefaultValueFunction<CustomConnOptions, TQoreFile>;
+}
+
 export type TQoreAppActionOption<CustomConnOptions extends TCustomConnOptions = TCustomConnOptions> =
   | IQoreAppActionStringOption<CustomConnOptions>
   | IQoreAppActionNumberOption<CustomConnOptions>
@@ -220,6 +232,7 @@ export type TQoreAppActionOption<CustomConnOptions extends TCustomConnOptions = 
   | IQoreAppActionListOption<CustomConnOptions>
   | IQoreAppActionObjectOption<CustomConnOptions>
   | IQoreAppActionNullOption<CustomConnOptions>
+  | IQoreAppActionFileOption<CustomConnOptions>
   | IQoreAppActionAnyOption<CustomConnOptions>;
 
 export type TQoreAppActionOverrideOption<CustomConnOptions extends TCustomConnOptions = TCustomConnOptions> = Partial<
