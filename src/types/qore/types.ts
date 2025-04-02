@@ -53,6 +53,12 @@ export type TQoreListCompatibleType = 'list' | '*list' | 'softlist' | '*softlist
 export type TQoreBooleanCompatibleType = 'boolean' | '*boolean' | 'softbool' | '*bool' | '*bool' | 'bool' | '*softbool';
 export type TQoreNullableType = 'NULL' | 'nothing';
 export type TQoreAnyType = 'all' | 'any' | 'auto';
+export type TQoreFileType = 'file' | '*file';
+export type TQoreFile = {
+  name: string;
+  mime_type: string;
+  content: string;
+};
 
 export type TQoreSimpleType = TQoreSimpleTypeNonList | TQoreListCompatibleType;
 
@@ -62,6 +68,7 @@ export type TQoreSimpleTypeNonList =
   | TQoreHashCompatibleType
   | TQoreBooleanCompatibleType
   | TQoreNullableType
+  | TQoreFileType
   | TQoreAnyType;
 
 export type TQoreType = TQoreSimpleType | TQoreTypeObject;
@@ -73,6 +80,7 @@ export type TQoreTypeMapping = {
   hash: Record<string, any>;
   list: unknown[];
   boolean: boolean;
+  file: TQoreFile;
   [key: string]: any;
 };
 
