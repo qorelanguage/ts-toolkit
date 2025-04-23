@@ -1,5 +1,5 @@
 import { OpenAPIV2 } from 'openapi-types';
-import { IQoreBaseAppAction } from './actions';
+import { IQoreAppActionWithSwaggerPath, IQoreBaseAppAction } from './actions';
 import { TCustomConnOptions } from './options';
 
 export type THttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
@@ -8,7 +8,7 @@ export type TAllowedPaths<CustomConnOptions extends TCustomConnOptions = TCustom
   Partial<Record<THttpMethod, IAllowedPathData<CustomConnOptions>>>
 >;
 export interface IAllowedPathData<CustomConnOptions extends TCustomConnOptions = TCustomConnOptions>
-  extends Partial<Omit<IQoreBaseAppAction, 'action_code' | 'app'>> {
+  extends Partial<Omit<IQoreAppActionWithSwaggerPath, 'action_code' | 'app'>> {
   processor?: (
     data: OpenAPIV2.OperationObject,
   ) => Partial<Omit<IQoreBaseAppAction<CustomConnOptions>, 'action_code' | 'app'>>;

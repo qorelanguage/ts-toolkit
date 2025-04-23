@@ -3,6 +3,7 @@ import {
   TCustomConnOptions,
   TQoreAppActionOption,
   TQoreAppActionOverrideOption,
+  TQoreGetDynamicTypeFunction,
   TQoreMappedOptions,
   TQoreOptions,
   TQoreOptionsNotLocalized,
@@ -15,6 +16,8 @@ export interface IQoreBaseAppAction<CustomConnOptions extends TCustomConnOptions
   action: string;
   action_code: EQoreAppActionCode;
   override_options?: Record<string, TQoreAppActionOverrideOption<CustomConnOptions>>;
+  response_type?: TQoreResponseType;
+  request_type?: TQoreOptionsNotLocalized;
   get_dynamic_request_type?: TQoreGetDynamicRequestTypeFunction;
 }
 
@@ -44,6 +47,7 @@ export interface IQoreAppActionWithEventOrWebhook<Options extends TQoreOptions =
   action_code: EQoreAppActionCode.EVENT;
   event_info: TQoreAppActionWithEventOrWebhookEventInfo;
   options?: Options;
+  get_dynamic_type?: TQoreGetDynamicTypeFunction<TCustomConnOptions>;
   get_example_event_data?: (
     context: TQoreAppActionFunctionContext<TCustomConnOptions, Options>,
   ) => Record<string, any> | Promise<Record<string, any>>;
@@ -115,21 +119,38 @@ export enum EQoreAppActionWebhookAuthType {
   AUTH_REQUIRE_AUTH = 1,
 }
 
+export type TQoreRequestDataConverterFunction<
+  CustomConnOptions extends TCustomConnOptions = TCustomConnOptions,
+  Options extends TQoreOptions = TQoreOptions,
+> = (
+  request: Partial<TQoreMappedOptions<Options>>,
+  ctx: TQoreAppActionFunctionContext<CustomConnOptions, Options>,
+) => Record<string, any>;
+
+export type TQoreResponseDataConverterFunction<
+  CustomConnOptions extends TCustomConnOptions = TCustomConnOptions,
+  Options extends TQoreOptions = TQoreOptions,
+> = (
+  response: { body?: Record<string, any>; headers?: Record<string, any>; 'headers-raw'?: Record<string, any> },
+  ctx: TQoreAppActionFunctionContext<CustomConnOptions, Options>,
+) => any;
+
 export interface IQoreAppActionWithFunction<Options extends TQoreOptions = TQoreOptions, _Response = TQoreResponseType>
   extends IQoreBaseAppAction {
   action_code: EQoreAppActionCode.ACTION;
   api_function: TQoreAppActionFunction<Options>;
   options?: Options;
-  response_type?: TQoreResponseType;
   io_timeout_secs?: number;
 }
 
-export interface IQoreAppActionWithSwaggerPath extends IQoreBaseAppAction {
+export interface IQoreAppActionWithSwaggerPath<Options extends TQoreOptions = TQoreOptions> extends IQoreBaseAppAction {
   action_code: EQoreAppActionCode.ACTION;
   swagger_path: string;
   swagger_schema?: string;
   // optional list of vars in swagger_path (ex: '/{id}/{key}') that should not have option dependencies created
   independent_path_vars?: string[];
+  request_data_converter?: TQoreRequestDataConverterFunction<TCustomConnOptions, Options>;
+  response_data_converter?: TQoreResponseDataConverterFunction<TCustomConnOptions, Options>;
 }
 
 export interface IQorePartialAppActionWithSwaggerPath extends Omit<IQoreBaseAppAction, 'app'> {

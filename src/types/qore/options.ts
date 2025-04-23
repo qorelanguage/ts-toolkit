@@ -6,6 +6,8 @@ import {
   IQoreTypeObjectNonList,
   TQoreAnyType,
   TQoreBooleanCompatibleType,
+  TQoreFile,
+  TQoreFileType,
   TQoreHashCompatibleType,
   TQoreListCompatibleType,
   TQoreNullableType,
@@ -159,6 +161,10 @@ export interface IQoreAppActionListOption<CustomConnOptions extends TCustomConnO
    */
   get_allowed_values?: TQoreGetAllowedValuesFunction<CustomConnOptions, unknown>;
   get_default_value?: TQoreGetDefaultValueFunction<CustomConnOptions, unknown[]>;
+  get_element_allowed_values?: TQoreGetAllowedValuesFunction<CustomConnOptions, unknown>;
+  rest_get_element_allowed_values?: IQoreRestGetAllowedValues;
+  element_allowed_values?: IQoreAllowedValue<unknown>[];
+  element_allowed_values_creatable?: boolean;
 }
 
 export interface IQoreAppActionObjectOption<CustomConnOptions extends TCustomConnOptions>
@@ -209,6 +215,16 @@ export interface IQoreAppActionAnyOption<CustomConnOptions extends TCustomConnOp
   get_default_value?: TQoreGetDefaultValueFunction<CustomConnOptions, any>;
 }
 
+export interface IQoreAppActionFileOption<CustomConnOptions extends TCustomConnOptions>
+  extends IQoreAppActionBaseOption<CustomConnOptions> {
+  type: TQoreFileType;
+  example_value?: TQoreFile;
+  allowed_values?: IQoreAllowedValue<TQoreFile>[];
+  default_value?: TQoreFile;
+  get_allowed_values?: TQoreGetAllowedValuesFunction<CustomConnOptions, TQoreFile>;
+  get_default_value?: TQoreGetDefaultValueFunction<CustomConnOptions, TQoreFile>;
+}
+
 export type TQoreAppActionOption<CustomConnOptions extends TCustomConnOptions = TCustomConnOptions> =
   | IQoreAppActionStringOption<CustomConnOptions>
   | IQoreAppActionNumberOption<CustomConnOptions>
@@ -216,6 +232,7 @@ export type TQoreAppActionOption<CustomConnOptions extends TCustomConnOptions = 
   | IQoreAppActionListOption<CustomConnOptions>
   | IQoreAppActionObjectOption<CustomConnOptions>
   | IQoreAppActionNullOption<CustomConnOptions>
+  | IQoreAppActionFileOption<CustomConnOptions>
   | IQoreAppActionAnyOption<CustomConnOptions>;
 
 export type TQoreAppActionOverrideOption<CustomConnOptions extends TCustomConnOptions = TCustomConnOptions> = Partial<

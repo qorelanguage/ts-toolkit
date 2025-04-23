@@ -171,6 +171,9 @@ export interface IQoreRestConnectionConfig {
   // The OAuth2 grant type being used. Possible values are "authorization_code", "client_credentials", "password".
   oauth2_grant_type?: TQoreRestOauth2GrantType;
 
+  // When this option is set, the token option will be used as an API key and set in the header indicated by this option on each request
+  token_api_key_header?: string;
+
   // The OAuth2 redirect URL used for the "authorization_code" grant type.
   oauth2_redirect_url?: string;
 
@@ -188,6 +191,9 @@ export interface IQoreRestConnectionConfig {
 
   // The OAuth2 token URL used to obtain access tokens. Ignored if the `token` option is set.
   oauth2_token_url?: string;
+
+  // an integer in minutes giving the expected lifetime of the token
+  oauth2_token_expiry_hint?: number;
 
   // Use basic authorization with the client ID and client secret when making token requests
   oauth2_token_use_basic_auth?: boolean;
