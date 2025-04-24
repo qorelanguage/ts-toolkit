@@ -172,16 +172,16 @@ export interface IQoreRestConnectionConfig {
   oauth2_grant_type?: TQoreRestOauth2GrantType;
 
   // The OAuth2 token URL used to obtain access tokens. This is ignored if a token is provided directly.
-  custom_token_refresh_auth: string;
+  custom_token_refresh_auth?: string;
 
   // The location to use for refreshing the token. Possible values are "url" or "header".
-  custom_token_refresh_location: string;
+  custom_token_refresh_location?: string;
 
   // The HTTP method to use for refreshing the token. This is used when `custom_token_refresh_location` is set to "url".
-  custom_token_refresh_method: string;
+  custom_token_refresh_method?: string;
 
   // The URL to use for refreshing the token. This is used when `custom_token_refresh_location` is set to "url".
-  custom_token_refresh_path: string;
+  custom_token_refresh_path?: string;
 
   // When this option is set, the token option will be used as an API key and set in the header indicated by this option on each request
   token_api_key_header?: string;
