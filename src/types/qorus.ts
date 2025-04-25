@@ -38,3 +38,30 @@ export type TQorusType =
   | TQorusAnyCompatibleUIType
   | TQorusBooleanCompatibleUIType
   | TQorusSpecialUIType;
+
+export type QorusProgrammingLanguage = 'qore' | 'python' | 'java';
+
+export interface QorusConfigItem {
+  type: TQorusType;
+  desc: string;
+  strictly_local?: boolean;
+  config_group?: string;
+  sensitive?: boolean;
+  prefix?: string;
+  value: any;
+  level?: string;
+  is_set?: boolean;
+  is_templated_string?: boolean;
+}
+
+export interface QorusInterfaceGroups {
+  [groupName: string]: {
+    name: string;
+    enabled?: boolean;
+    size: number;
+  };
+}
+
+export interface QorusInterfaceTags {
+  [tagName: string]: any;
+}
