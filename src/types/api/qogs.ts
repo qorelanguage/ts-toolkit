@@ -49,7 +49,7 @@ export interface QorusQogState {
   transitions: QorusQogTransition[];
   is_event_trigger?: boolean;
   type?: string;
-  condition?: string | Object;
+  condition?: string | unknown;
   language?: QorusProgrammingLanguage;
   'block-config'?: Record<string, any>;
 }
