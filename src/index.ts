@@ -14,8 +14,10 @@ export { TContext } from './QorusDataProvider';
 export { IDefaultHeaders } from './QorusRequest';
 export { IApiPaths, IAuthenticatorApiPaths, IDataProviderApiPaths, IJobsApiPaths, TVersion } from './utils/apiPaths';
 
+export * from './types/api/alerts';
 export * from './types/api/library';
 export * from './types/api/qogs';
+export * from './types/api/services';
 export * from './types/api/system';
 export * from './types/expressions';
 export * from './types/forms';

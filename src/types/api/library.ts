@@ -1,10 +1,10 @@
 export interface QorusLibrary {
-  functions: QorusLibraryFunctions;
-  classes: QorusLibraryClasses;
-  constants: QorusLibraryConstants;
-  pipelines: QorusLibraryPipelines;
-  fsm: QorusLibraryQogs;
-  mapper: QorusLibraryMappers;
+  functions?: QorusLibraryFunction[];
+  classes?: QorusLibraryClass[];
+  constants?: QorusLibraryConstant[];
+  pipelines?: QorusLibraryPipeline[];
+  fsm?: QorusLibraryQog[];
+  mapper?: QorusLibraryMapper[];
 }
 
 export interface QorusLibraryItem {
@@ -13,38 +13,23 @@ export interface QorusLibraryItem {
   version?: string;
 }
 
-export interface QorusLibraryFunctions {
-  [functionName: string]: QorusLibraryFunction;
-}
-
-export interface QorusLibraryClasses {
-  [className: string]: QorusLibraryClass;
-}
-
-export interface QorusLibraryConstants {
-  [constantName: string]: QorusLibraryConstant;
-}
-
-export interface QorusLibraryPipelines {
-  [pipelineName: string]: QorusLibraryPipeline;
-}
-
-export interface QorusLibraryMappers {
-  [mapperName: string]: QorusLibraryMapper;
-}
-
-export interface QorusLibraryQogs {
-  [qogName: string]: QorusLibraryQog;
-}
-
 export interface QorusLibraryClass extends QorusLibraryItem {}
 
 export interface QorusLibraryConstant extends QorusLibraryItem {}
 
 export interface QorusLibraryPipeline extends QorusLibraryItem {}
 
-export interface QorusLibraryMapper extends QorusLibraryItem {}
+export interface QorusLibraryMapper extends Pick<QorusLibraryItem, 'name' | 'version'> {
+  mapperid: number;
+  type: 'Mapper';
+}
 
 export interface QorusLibraryQog extends QorusLibraryItem {}
 
 export interface QorusLibraryFunction extends QorusLibraryItem {}
+
+export interface QorusLibraryValueMap extends QorusLibraryItem {
+  throws_exception: boolean;
+  valuetype: string;
+  mapsize: number;
+}
