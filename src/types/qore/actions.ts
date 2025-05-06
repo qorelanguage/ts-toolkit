@@ -19,11 +19,16 @@ export interface IQoreBaseAppAction<CustomConnOptions extends TCustomConnOptions
   response_type?: TQoreResponseType;
   request_type?: TQoreOptionsNotLocalized;
   get_dynamic_request_type?: TQoreGetDynamicRequestTypeFunction;
+  get_dynamic_response_type?: TQoreGetDynamicResponseTypeFunction<CustomConnOptions>;
 }
 
 export type TQoreGetDynamicRequestTypeFunction = (
   context?: TQoreAppActionFunctionContext,
 ) => TQoreOptionsNotLocalized | Promise<TQoreOptionsNotLocalized>;
+
+export type TQoreGetDynamicResponseTypeFunction<CustomConnOptions extends TCustomConnOptions = TCustomConnOptions> = (
+  context?: TQoreAppActionFunctionContext<CustomConnOptions>,
+) => TQoreResponseType | Promise<TQoreResponseType>;
 
 export type TQoreAppActionFunctionContext<
   CustomConnOptions extends TCustomConnOptions = TCustomConnOptions,
