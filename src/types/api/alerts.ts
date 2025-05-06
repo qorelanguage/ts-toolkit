@@ -18,7 +18,7 @@ export interface QorusAlert {
   servicetype?: string;
   source: string;
   stateless?: boolean;
-  type: string;
+  type: 'JOB' | 'SERVICE' | 'WORKFLOW' | 'USER-CONNECTION' | 'DATASOURCE' | 'REMOTE' | 'PROCESS';
   url?: string;
   version?: string;
   when: string;
