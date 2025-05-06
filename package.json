@@ -1,6 +1,6 @@
 {
   "name": "@qoretechnologies/ts-toolkit",
-  "version": "0.5.30",
+  "version": "0.5.31",
   "description": "Utility library to interact with Qorus Integration Engine & Qore Language",
   "keywords": [
     "qoretechnologies",

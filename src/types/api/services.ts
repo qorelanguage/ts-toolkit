@@ -22,7 +22,7 @@ export interface QorusService {
   threads?: number; // the number of active threads in the service
   autostart: boolean; // boolean value indicating if the service should be autostarted or not
   manual_autostart: boolean; // boolean flag set if the autostart value has been changed manually
-  loaded?: Date; // date/time the service was loaded
+  loaded?: string; // date/time the service was loaded
   methods: MethodInfo[]; // a list of hashes for each service method
   resources?: Record<string, ServiceResourceDetailInfo>; // a hash of service resources (if any), keys are resource names
   resource_files?: ServiceFileResourceInfo[]; // a list of hashes giving service resource file information (if any)
