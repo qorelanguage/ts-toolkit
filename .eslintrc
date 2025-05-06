@@ -32,11 +32,6 @@
     "@typescript-eslint/no-unsafe-return": "warn",
     "@typescript-eslint/no-unsafe-call": "warn",
     "@typescript-eslint/naming-convention": "warn",
-    "@typescript-eslint/no-empty-interface": [
-      "error",
-      {
-        "allowSingleExtends": true
-      }
-    ]
+    "@typescript-eslint/no-empty-interface": "off"
   }
 }
