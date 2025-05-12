@@ -59,6 +59,13 @@ export type TQoreFile = {
   mime_type: string;
   content: string;
 };
+export type TQoreRgbColorType = 'rbgcolor';
+export type TQoreRgbColor = {
+  r: number;
+  g: number;
+  b: number;
+  a: number;
+};
 
 export type TQoreSimpleType = TQoreSimpleTypeNonList | TQoreListCompatibleType;
 
@@ -69,6 +76,7 @@ export type TQoreSimpleTypeNonList =
   | TQoreBooleanCompatibleType
   | TQoreNullableType
   | TQoreFileType
+  | TQoreRgbColorType
   | TQoreAnyType;
 
 export type TQoreType = TQoreSimpleType | TQoreTypeObject;
@@ -81,6 +89,7 @@ export type TQoreTypeMapping = {
   list: unknown[];
   boolean: boolean;
   file: TQoreFile;
+  rbgcolor: TQoreRgbColor;
   [key: string]: any;
 };
 
