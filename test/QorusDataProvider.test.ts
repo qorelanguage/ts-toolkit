@@ -75,7 +75,8 @@ describe('QorusDataProvider Utility Class Tests', () => {
     const db = await factory.get(factoryChildrenNames.db, { datasource: 'pgsql:omquser/omquser@omquser%bee' });
     const dbChildren = db.getChildrenNames();
 
-    expect(dbChildren.table_1).toEqual('table_1');
+    // table_1 disappeared from the db children and was replaced with exec-sql
+    expect(dbChildren['exec-sql']).toEqual('exec-sql');
   });
 
   it('should check if the child is available', async () => {
