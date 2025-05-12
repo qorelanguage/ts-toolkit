@@ -8,6 +8,8 @@ import {
   TQoreBooleanCompatibleType,
   TQoreFile,
   TQoreFileType,
+  TQoreRgbColor,
+  TQoreRgbColorType,
   TQoreHashCompatibleType,
   TQoreListCompatibleType,
   TQoreNullableType,
@@ -225,6 +227,16 @@ export interface IQoreAppActionFileOption<CustomConnOptions extends TCustomConnO
   get_default_value?: TQoreGetDefaultValueFunction<CustomConnOptions, TQoreFile>;
 }
 
+export interface IQoreAppActionColorOption<CustomConnOptions extends TCustomConnOptions>
+  extends IQoreAppActionBaseOption<CustomConnOptions> {
+  type: TQoreRgbColorType;
+  example_value?: TQoreRgbColor;
+  allowed_values?: IQoreAllowedValue<TQoreRgbColor>[];
+  default_value?: TQoreRgbColor;
+  get_allowed_values?: TQoreGetAllowedValuesFunction<CustomConnOptions, TQoreRgbColor>;
+  get_default_value?: TQoreGetDefaultValueFunction<CustomConnOptions, TQoreRgbColor>;
+}
+
 export type TQoreAppActionOption<CustomConnOptions extends TCustomConnOptions = TCustomConnOptions> =
   | IQoreAppActionStringOption<CustomConnOptions>
   | IQoreAppActionNumberOption<CustomConnOptions>
@@ -233,6 +245,7 @@ export type TQoreAppActionOption<CustomConnOptions extends TCustomConnOptions = 
   | IQoreAppActionObjectOption<CustomConnOptions>
   | IQoreAppActionNullOption<CustomConnOptions>
   | IQoreAppActionFileOption<CustomConnOptions>
+  | IQoreAppActionColorOption<CustomConnOptions>
   | IQoreAppActionAnyOption<CustomConnOptions>;
 
 export type TQoreAppActionOverrideOption<CustomConnOptions extends TCustomConnOptions = TCustomConnOptions> = Partial<
