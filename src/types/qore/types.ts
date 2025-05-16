@@ -59,7 +59,7 @@ export type TQoreFile = {
   mime_type: string;
   content: string;
 };
-export type TQoreRgbColorType = 'rbgcolor';
+export type TQoreRgbColorType = 'rgbcolor';
 export type TQoreRgbColor = {
   r: number;
   g: number;
@@ -89,7 +89,7 @@ export type TQoreTypeMapping = {
   list: unknown[];
   boolean: boolean;
   file: TQoreFile;
-  rbgcolor: TQoreRgbColor;
+  rgbcolor: TQoreRgbColor;
   [key: string]: any;
 };
 

@@ -54,8 +54,22 @@ export type TQoreGetDynamicTypeFunction<CustomConnOptions extends TCustomConnOpt
 ) => TQoreType | Promise<TQoreType>;
 
 // Type to extract the type of each option using the mapping
-export type TQoreOptionType<Option> = Option extends { type: keyof TQoreTypeMapping }
-  ? TQoreTypeMapping[Option['type']]
+export type TQoreOptionType<Option> = Option extends {
+  type: infer TypeDefinition;
+}
+  ? TypeDefinition extends keyof TQoreTypeMapping
+    ? TQoreTypeMapping[TypeDefinition]
+    : TypeDefinition extends { type: 'hash'; fields: infer HashFields }
+    ? {
+        [FieldKey in keyof HashFields]: TQoreOptionType<HashFields[FieldKey]>;
+      }
+    : TypeDefinition extends { type: 'list'; element_type: infer ElementType }
+    ? ElementType extends keyof TQoreTypeMapping
+      ? TQoreTypeMapping[ElementType][]
+      : ElementType extends object
+      ? TQoreOptionType<{ type: ElementType }>[]
+      : never[]
+    : never
   : never;
 
 // Mapped type to map over the keys of the options object and apply the OptionType type
