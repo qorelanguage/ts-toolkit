@@ -155,6 +155,8 @@ export interface IQoreRestConnectionConfig {
   // authorization URL when using the "authorization_code" grant type.
   oauth2_auth_args?: Record<string, any>;
 
+  oauth2_pkce?: string;
+
   // The OAuth2 authorization URL used for the "authorization_code" grant type. This is ignored if a token
   // is provided directly.
   oauth2_auth_url?: string;
