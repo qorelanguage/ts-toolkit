@@ -1,7 +1,6 @@
 import dotenv from 'dotenv';
 import { QorusAuthenticator } from '../src';
 import { QorusDataProvider } from '../src/';
-import process
 
 dotenv.config();
 

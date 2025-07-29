@@ -1,7 +1,6 @@
 import dotenv from 'dotenv';
 import { QorusAuthenticator as QorusAuth, QorusDataProvider } from '../src';
 import logger from '../src/managers/logger';
-import process;
 
 dotenv.config();
 const loggerMock = jest.spyOn(logger, 'error');
