@@ -5,6 +5,9 @@ on:
     branches:
       - develop
 
+env:
+  TEST_DATASOURCE_CONNECT_STRING: ${{ secrets.TEST_DATASOURCE_CONNECT_STRING }}
+
 jobs:
   Publish-and-release:
     runs-on: ubuntu-latest

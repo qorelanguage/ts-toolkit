@@ -1,5 +1,5 @@
 
-# Factory 
+# Factory
 # 1st Step Browse Data Providers
 PUT https://sandbox:sandbox@sandbox.qoretechnologies.com/api/latest/dataprovider/browse
 content-type: application/json
@@ -8,7 +8,7 @@ content-type: application/json
     "context": "record"
 }
 ###
-# 2nd Step Select Factory 
+# 2nd Step Select Factory
 PUT https://sandbox:sandbox@sandbox.qoretechnologies.com/api/latest/dataprovider/browse/factory/
 content-type: application/json
 
@@ -18,14 +18,14 @@ content-type: application/json
 
 ###
 # /factory
-# 3rd Step Choose Factory 
+# 3rd Step Choose Factory
 PUT https://sandbox:sandbox@sandbox.qoretechnologies.com/api/latest/dataprovider/browse/factory/db
 content-type: application/json
 
 {
     "context": "record",
-    "provider_options": {"datasource": "pgsql:omquser/omquser@omquser%bee"}
+    "provider_options": {"datasource": "pgsql:user/passwordr@db%hostname"}
 }
 ###
 # /{factoryName}
-# 4th Step 
+# 4th Step

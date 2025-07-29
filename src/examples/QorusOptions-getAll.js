@@ -17,8 +17,8 @@ const factoryProvider = await dataProviderBrowse.get('factory');
 const options = factoryProvider.getOptions('db');
 
 // Set required constructor option
-options.set('datasource', 'pgsql:omquser/omquser@omquser%bee');
+options.set('datasource', 'pgsql@user/pass@db%host');
 
 // Returns all the the constructor properties with their values, throws error if any required property have not been provided and return undefined.
 options.getAll();
-// => {datasource: "pgsql:omquser/omquser@omquser%bee"}
+// => {datasource: "pgsql@user/pass@db%host"}

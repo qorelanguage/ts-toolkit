@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import { QorusAuthenticator } from '../src';
 import { QorusDataProvider } from '../src/';
+import process
 
 dotenv.config();
 
@@ -72,7 +73,7 @@ describe('QorusDataProvider Utility Class Tests', () => {
     const factory = await dataProviderBrowse.get(browseChildrenNames.factory);
     const factoryChildrenNames = factory.getChildrenNames();
 
-    const db = await factory.get(factoryChildrenNames.db, { datasource: 'pgsql:omquser/omquser@omquser%bee' });
+    const db = await factory.get(factoryChildrenNames.db, { datasource: process.env.TEST_DATASOURCE_CONNECT_STRING });
     const dbChildren = db.getChildrenNames();
 
     // table_1 disappeared from the db children and was replaced with exec-sql

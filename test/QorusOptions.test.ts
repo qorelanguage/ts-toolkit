@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import { QorusAuthenticator as QorusAuth, QorusDataProvider } from '../src';
 import logger from '../src/managers/logger';
+import process;
 
 dotenv.config();
 const loggerMock = jest.spyOn(logger, 'error');
@@ -33,10 +34,10 @@ describe('QorusOptions', () => {
     const factoryProvider = await dataProviderBrowse.get('factory');
     const options = factoryProvider.getOptions('db');
 
-    options?.set('datasource', 'pgsql:omquser/omquser@omquser%bee');
+    options?.set('datasource', process.env.TEST_DATASOURCE_CONNECT_STRING);
     const values: any = options?.getAll();
 
-    expect(values?.datasource).toEqual('pgsql:omquser/omquser@omquser%bee');
+    expect(values?.datasource).toEqual(process.env.TEST_DATASOURCE_CONNECT_STRING);
   });
 
   it('should return property object', async () => {
@@ -69,7 +70,7 @@ describe('QorusOptions', () => {
     const dataProviderBrowse = await QorusDataProvider.getRecord();
     const factoryProvider = await dataProviderBrowse.get('factory');
     const options = factoryProvider.getOptions('db');
-    options?.set('datasource', 'pgsql:omquser/omquser@omquser%bee');
+    options?.set('datasource', process.env.TEST_DATASOURCE_CONNECT_STRING);
 
     const isValid = options?.validateRequired();
 
@@ -80,7 +81,7 @@ describe('QorusOptions', () => {
     const dataProviderBrowse = await QorusDataProvider.getRecord();
     const factoryProvider = await dataProviderBrowse.get('factory');
     const options = factoryProvider.getOptions('db');
-    options?.set('datasource', 'pgsql:omquser/omquser@omquser%bee');
+    options?.set('datasource', process.env.TEST_DATASOURCE_CONNECT_STRING);
 
     const dbProvider = await factoryProvider.get('db', options?.getAll());
 
@@ -92,7 +93,7 @@ describe('QorusOptions', () => {
     const factoryProvider = await dataProviderBrowse.get('factory');
     const options = factoryProvider.getOptions('db');
 
-    expect(options?.validate('datasource', 'pgsql:omquser/omquser@omquser%bee')).toEqual(true);
+    expect(options?.validate('datasource', process.env.TEST_DATASOURCE_CONNECT_STRING)).toEqual(true);
   });
 
   it('should fail with error, Children for the provider does not exist', async () => {

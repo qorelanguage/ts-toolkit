@@ -18,5 +18,5 @@ const factoryProvider = await dataProviderBrowse.get('factory');
 const options = factoryProvider.getOptions('db');
 
 // Get object of provided constructor option
-options.validate('datasource', 'pgsql:omquser/omquser@omquser%bee');
+options.validate('datasource', 'pgsql@user/pass@db%host');
 // => true
