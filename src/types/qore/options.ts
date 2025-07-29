@@ -8,12 +8,12 @@ import {
   TQoreBooleanCompatibleType,
   TQoreFile,
   TQoreFileType,
-  TQoreRgbColor,
-  TQoreRgbColorType,
   TQoreHashCompatibleType,
   TQoreListCompatibleType,
   TQoreNullableType,
   TQoreNumberCompatibleType,
+  TQoreRgbColor,
+  TQoreRgbColorType,
   TQoreStringCompatibleType,
   TQoreType,
   TQoreTypeMapping,
@@ -135,6 +135,7 @@ export interface IQoreAppActionBaseOption<CustomConnOptions extends TCustomConnO
   rest_get_allowed_values?: IQoreRestGetAllowedValues;
   allowed_values_creatable?: boolean;
   depends_on?: string[] | string[][];
+  validation_regex?: string;
 
   attr?: Record<string, any>;
   sensitive?: boolean;

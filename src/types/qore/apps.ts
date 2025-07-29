@@ -276,6 +276,7 @@ export interface IQoreRestConnectionModifiers<
   set_options_post_auth_code?: (
     context: Omit<TQoreAppActionFunctionContext<ModifierOptions>, 'opts'>,
   ) => TQoreMappedOptions<ModifierOptions>;
+  url_from_option?: string;
   /** allows the REST URL to be changed when an option value is changed
    */
   connection_update_option?: {
