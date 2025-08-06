@@ -42,6 +42,7 @@ export interface IQoreApp<
 > extends IQoreSwaggerConfig,
     IQoreAppShared {
   name: TStringWithFirstUpperCaseCharacter;
+  group?: string;
   logo: string;
   logo_file_name: string;
   logo_mime_type: string;
@@ -52,6 +53,7 @@ export interface IQoreApp<
 
 export interface IQoreExistingApp {
   name: TStringWithFirstUpperCaseCharacter;
+  group?: string;
   module: string;
   root_provider?: string;
 }

@@ -126,6 +126,8 @@ export interface IQoreSharedObject<TypeValue = unknown> extends IQoreAppShared {
   preselected?: boolean;
   // (values must be of the correct type) the default value if none is provided by the user
   default_value?: TypeValue;
+
+  group?: string;
 }
 
 export interface IQoreAppActionBaseOption<CustomConnOptions extends TCustomConnOptions> extends IQoreSharedObject {
