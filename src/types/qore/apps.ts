@@ -268,6 +268,8 @@ export interface IQoreRestConnectionConfig {
 export interface IQoreRestConnectionModifiers<
   ModifierOptions extends Record<string, IQoreConnectionOption> = Record<string, IQoreConnectionOption>,
 > {
+  // if the app implements an AWS API, put the service name here to enable signing requests (including pings)
+  aws_service?: string;
   options?: ModifierOptions;
   required_options?: string;
   url_template_options?: Array<string>;
