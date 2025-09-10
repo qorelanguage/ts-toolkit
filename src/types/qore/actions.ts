@@ -90,6 +90,9 @@ export interface IQoreAppActionWithWebhookBase<
 
   // an optional HTTP method to use when calling the confirmation URL in confirmation messages; defaults to "GET"
   webhook_confirmation_method?: TWebhookHttpMethod;
+
+  // an optional Content-Type value to treat as JSON when receiving webhook messages
+  webhook_assume_json?: string;
 }
 
 export type TWebhookRegisterFunction<
