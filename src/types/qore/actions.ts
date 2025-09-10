@@ -80,16 +80,16 @@ export interface IQoreAppActionWithWebhookBase<
   webhook_echo_body_keys?: string[];
 
   // an optional location of a confirmation key in each webhook message in dot
-  confirmation_key_loc?: string;
+  webhook_confirmation_key_loc?: string;
 
-  // an optional value to compare with the value at \a confirmation_key_loc to determine if the message is a confirmation message
-  confirmation_value?: string;
+  // an optional value to compare with the value at \a webhook_confirmation_key_loc to determine if the message is a confirmation message
+  webhook_confirmation_value?: string;
 
   // an optional location of a confirmation URL in confirmation messages in dot notation
-  confirmation_url_loc?: string;
+  webhook_confirmation_url_loc?: string;
 
   // an optional HTTP method to use when calling the confirmation URL in confirmation messages; defaults to "GET"
-  confirmation_method?: TWebhookHttpMethod;
+  webhook_confirmation_method?: TWebhookHttpMethod;
 }
 
 export type TWebhookRegisterFunction<
