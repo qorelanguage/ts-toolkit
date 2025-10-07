@@ -1,3 +1,4 @@
+import { IReqoreCollectionItemProps } from '@qoretechnologies/reqore/dist/components/Collection/item';
 import { IReqorePanelProps } from '@qoretechnologies/reqore/dist/components/Panel';
 import { TReqoreIntent } from '@qoretechnologies/reqore/dist/constants/theme';
 import { IReqoreAutoFocusRules } from '@qoretechnologies/reqore/dist/hooks/useAutoFocus';
@@ -98,6 +99,7 @@ export interface IQorusFormFieldSchemaBase {
   intent?: TReqoreIntent;
   metadata?: Record<string, any>;
   rules?: ['valid_identifier'];
+  tags?: IReqoreCollectionItemProps['tags'];
 
   options?: {
     file?: IReqraftFileFormFieldProps['options'];
