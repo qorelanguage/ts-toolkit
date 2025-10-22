@@ -23,6 +23,7 @@ export * from './types/expressions';
 export * from './types/forms';
 export * from './types/qore/actions';
 export * from './types/qore/apps';
+export * from './types/qore/record-based-apps';
 export * from './types/qore/options';
 export * from './types/qore/types';
 export * from './types/qore/utils';
