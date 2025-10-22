@@ -297,7 +297,24 @@ export interface TQoreRecordBasedApp<
   delete_records?: TQoreDeleteRecordsFunction<RestModifierOptions>;
   create_records?: TQoreCreateRecordsFunction<RestModifierOptions>;
   upsert_records?: TQoreUpsertRecordsFunction<RestModifierOptions>;
+  get_search_options?: TQoreGetSearchOptionsFunction<RestModifierOptions>;
 }
+
+export type TQoreSearchOption = Omit<
+  TQoreAppActionOption,
+  | 'get_allowed_values'
+  | 'get_default_value'
+  | 'get_element_allowed_values'
+  | 'get_dependent_options'
+  | 'get_dynamic_type'
+  | 'rest_get_allowed_values'
+>;
+
+export type TQoreSearchOptions = Record<string, TQoreSearchOption>;
+
+export type TQoreGetSearchOptionsFunction<
+  RestModifierOptions extends Record<string, IQoreConnectionOption> = Record<string, IQoreConnectionOption>,
+> = (context: TQoreAppActionFunctionContext<RestModifierOptions>) => Promise<TQoreSearchOptions> | TQoreSearchOptions;
 
 export type TQoreCreateRecordsFunction<
   RestModifierOptions extends Record<string, IQoreConnectionOption> = Record<string, IQoreConnectionOption>,
