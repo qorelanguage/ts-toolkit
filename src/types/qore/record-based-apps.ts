@@ -295,29 +295,17 @@ export interface TQoreRecordBasedApp<
   search_records?: TQoreSearchRecordsFunction<RestModifierOptions>;
   update_records?: TQoreUpdateRecordsFunction<RestModifierOptions>;
   delete_records?: TQoreDeleteRecordsFunction<RestModifierOptions>;
-
-  create_record?: TQoreCreateSingleRecordFunction<RestModifierOptions>;
-  create_records?: TQoreCreateMultipleRecordsFunction<RestModifierOptions>;
-
-  upsert_record?: TQoreUpsertSingleRecordsFunction<RestModifierOptions>;
-  upsert_records?: TQoreUpsertMultipleRecordsFunction<RestModifierOptions>;
+  create_records?: TQoreCreateRecordsFunction<RestModifierOptions>;
+  upsert_records?: TQoreUpsertRecordsFunction<RestModifierOptions>;
 }
 
-export type TQoreCreateSingleRecordFunction<
+export type TQoreCreateRecordsFunction<
   RestModifierOptions extends Record<string, IQoreConnectionOption> = Record<string, IQoreConnectionOption>,
 > = (
   context: TQoreAppActionFunctionContext<RestModifierOptions>,
-  record: Record<string, any>,
+  records: Record<string, any[]>,
   create_opts?: { table: string; [key: string]: unknown },
-) => Promise<Record<string, any>>;
-
-export type TQoreCreateMultipleRecordsFunction<
-  RestModifierOptions extends Record<string, IQoreConnectionOption> = Record<string, IQoreConnectionOption>,
-> = (
-  context: TQoreAppActionFunctionContext<RestModifierOptions>,
-  record: Record<string, any>,
-  create_opts?: { table: string; [key: string]: unknown },
-) => Promise<Record<string, any>[]>;
+) => Promise<Record<string, any[]>>;
 
 export type TQoreUpdateRecordsFunction<
   RestModifierOptions extends Record<string, IQoreConnectionOption> = Record<string, IQoreConnectionOption>,
@@ -330,19 +318,11 @@ export type TQoreUpdateRecordsFunction<
 
 export type TQoreUpsertRecordsResultCode = 'inserted' | 'updated' | 'verified' | 'unchanged' | 'deleted';
 
-export type TQoreUpsertSingleRecordsFunction<
+export type TQoreUpsertRecordsFunction<
   RestModifierOptions extends Record<string, IQoreConnectionOption> = Record<string, IQoreConnectionOption>,
 > = (
   context: TQoreAppActionFunctionContext<RestModifierOptions>,
-  record: Record<string, any>,
-  upsert_opts?: { table: string; [key: string]: unknown },
-) => Promise<TQoreUpsertRecordsResultCode>;
-
-export type TQoreUpsertMultipleRecordsFunction<
-  RestModifierOptions extends Record<string, IQoreConnectionOption> = Record<string, IQoreConnectionOption>,
-> = (
-  context: TQoreAppActionFunctionContext<RestModifierOptions>,
-  record: Record<string, any>,
+  records: Record<string, any[]>,
   upsert_opts?: { table: string; [key: string]: unknown },
 ) => Promise<TQoreUpsertRecordsResultCode[]>;
 
