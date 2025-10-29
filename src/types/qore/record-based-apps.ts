@@ -397,7 +397,7 @@ export type TQoreSearchRecordsFieldReference = {
   field: string;
 };
 
-export type TQoreSearchRecordsValue = any;
+export type TQoreSearchRecordsValue = { value: any };
 
 export type TQoreSearchRecordsIterator<
   RestModifierOptions extends Record<string, IQoreConnectionOption> = Record<string, IQoreConnectionOption>,
