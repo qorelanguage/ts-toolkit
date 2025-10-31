@@ -201,59 +201,7 @@ export interface TQoreRecordBasedApp<
    */
   get_record_type: TQoreGetRecordTypeFunction<RestModifierOptions>;
 
-  /**
-   * Defines global expressions for record-based action support.
-   *
-   * Expressions can be operators (like AND, OR, =, <, >) or functions that can be used
-   * in search filters and field operations.
-   *
-   * Standard operator names include:
-   * - `"AND"`: Logical and
-   * - `"OR"`: Logical or
-   * - `"regex"`: Regular expression match
-   * - `"<"`: Less than
-   * - `"<="`: Less than or equal
-   * - `">"`: Greater than
-   * - `">="`: Greater than or equal
-   * - `"="`: Equal
-   * - `"!="`: Not equal
-   * - `"in"`: In operator
-   * - `"not"`: Logical negation
-   * - `"like"`: SQL-like "like" operator with "%" as wildcard
-   * - `"between"`: Between operator
-   *
-   * @param context - Context object containing:
-   *   - `conn_name`: The connection name, if any is defined
-   *   - `conn_opts`: Connection options + processed options from the auth response + the auth response itself
-   * @returns An object defining global expressions with their configurations
-   *
-   * @example
-   * ```typescript
-   * get_expressions: async function(ctx) {
-   *   return {
-   *     "AND": {
-   *       "type": "operator",
-   *       "subtype": "logic-operator",
-   *       "name": "AND",
-   *       "display_name": "and (&&)",
-   *       "short_desc": "Returns True if all arguments are True",
-   *       "desc": "Returns `True` if all arguments are `True` with logic short-circuiting",
-   *       "symbol": "&&",
-   *       "roles": ["search", "field"],
-   *       "args": [
-   *         {
-   *           "type_code": "any",
-   *           "type": "bool",
-   *         },
-   *       ],
-   *       "varargs": true,
-   *       "return_type": "bool",
-   *     },
-   *   };
-   * }
-   * ```
-   */
-  get_expressions: TQoreGetExpressionsFunction<RestModifierOptions>;
+  expressions: TQoreSearchRecordsExpressions;
 
   /**
    * Executes a search query and returns matching records.
@@ -297,7 +245,9 @@ export interface TQoreRecordBasedApp<
   delete_records?: TQoreDeleteRecordsFunction<RestModifierOptions>;
   create_records?: TQoreCreateRecordsFunction<RestModifierOptions>;
   upsert_records?: TQoreUpsertRecordsFunction<RestModifierOptions>;
-  get_search_options?: TQoreGetSearchOptionsFunction<RestModifierOptions>;
+  search_options?: TQoreSearchOptions;
+  upsert_options?: TQoreSearchOptions;
+  create_options?: TQoreSearchOptions;
 }
 
 export type TQoreSearchOption = Omit<
@@ -311,10 +261,8 @@ export type TQoreSearchOption = Omit<
 >;
 
 export type TQoreSearchOptions = Record<string, TQoreSearchOption>;
-
-export type TQoreGetSearchOptionsFunction<
-  RestModifierOptions extends Record<string, IQoreConnectionOption> = Record<string, IQoreConnectionOption>,
-> = (context: TQoreAppActionFunctionContext<RestModifierOptions>) => Promise<TQoreSearchOptions> | TQoreSearchOptions;
+export type TQoreCreateOptions = Record<string, TQoreSearchOption>;
+export type TQoreUpsertOptions = Record<string, TQoreSearchOption>;
 
 export type TQoreCreateRecordsFunction<
   RestModifierOptions extends Record<string, IQoreConnectionOption> = Record<string, IQoreConnectionOption>,
@@ -358,12 +306,6 @@ export type TQoreGetTableListFunction<
 export type TQoreGetRecordTypeFunction<
   RestModifierOptions extends Record<string, IQoreConnectionOption> = Record<string, IQoreConnectionOption>,
 > = (context: TQoreAppActionFunctionContext<RestModifierOptions>, tableName: string) => Promise<TQoreTypeObject>;
-
-export type TQoreGetExpressionsFunction<
-  RestModifierOptions extends Record<string, IQoreConnectionOption> = Record<string, IQoreConnectionOption>,
-> = (
-  context: TQoreAppActionFunctionContext<RestModifierOptions>,
-) => Promise<TQoreSearchRecordsExpressions> | TQoreSearchRecordsExpressions;
 
 export type TQoreSearchRecordsFunction<
   RestModifierOptions extends Record<string, IQoreConnectionOption> = Record<string, IQoreConnectionOption>,
