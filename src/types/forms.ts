@@ -83,6 +83,9 @@ export interface IQorusFormFieldSchemaBase {
   supports_styling?: boolean;
   supports_expressions?: boolean;
 
+  // URL to fetch expressions and operators for this field
+  expressions_url?: string;
+
   app?: string;
   action?: string;
 
