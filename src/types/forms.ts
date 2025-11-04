@@ -85,6 +85,7 @@ export interface IQorusFormFieldSchemaBase {
 
   // URL to fetch expressions and operators for this field
   expressions_url?: string;
+  server_expression_handling?: boolean;
 
   app?: string;
   action?: string;
