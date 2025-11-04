@@ -259,16 +259,16 @@ export interface TQoreRecordBasedApp<
   delete_records?: TQoreDeleteRecordsFunction<RestModifierOptions>;
   create_records?: TQoreCreateRecordsFunction<RestModifierOptions>;
   upsert_records?: TQoreUpsertRecordsFunction<RestModifierOptions>;
-  search_options?: TQoreSearchOptions;
-  upsert_options?: TQoreSearchOptions;
-  create_options?: TQoreSearchOptions;
+  search_options?: TQoreCrudOptions;
+  upsert_options?: TQoreCrudOptions;
+  create_options?: TQoreCrudOptions;
+  update_options?: TQoreCrudOptions;
+  delete_options?: TQoreCrudOptions;
 }
 
-export type TQoreSearchOption = Omit<TQoreAppActionOption, 'get_dependent_options' | 'get_dynamic_type'>;
+export type TQoreCrudOption = Omit<TQoreAppActionOption, 'get_dependent_options' | 'get_dynamic_type'>;
 
-export type TQoreSearchOptions = Record<string, TQoreSearchOption>;
-export type TQoreCreateOptions = Record<string, TQoreSearchOption>;
-export type TQoreUpsertOptions = Record<string, TQoreSearchOption>;
+export type TQoreCrudOptions = Record<string, TQoreCrudOption>;
 
 export type TQoreCreateRecordsFunction<
   RestModifierOptions extends Record<string, IQoreConnectionOption> = Record<string, IQoreConnectionOption>,
