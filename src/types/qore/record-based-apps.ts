@@ -5,6 +5,18 @@ import { TQoreTypeObject } from './types';
 
 export type TQoreSearchRecordsExpressions = Record<TExpressionKey, TQoreSearchRecordsExpressionDefinition>;
 
+export enum EQoreExpressionGroups {
+  AGGREGATE = 'Aggregate',
+  ALIAS = 'Alias',
+  COMPARISON = 'Comparison',
+  DATA_CONVERSION = 'Data Conversion',
+  DATA_MANIPULATION = 'Data Manipulation',
+  DATE_TIME = 'Date/Time',
+  LOGICAL = 'Logical',
+  SEQUENCE = 'Sequence',
+  WINDOW = 'Window',
+}
+
 export type TQoreSearchRecordsExpressionDefinition = {
   /** The type of expression: operator or function */
   type: 'operator' | 'function';
@@ -28,6 +40,8 @@ export type TQoreSearchRecordsExpressionDefinition = {
   return_type: TQoreResponseType;
   /** The arguments the expression takes */
   args: TExpressionArg[];
+
+  group?: EQoreExpressionGroups;
 };
 
 export type TExpressionKey =
@@ -250,15 +264,7 @@ export interface TQoreRecordBasedApp<
   create_options?: TQoreSearchOptions;
 }
 
-export type TQoreSearchOption = Omit<
-  TQoreAppActionOption,
-  | 'get_allowed_values'
-  | 'get_default_value'
-  | 'get_element_allowed_values'
-  | 'get_dependent_options'
-  | 'get_dynamic_type'
-  | 'rest_get_allowed_values'
->;
+export type TQoreSearchOption = Omit<TQoreAppActionOption, 'get_dependent_options' | 'get_dynamic_type'>;
 
 export type TQoreSearchOptions = Record<string, TQoreSearchOption>;
 export type TQoreCreateOptions = Record<string, TQoreSearchOption>;
