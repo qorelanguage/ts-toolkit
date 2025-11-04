@@ -77,7 +77,7 @@ export interface IQorusFormFieldSchemaBase {
   arg_schema?: IQorusFormSchema;
   multiselect?: boolean;
 
-  supports_custom_value?: boolean;
+  supports_custom_values?: boolean;
   supports_templates?: boolean;
   supports_references?: boolean;
   supports_styling?: boolean;
