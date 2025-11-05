@@ -45,12 +45,12 @@ export type TQoreSearchRecordsExpressionDefinition = {
 };
 
 export type TExpressionKey =
-  | 'AND'
-  | 'OR'
+  | '&&'
+  | '||'
   | 'regex'
   | '<'
   | '<='
-  | '='
+  | '=='
   | '!='
   | '>='
   | '>'
@@ -262,8 +262,6 @@ export interface TQoreRecordBasedApp<
   search_options?: TQoreCrudOptions;
   upsert_options?: TQoreCrudOptions;
   create_options?: TQoreCrudOptions;
-  update_options?: TQoreCrudOptions;
-  delete_options?: TQoreCrudOptions;
 }
 
 export type TQoreCrudOption = Omit<TQoreAppActionOption, 'get_dependent_options' | 'get_dynamic_type'>;
