@@ -41,7 +41,7 @@ jobs:
       # Setup node
       - uses: actions/setup-node@v3
         with:
-          node-version: latest
+          node-version: 20.19.5
 
       # Install modules
       - name: Installing modules
