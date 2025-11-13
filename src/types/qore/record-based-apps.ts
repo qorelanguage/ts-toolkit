@@ -264,7 +264,10 @@ export interface TQoreRecordBasedApp<
   create_options?: TQoreCrudOptions;
 }
 
-export type TQoreCrudOption = Omit<TQoreAppActionOption, 'get_dependent_options' | 'get_dynamic_type'>;
+export type TQoreCrudOption = TQoreAppActionOption & {
+  get_dependent_options?: never;
+  get_dynamic_type?: never;
+};
 
 export type TQoreCrudOptions = Record<string, TQoreCrudOption>;
 
@@ -316,7 +319,7 @@ export type TQoreSearchRecordsFunction<
 > = (
   context: TQoreAppActionFunctionContext<RestModifierOptions>,
   where_cond?: TQoreSearchRecordsWhereConditions,
-  search_opts?: { table: string; [key: string]: unknown },
+  search_opts?: { table: string; limit?: number; [key: string]: unknown },
 ) => Promise<TQoreSearchRecordsIterator<RestModifierOptions>>;
 
 export const isQoreRecordSearchFieldReference = (arg: unknown): arg is TQoreSearchRecordsFieldReference => {
