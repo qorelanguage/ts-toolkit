@@ -104,6 +104,18 @@ export type TExpressionArg = OmitFromUnion<
    * allowed values for the list elements
    */
   multiselect?: boolean;
+
+  /**
+   * Label to display after the argument when rendering expressions
+   */
+  label_after?: string;
+
+  /**
+   * Label to display before the argument when rendering expressions
+   */
+  label_before?: string;
+
+  render_template?: string;
 };
 
 /**
