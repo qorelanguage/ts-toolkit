@@ -320,7 +320,7 @@ export type TQoreDeleteRecordsFunction<
 
 export type TQoreGetTableListFunction<
   RestModifierOptions extends Record<string, IQoreConnectionOption> = Record<string, IQoreConnectionOption>,
-> = (context: TQoreAppActionFunctionContext<RestModifierOptions>) => Promise<string[]>;
+> = (context: TQoreAppActionFunctionContext<RestModifierOptions>) => Promise<string[]> | string[];
 
 export type TQoreGetRecordTypeFunction<
   RestModifierOptions extends Record<string, IQoreConnectionOption> = Record<string, IQoreConnectionOption>,
