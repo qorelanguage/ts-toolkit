@@ -4,7 +4,7 @@ import { TReqoreIntent } from '@qoretechnologies/reqore/dist/constants/theme';
 import { IReqoreAutoFocusRules } from '@qoretechnologies/reqore/dist/hooks/useAutoFocus';
 import { IReqoreIconName } from '@qoretechnologies/reqore/dist/types/icons';
 import { IReqraftFileFormFieldProps } from '@qoretechnologies/reqraft/dist/components/form/fields/file/File';
-import { IQorusExpression } from './expressions';
+import { IQorusExpression, IQorusExpressionSchema } from './expressions';
 import { TQorusType } from './qorus';
 
 export type TQorusFormOperatorValue = string | string[] | undefined | null;
@@ -84,6 +84,7 @@ export interface IQorusFormFieldSchemaBase {
   supports_expressions?: boolean;
 
   // URL to fetch expressions and operators for this field
+  expressions?: IQorusExpressionSchema[];
   expressions_url?: string;
   server_expression_handling?: boolean;
 
