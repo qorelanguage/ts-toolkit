@@ -1,6 +1,6 @@
 import { TQoreAppActionFunctionContext, TQoreResponseType } from './actions';
 import { IQoreApp } from './apps';
-import { IQoreConnectionOption, TQoreAppActionOption } from './options';
+import { IQoreConnectionOption, TQoreAppActionOption, TQoreMappedOptions, TQoreOptions } from './options';
 import { TQoreTypeObject } from './types';
 
 export type TQoreSearchRecordsExpressions = Record<TExpressionKey, TQoreSearchRecordsExpressionDefinition>;
@@ -285,37 +285,41 @@ export type TQoreCrudOptions = Record<string, TQoreCrudOption>;
 
 export type TQoreCreateRecordsFunction<
   RestModifierOptions extends Record<string, IQoreConnectionOption> = Record<string, IQoreConnectionOption>,
+  Options extends TQoreOptions = TQoreOptions,
 > = (
   context: TQoreAppActionFunctionContext<RestModifierOptions>,
   records: Record<string, any[]>,
-  create_opts?: { table: string; [key: string]: unknown },
+  create_opts?: { table: string; limit?: number; [key: string]: unknown } & TQoreMappedOptions<Options>,
 ) => Promise<Record<string, any[]>>;
 
 export type TQoreUpdateRecordsFunction<
   RestModifierOptions extends Record<string, IQoreConnectionOption> = Record<string, IQoreConnectionOption>,
+  Options extends TQoreOptions = TQoreOptions,
 > = (
   context: TQoreAppActionFunctionContext<RestModifierOptions>,
   update_fields: Record<string, any>,
   where_cond?: TQoreSearchRecordsWhereConditions,
-  update_opts?: { table: string; [key: string]: unknown },
+  update_opts?: { table: string; limit?: number; [key: string]: unknown } & TQoreMappedOptions<Options>,
 ) => Promise<number>;
 
 export type TQoreUpsertRecordsResultCode = 'inserted' | 'updated' | 'verified' | 'unchanged' | 'deleted';
 
 export type TQoreUpsertRecordsFunction<
   RestModifierOptions extends Record<string, IQoreConnectionOption> = Record<string, IQoreConnectionOption>,
+  Options extends TQoreOptions = TQoreOptions,
 > = (
   context: TQoreAppActionFunctionContext<RestModifierOptions>,
   records: Record<string, any[]>,
-  upsert_opts?: { table: string; [key: string]: unknown },
+  upsert_opts?: { table: string; limit?: number; [key: string]: unknown } & TQoreMappedOptions<Options>,
 ) => Promise<TQoreUpsertRecordsResultCode[]>;
 
 export type TQoreDeleteRecordsFunction<
   RestModifierOptions extends Record<string, IQoreConnectionOption> = Record<string, IQoreConnectionOption>,
+  Options extends TQoreOptions = TQoreOptions,
 > = (
   context: TQoreAppActionFunctionContext<RestModifierOptions>,
   where_cond?: TQoreSearchRecordsWhereConditions,
-  delete_opts?: { table: string; [key: string]: unknown },
+  delete_opts?: { table: string; limit?: number; [key: string]: unknown } & TQoreMappedOptions<Options>,
 ) => Promise<number>;
 
 export type TQoreGetTableListFunction<
@@ -324,14 +328,18 @@ export type TQoreGetTableListFunction<
 
 export type TQoreGetRecordTypeFunction<
   RestModifierOptions extends Record<string, IQoreConnectionOption> = Record<string, IQoreConnectionOption>,
-> = (context: TQoreAppActionFunctionContext<RestModifierOptions>, tableName: string) => Promise<TQoreTypeObject>;
+> = (
+  context: TQoreAppActionFunctionContext<RestModifierOptions>,
+  tableName: string,
+) => Promise<TQoreTypeObject> | TQoreTypeObject;
 
 export type TQoreSearchRecordsFunction<
   RestModifierOptions extends Record<string, IQoreConnectionOption> = Record<string, IQoreConnectionOption>,
+  Options extends TQoreOptions = TQoreOptions,
 > = (
   context: TQoreAppActionFunctionContext<RestModifierOptions>,
   where_cond?: TQoreSearchRecordsWhereConditions,
-  search_opts?: { table: string; limit?: number; [key: string]: unknown },
+  search_opts?: { table: string; limit?: number; [key: string]: unknown } & TQoreMappedOptions<Options>,
 ) => Promise<TQoreSearchRecordsIterator<RestModifierOptions>>;
 
 export const isQoreRecordSearchFieldReference = (arg: unknown): arg is TQoreSearchRecordsFieldReference => {
