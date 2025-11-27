@@ -1,14 +1,17 @@
-import { TQorusFormFieldSchema } from './forms';
 import { TQorusType } from './qorus';
 
-export type TQorusExpressionSchemaArg = Omit<TQorusFormFieldSchema, 'type'> & {
-  label_before?: string;
+export type TQorusExpressionSchemaArg = {
+  signature_type_code: string;
+  name: string;
+  ui_type: TQorusType;
+  display_name: string;
+  short_desc: string;
+  desc?: string;
+  sensitive: boolean;
   label_after?: string;
-  type: {
-    base_type: TQorusType;
-    name: string;
-    types_accepted: TQorusType[];
-  };
+  label_before?: string;
+  default_value?: any;
+  required: boolean;
 };
 
 export interface IQorusExpressionSchema {
@@ -26,6 +29,7 @@ export interface IQorusExpressionSchema {
   from_server?: boolean;
   from_both?: boolean;
   min_args?: number;
+  render_template?: string;
   return_type_first_arg?: boolean;
   return_type_arg_priority?: string[];
 }
@@ -34,6 +38,7 @@ export interface IQorusExpressionValue {
   exp?: string;
   args?: IQorusExpression[];
 }
+
 export interface IQorusExpression {
   value?: IQorusExpressionValue | any;
   type?: TQorusType;
