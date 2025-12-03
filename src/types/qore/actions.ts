@@ -20,8 +20,6 @@ export interface IQoreBaseAppAction<CustomConnOptions extends TCustomConnOptions
   response_type?: TQoreResponseType;
   groups?: string[];
   request_type?: TQoreOptionsNotLocalized;
-  get_dynamic_request_type?: TQoreGetDynamicRequestTypeFunction;
-  get_dynamic_response_type?: TQoreGetDynamicResponseTypeFunction<CustomConnOptions>;
 }
 
 export type TQoreGetDynamicRequestTypeFunction = (
@@ -56,7 +54,6 @@ export interface IQoreAppActionWithEventOrWebhook<Options extends TQoreOptions =
   options?: Options;
   get_dynamic_type?: TQoreGetDynamicTypeFunction<TCustomConnOptions>;
   // Triggers use get_dynamic_type instead
-  get_dynamic_response_type: never;
   get_example_event_data?: (
     context: TQoreAppActionFunctionContext<TCustomConnOptions, Options>,
   ) => Record<string, any> | Promise<Record<string, any>>;
@@ -163,6 +160,7 @@ export interface IQoreAppActionWithFunction<Options extends TQoreOptions = TQore
   extends IQoreBaseAppAction {
   action_code: EQoreAppActionCode.ACTION;
   api_function: TQoreAppActionFunction<Options>;
+  get_dynamic_response_type?: TQoreGetDynamicResponseTypeFunction;
   options?: Options;
   io_timeout_secs?: number;
 }
@@ -173,6 +171,7 @@ export interface IQoreAppActionWithSwaggerPath<Options extends TQoreOptions = TQ
   swagger_schema?: string;
   // optional list of vars in swagger_path (ex: '/{id}/{key}') that should not have option dependencies created
   independent_path_vars?: string[];
+  get_dynamic_request_type?: TQoreGetDynamicRequestTypeFunction;
   request_data_converter?: TQoreRequestDataConverterFunction<TCustomConnOptions, Options>;
   response_data_converter?: TQoreResponseDataConverterFunction<TCustomConnOptions, Options>;
 }
