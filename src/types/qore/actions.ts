@@ -55,6 +55,8 @@ export interface IQoreAppActionWithEventOrWebhook<Options extends TQoreOptions =
   event_info: TQoreAppActionWithEventOrWebhookEventInfo;
   options?: Options;
   get_dynamic_type?: TQoreGetDynamicTypeFunction<TCustomConnOptions>;
+  // Triggers use get_dynamic_type instead
+  get_dynamic_response_type: never;
   get_example_event_data?: (
     context: TQoreAppActionFunctionContext<TCustomConnOptions, Options>,
   ) => Record<string, any> | Promise<Record<string, any>>;
