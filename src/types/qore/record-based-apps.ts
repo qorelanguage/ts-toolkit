@@ -41,7 +41,7 @@ export type TQoreSearchRecordsExpressionDefinition = {
   /** The arguments the expression takes */
   args: TExpressionArg[];
 
-  group?: EQoreExpressionGroups;
+  groups?: EQoreExpressionGroups[];
 };
 
 export type TExpressionKey =
