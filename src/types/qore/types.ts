@@ -50,7 +50,7 @@ export type TQoreNumberCompatibleType =
   | '*unixtsms';
 export type TQoreHashCompatibleType = 'hash' | '*hash' | '*data' | 'data';
 export type TQoreListCompatibleType = 'list' | '*list' | 'softlist' | '*softlist';
-export type TQoreBooleanCompatibleType = 'boolean' | '*boolean' | 'softbool' | '*bool' | '*bool' | 'bool' | '*softbool';
+export type TQoreBooleanCompatibleType = 'softbool' | '*bool' | '*bool' | 'bool' | '*softbool';
 export type TQoreNullableType = 'NULL' | 'nothing';
 export type TQoreAnyType = 'all' | 'any' | 'auto';
 export type TQoreFileType = 'file' | '*file';
