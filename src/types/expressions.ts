@@ -20,6 +20,7 @@ export interface IQorusExpressionSchema {
   display_name: string;
   name: string;
   return_type: TQorusType;
+  ui_return_type: TQorusType;
   role: number;
   type: number;
   varargs: boolean;
