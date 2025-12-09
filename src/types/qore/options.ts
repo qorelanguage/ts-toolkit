@@ -130,15 +130,20 @@ export interface IQoreSharedObject<TypeValue = unknown> extends IQoreAppShared {
   groups?: string[];
 }
 
+export type TQoreOptionMessage = {
+  title: string;
+  content: string;
+  intent: 'info' | 'warning' | 'success';
+};
+
 export interface IQoreAppActionBaseOption<CustomConnOptions extends TCustomConnOptions> extends IQoreSharedObject {
   get_dependent_options?: TQoreGetDependentOptionsFunction;
-  /** Mutually-exclusive with 'get_allowed_values'
-   */
+  // Mutually-exclusive with 'get_allowed_values'
   rest_get_allowed_values?: IQoreRestGetAllowedValues;
   allowed_values_creatable?: boolean;
   depends_on?: string[] | string[][];
   validation_regex?: string;
-
+  messages?: TQoreOptionMessage[];
   attr?: Record<string, any>;
   sensitive?: boolean;
   required_groups?: string[];
