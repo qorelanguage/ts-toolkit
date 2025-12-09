@@ -36,6 +36,8 @@ export interface IQorusAllowedValue<IMetadata extends Record<string, any> = Reco
   desc?: string;
   name?: string;
   value: unknown;
+  ui_type?: TQorusType;
+  type?: TQorusType;
   disabled?: boolean;
   intent?: TReqoreIntent;
   badge?: IReqorePanelProps['badge'];
@@ -54,6 +56,7 @@ export type IQorusTypeOptionsMapper = {
 
 export interface IQorusFormFieldSchemaBase {
   element_type?: TQorusType;
+  ui_element_type?: string;
 
   value?: unknown | IQorusExpression;
   desc?: string;
@@ -134,10 +137,12 @@ export interface IQorusFormFieldSchemaBase {
 export type TQorusFormFieldSchema =
   | ({
       type: keyof IQorusTypeOptionsMapper;
+      ui_type: keyof IQorusTypeOptionsMapper;
       type_options?: IQorusTypeOptionsMapper[keyof IQorusTypeOptionsMapper];
     } & IQorusFormFieldSchemaBase)
   | ({
       type: Exclude<TQorusType, keyof IQorusTypeOptionsMapper>;
+      ui_type: Exclude<TQorusType, keyof IQorusTypeOptionsMapper>;
     } & IQorusFormFieldSchemaBase);
 
 export interface IQorusFormSchema {
