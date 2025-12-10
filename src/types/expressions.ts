@@ -33,6 +33,7 @@ export interface IQorusExpressionSchema {
   render_template?: string;
   return_type_first_arg?: boolean;
   return_type_arg_priority?: string[];
+  groups?: string[];
 }
 
 export interface IQorusExpressionValue {
