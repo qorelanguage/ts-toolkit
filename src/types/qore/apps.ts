@@ -265,9 +265,16 @@ export interface IQoreRestConnectionConfig {
   swagger_base_path?: string;
 }
 
+export type TQoreConnectionMessage = {
+  title: string;
+  content: string;
+  intent: 'info' | 'warning' | 'success';
+};
+
 export interface IQoreRestConnectionModifiers<
   ModifierOptions extends Record<string, IQoreConnectionOption> = Record<string, IQoreConnectionOption>,
 > {
+  messages?: TQoreConnectionMessage[];
   // if the app implements an AWS API, put the service name here to enable signing requests (including pings)
   aws_service?: string;
   options?: ModifierOptions;
