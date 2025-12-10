@@ -35,7 +35,10 @@ export interface IQorusAllowedValue<IMetadata extends Record<string, any> = Reco
   short_desc?: string;
   desc?: string;
   name?: string;
-  value: unknown;
+  value: {
+    type: TQorusType;
+    value?: unknown;
+  };
   ui_type?: TQorusType;
   type?: TQorusType;
   disabled?: boolean;
@@ -60,7 +63,11 @@ export interface IQorusFormFieldSchemaBase {
 
   value?: unknown | IQorusExpression;
   desc?: string;
-  default_value?: unknown;
+
+  default_value?: {
+    type: TQorusType;
+    value?: unknown;
+  };
   default_value_desc?: string;
   default_value_display_name?: string;
 
