@@ -1,7 +1,7 @@
 import ErrorQorusRequest, { IErrorQorusRequestParams } from './managers/error/ErrorQorusRequest';
 import logger from './managers/logger';
 import { QorusOptions, TQorusOptions } from './QorusOptions';
-import QorusRequest, { IQorusRequestResponse } from './QorusRequest';
+import QorusRequest from './QorusRequest';
 import { apiPathsInitial } from './utils/apiPaths';
 
 /**
@@ -59,21 +59,19 @@ export class QorusDataProvider {
       data: requestData,
     });
 
-    const response = result as IQorusRequestResponse;
-    const error = result as IErrorQorusRequestParams;
-
-    if (error.status) {
-      throw new ErrorQorusRequest(error);
+    // Check if the API returned an error object in the response data
+    // Changes were made expecting that response data will contain error object instead of casting the whole result to error
+    const apiError = result.data as IErrorQorusRequestParams | undefined;
+    if (apiError?.err) {
+      throw new ErrorQorusRequest(apiError);
     }
 
-    const responseData = response?.data as IDataProviderResponseData;
-    const responseError = error;
+    const responseData = result.data as IDataProviderResponseData;
 
     return new QorusDataProvider({
       path: [apiPathsInitial.dataProviders.browse],
-      responseData: responseData,
+      responseData,
       context,
-      responseError,
     });
   }
 
@@ -275,16 +273,15 @@ const fetchProvider = async (obj: QorusDataProvider, context: TContext, select?:
     data: requestData,
   });
 
-  const response = result as IQorusRequestResponse;
-  const error = result as IErrorQorusRequestParams;
-
-  if (error?.status) {
-    throw new ErrorQorusRequest(error ?? '');
+  // Check if the API returned an error object in the response data
+  const apiError = result.data as IErrorQorusRequestParams | undefined;
+  if (apiError?.err) {
+    throw new ErrorQorusRequest(apiError);
   }
-  const providerResponse = response?.data;
-  const responseError = error;
 
-  return new QorusDataProvider({ path: _path!, responseData: providerResponse, context, responseError });
+  const providerResponse = result.data;
+
+  return new QorusDataProvider({ path: _path!, responseData: providerResponse, context });
 };
 
 export interface IDataProviderData {
