@@ -1,3 +1,4 @@
+import qs from 'qs';
 import ErrorInternal from './managers/error/ErrorInternal';
 import ErrorQorusRequest from './managers/error/ErrorQorusRequest';
 import QorusAuthenticator, { IEndpoint } from './QorusAuthenticator';
@@ -8,19 +9,14 @@ export type TQorusRequestHeader = Record<string, TQorusRecordOptions>;
 export type TQorusRecordOptions = string | number | boolean;
 
 export interface IQorusRequestResponse<T = any> {
-  /**Response data from an api call*/
+  /** Response data from an api call */
   data: T;
-  /**Response status from an api call */
-  status: number;
-  /** Response status text from an api call*/
-  statusText: string;
+
   /** Response Headers */
   headers: TQorusRequestHeader;
-  /** Response config parameter of a api call */
-  config: Record<string, any>;
-  /** Request type of the api call */
-  request?: any;
 }
+
+export type TQorusRequestBodyType = 'json' | 'form-urlencoded';
 
 export interface IQorusRequestParams {
   /**
@@ -39,9 +35,18 @@ export interface IQorusRequestParams {
   data?: any;
 
   /**
-   * URL Parameters to include in an https request to Qorus server api
+   * URL Parameters to include in an https request to Qorus server api.
+   * Supports strings, numbers, booleans, arrays, and nested objects.
+   * Values are serialized using qs library.
    */
-  params?: Record<string, string>;
+  params?: Record<string, unknown>;
+
+  /**
+   * Body encoding type for the request
+   * - 'json': (default) sends data as JSON with Content-Type: application/json
+   * - 'form-urlencoded': sends data as URL-encoded form with Content-Type: application/x-www-form-urlencoded
+   */
+  bodyType?: TQorusRequestBodyType;
 }
 
 export interface IDefaultHeaders {
@@ -76,11 +81,11 @@ export class QorusRequest {
   defaultHeaders: IDefaultHeaders = { 'Content-Type': 'application/json', Accept: 'application/json' };
 
   private makeRequest = async (
-    type: 'GET' | 'PUT' | 'POST' | 'DELETE',
+    type: 'GET' | 'PUT' | 'POST' | 'DELETE' | 'PATCH',
     props: IQorusRequestParams,
     endpoint?: IEndpoint,
-  ): Promise<any> => {
-    const { path, data, headers = this.defaultHeaders, params } = props;
+  ): Promise<IQorusRequestResponse> => {
+    const { path, data, headers: customHeaders, params, bodyType = 'json' } = props;
     let selectedEndpoint: IEndpoint | undefined;
 
     if (isValidStringArray([endpoint?.url, endpoint?.endpointId])) {
@@ -89,49 +94,78 @@ export class QorusRequest {
       selectedEndpoint = QorusAuthenticator.getSelectedEndpoint();
     }
 
-    if (headers != this.defaultHeaders) {
-      Object.assign(headers, { ...this.defaultHeaders, headers });
+    // Merge default headers with custom headers (custom headers override defaults)
+    const headers: TQorusRequestHeader = { ...this.defaultHeaders, ...customHeaders };
+
+    // Override Content-Type for form-urlencoded requests
+    if (bodyType === 'form-urlencoded') {
+      headers['Content-Type'] = 'application/x-www-form-urlencoded';
     }
 
     if (selectedEndpoint?.url) {
       if (selectedEndpoint?.authToken) {
-        Object.assign(headers, { ...headers, 'Qorus-Token': selectedEndpoint?.authToken });
+        headers['Qorus-Token'] = selectedEndpoint.authToken;
       }
 
-      const requestParams = new URLSearchParams(params).toString();
-      let fetchUrl: string;
+      // Serialize params using qs (supports arrays, nested objects, etc.)
+      const requestParams = params ? qs.stringify(params, { skipNulls: true }) : '';
+      const fetchUrl = requestParams
+        ? `${selectedEndpoint.url}${path}?${requestParams}`
+        : `${selectedEndpoint.url}${path}`;
 
-      if (requestParams.length) {
-        fetchUrl = `${selectedEndpoint?.url}${path}?${requestParams}`;
-      } else {
-        fetchUrl = `${selectedEndpoint?.url}${path}`;
+      // Serialize body based on bodyType
+      let body: string | undefined;
+      if (data) {
+        if (bodyType === 'form-urlencoded') {
+          body = qs.stringify(data, { skipNulls: true });
+        } else {
+          body = JSON.stringify(data);
+        }
       }
 
-      const promise = await fetch(fetchUrl, {
+      const fetchConfig: RequestInit = {
         method: type,
-        headers: headers as any,
-        body: data ? JSON.stringify(data) : undefined,
-      });
+        headers: headers as HeadersInit,
+        body,
+      };
 
-      if (!promise.ok) {
-        const text = await promise.text();
+      const response = await fetch(fetchUrl, fetchConfig);
+
+      if (!response.ok) {
+        const text = await response.text();
         throw new ErrorQorusRequest(text);
       }
 
-      if (promise.status === 204 || promise.status === 404) {
-        return { data: {} };
+      // Convert response headers to a plain object
+      const responseHeaders: TQorusRequestHeader = {};
+      response.headers.forEach((value, key) => {
+        responseHeaders[key] = value;
+      });
+
+      if (response.status === 204) {
+        return {
+          data: {},
+          headers: responseHeaders,
+        };
       }
 
-      let json: any;
+      let responseData: unknown;
 
-      // We need to turn the promise to json but if the response is empty we need to return an empty object
       try {
-        json = await promise.json();
+        responseData = await response.json();
       } catch (error) {
-        json = {};
+        // If parsing fails, try to get text, or return empty object
+        try {
+          responseData = await response.text();
+        } catch {
+          responseData = {};
+        }
       }
 
-      return { data: json };
+      return {
+        data: responseData,
+        headers: responseHeaders,
+      };
     }
 
     throw new ErrorInternal('Initialize an endpoint using QorusAuthenticator to use QorusRequest');
@@ -142,9 +176,8 @@ export class QorusRequest {
    * @param props QorusRequestParams endpoint url is mandatory to make a get request
    * @returns Result of the get request
    */
-  async get<T>(props: IQorusRequestParams, endpoint?: IEndpoint): Promise<T | undefined> {
-    const result = await this.makeRequest('GET', props, endpoint);
-    return result;
+  async get<T = IQorusRequestResponse>(props: IQorusRequestParams, endpoint?: IEndpoint): Promise<T> {
+    return this.makeRequest('GET', props, endpoint) as Promise<T>;
   }
 
   /**
@@ -152,9 +185,8 @@ export class QorusRequest {
    * @param props QorusRequestParams endpoint url is mandatory to make a post request
    * @returns Result of the post request
    */
-  async post<T>(props: IQorusRequestParams, endpoint?: IEndpoint): Promise<T | undefined> {
-    const result = await this.makeRequest('POST', props, endpoint);
-    return result;
+  async post<T = IQorusRequestResponse>(props: IQorusRequestParams, endpoint?: IEndpoint): Promise<T> {
+    return this.makeRequest('POST', props, endpoint) as Promise<T>;
   }
 
   /**
@@ -162,9 +194,17 @@ export class QorusRequest {
    * @param props QorusRequestParams endpoint url is mandatory to make a put request
    * @returns Result of the put request
    */
-  async put<T>(props: IQorusRequestParams, endpoint?: IEndpoint): Promise<T | undefined> {
-    const result = await this.makeRequest('PUT', props, endpoint);
-    return result;
+  async put<T = IQorusRequestResponse>(props: IQorusRequestParams, endpoint?: IEndpoint): Promise<T> {
+    return this.makeRequest('PUT', props, endpoint) as Promise<T>;
+  }
+
+  /**
+   * Patch request creator for the QorusToolkit
+   * @param props QorusRequestParams endpoint url is mandatory to make a patch request
+   * @returns Result of the patch request
+   */
+  async patch<T = IQorusRequestResponse>(props: IQorusRequestParams, endpoint?: IEndpoint): Promise<T> {
+    return this.makeRequest('PATCH', props, endpoint) as Promise<T>;
   }
 
   /**
@@ -172,9 +212,8 @@ export class QorusRequest {
    * @param props QorusRequestParams endpoint url is mandatory to make a delete request
    * @returns Result of the delete request
    */
-  async deleteReq<T>(props: IQorusRequestParams, endpoint?: IEndpoint): Promise<T | undefined> {
-    const result = await this.makeRequest('DELETE', props, endpoint);
-    return result;
+  async deleteReq<T = IQorusRequestResponse>(props: IQorusRequestParams, endpoint?: IEndpoint): Promise<T> {
+    return this.makeRequest('DELETE', props, endpoint) as Promise<T>;
   }
 }
 

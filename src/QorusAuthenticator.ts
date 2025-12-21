@@ -1,7 +1,7 @@
 import ErrorInternal from './managers/error/ErrorInternal';
 import { getKeyValLocal, setKeyValLocal } from './managers/LocalStorage';
 import logger from './managers/logger';
-import QorusRequest, { IQorusRequestResponse } from './QorusRequest';
+import QorusRequest from './QorusRequest';
 import QorusValidator from './QorusValidator';
 import { isValidString, isValidStringArray } from './utils';
 import {
@@ -320,7 +320,7 @@ export class QorusAuthenticator {
       data: { user, pass },
     });
 
-    const responseData = resp as IQorusRequestResponse;
+    const responseData = resp;
     if (typeof responseData?.data === 'undefined') {
       throw new ErrorInternal(`${responseData ?? ''}`);
     }

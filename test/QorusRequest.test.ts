@@ -19,18 +19,16 @@ describe('QorusRequest Utility Tests', () => {
       path: '/api/latest/public/login',
       data: { user: process.env.TESTUSER, pass: process.env.TESTPASS },
     });
-    const response = result as any;
 
-    expect(typeof response?.data.token).toEqual('string');
+    expect(typeof result.data.token).toEqual('string');
   });
 
   it('Should make a get request and return the result', async () => {
     const result = await QorusRequest.get({
       path: '/api/latest/dataprovider/browse',
     });
-    const response = result as any;
 
-    expect(response?.data.type).toEqual('nav');
+    expect(result.data.type).toEqual('nav');
   });
 
   it('Should make a put request and return the result', async () => {
@@ -38,10 +36,16 @@ describe('QorusRequest Utility Tests', () => {
       path: '/api/latest/dataprovider/browse',
       params: { context: 'api' },
     });
-    const response = result as any;
 
-    expect(response?.data.type).toEqual('nav');
+    expect(result.data.type).toEqual('nav');
   });
 
-  // Todo delete request test
+  it('Should return response headers alongside data', async () => {
+    const result = await QorusRequest.get({
+      path: '/api/latest/dataprovider/browse',
+    });
+
+    expect(result.headers).toBeDefined();
+    expect(typeof result.headers).toEqual('object');
+  });
 });
