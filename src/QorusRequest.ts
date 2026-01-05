@@ -112,18 +112,20 @@ export class QorusRequest {
         }
       }
 
-      // If no text, return structured error object
+      // If no text, return structured error object with HTTP status info
+      const statusInfo = response.status ? ` (${response.status} ${response.statusText})` : '';
       return {
         status: response.status || 0,
         err: response.statusText || 'Unknown Error',
-        desc: 'QorusRequest error: Server returned empty response',
+        desc: `QorusRequest error: Server returned empty response${statusInfo}`,
       };
     } catch (error) {
-      // If even getting text fails, return a fallback error object
+      // If even getting text fails, return a fallback error object with HTTP status info
+      const statusInfo = response.status ? ` (${response.status} ${response.statusText})` : '';
       return {
         status: response.status || 0,
         err: response.statusText || 'Unknown Error',
-        desc: 'QorusRequest error: Failed to read server response',
+        desc: `QorusRequest error: Failed to read server response${statusInfo}`,
       };
     }
   };
@@ -189,6 +191,7 @@ export class QorusRequest {
 
       if (!response.ok) {
         const errorData = await this.parseErrorResponse(response);
+
         throw new ErrorQorusRequest(errorData);
       }
 
