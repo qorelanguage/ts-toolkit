@@ -1,6 +1,12 @@
 import BaseError from './Error';
 import { errorCodes } from './errorCodes';
 
+export interface IErrorQorusRequestParams {
+  desc: string;
+  err: string;
+  status: number;
+}
+
 class ErrorQorusRequest extends BaseError {
   constructor(error: IErrorQorusRequestParams | string) {
     if (typeof error === 'string') {
@@ -11,12 +17,6 @@ class ErrorQorusRequest extends BaseError {
       super(error.desc, true, error.err, error.status);
     }
   }
-}
-
-export interface IErrorQorusRequestParams {
-  desc: string;
-  err: string;
-  status: number;
 }
 
 export default ErrorQorusRequest;
