@@ -1,6 +1,6 @@
 import qs from 'qs';
 import ErrorInternal from './managers/error/ErrorInternal';
-import ErrorQorusRequest from './managers/error/ErrorQorusRequest';
+import ErrorQorusRequest, { IErrorQorusRequestParams } from './managers/error/ErrorQorusRequest';
 import QorusAuthenticator, { IEndpoint } from './QorusAuthenticator';
 import { isValidStringArray } from './utils';
 
@@ -80,6 +80,54 @@ export class QorusRequest {
    */
   defaultHeaders: IDefaultHeaders = { 'Content-Type': 'application/json', Accept: 'application/json' };
 
+  /**
+   * Helper method to properly concatenate URL and path
+   * Ensures exactly one slash between URL and path
+   */
+  private buildFetchUrl = (baseUrl: string, path: string, params?: string): string => {
+    // Remove trailing slash from base URL and leading slash from path
+    const cleanUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+    const cleanPath = path.startsWith('/') ? path : `/${path}`;
+
+    const fullUrl = `${cleanUrl}${cleanPath}`;
+    return params ? `${fullUrl}?${params}` : fullUrl;
+  };
+
+  /**
+   * Helper method to parse error response with fallback
+   * Tries to parse as JSON first, then as text, then provides a structured fallback
+   */
+  private parseErrorResponse = async (response: Response): Promise<string | IErrorQorusRequestParams> => {
+    try {
+      // First try to get the response text
+      const text = await response.text();
+
+      // If we got text, try to parse it as JSON
+      if (text) {
+        try {
+          return JSON.parse(text);
+        } catch {
+          // If it's not JSON, return as string
+          return text;
+        }
+      }
+
+      // If no text, return structured error object
+      return {
+        status: response.status || 0,
+        err: response.statusText || 'Unknown Error',
+        desc: 'QorusRequest error: Server returned empty response',
+      };
+    } catch (error) {
+      // If even getting text fails, return a fallback error object
+      return {
+        status: response.status || 0,
+        err: response.statusText || 'Unknown Error',
+        desc: 'QorusRequest error: Failed to read server response',
+      };
+    }
+  };
+
   private makeRequest = async (
     type: 'GET' | 'PUT' | 'POST' | 'DELETE' | 'PATCH',
     props: IQorusRequestParams,
@@ -109,9 +157,7 @@ export class QorusRequest {
 
       // Serialize params using qs (supports arrays, nested objects, etc.)
       const requestParams = params ? qs.stringify(params, { skipNulls: true }) : '';
-      const fetchUrl = requestParams
-        ? `${selectedEndpoint.url}${path}?${requestParams}`
-        : `${selectedEndpoint.url}${path}`;
+      const fetchUrl = this.buildFetchUrl(selectedEndpoint.url, path, requestParams);
 
       // Serialize body based on bodyType
       let body: string | undefined;
@@ -129,11 +175,21 @@ export class QorusRequest {
         body,
       };
 
-      const response = await fetch(fetchUrl, fetchConfig);
+      let response: Response;
+      try {
+        response = await fetch(fetchUrl, fetchConfig);
+      } catch (error) {
+        // Handle network errors (connection refused, timeout, etc.)
+        throw new ErrorQorusRequest({
+          status: 0,
+          err: 'Network Error',
+          desc: error instanceof Error ? error.message : 'QorusRequest error: Failed to connect to server',
+        });
+      }
 
       if (!response.ok) {
-        const text = await response.text();
-        throw new ErrorQorusRequest(text);
+        const errorData = await this.parseErrorResponse(response);
+        throw new ErrorQorusRequest(errorData);
       }
 
       // Convert response headers to a plain object
