@@ -92,6 +92,13 @@ export interface IQoreAppActionWithWebhookBase<
 
   // an optional Content-Type value to treat as JSON when receiving webhook messages
   webhook_assume_json?: string;
+
+  /**
+   * Optional function to transform or filter webhook event data.
+   * Called after webhook_event_loc extraction but before passing to workflow.
+   * Return null/undefined to skip the event entirely.
+   */
+  format_event_data?: TWebhookFormatEventDataFunction<CustomConnOptions, Options>;
 }
 
 export type TWebhookRegisterFunction<
@@ -107,6 +114,21 @@ export type TWebhookDeregisterFunction<CustomConnOptions extends TCustomConnOpti
   url: string,
   regInfo: Record<string, any>,
 ) => Promise<void>;
+
+/**
+ * Function type for format_event_data webhook transformation.
+ * Called after webhook_event_loc extraction but before passing to workflow.
+ * @param context - App context with connection and trigger options
+ * @param eventData - The webhook event data (after webhook_event_loc extraction)
+ * @returns Transformed event data, or null/undefined to skip the event entirely
+ */
+export type TWebhookFormatEventDataFunction<
+  CustomConnOptions extends TCustomConnOptions = TCustomConnOptions,
+  Options extends TQoreOptions = TQoreOptions,
+> = (
+  context: TQoreAppActionFunctionContext<CustomConnOptions, Options>,
+  eventData: Record<string, any>,
+) => Promise<Record<string, any> | null | undefined> | Record<string, any> | null | undefined;
 
 export interface IQoreAppActionWithWebhookWithoutPerms<Options extends TQoreOptions = TQoreOptions>
   extends IQoreAppActionWithWebhookBase<TCustomConnOptions, Options> {
