@@ -5,3 +5,4 @@ notes.md
 tests.json
 build-storybook.log
 storybook-static
+.env
