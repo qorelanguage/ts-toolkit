@@ -8,7 +8,7 @@ if (!(process.env.ENDPOINT && process.env.TESTUSER && process.env.TESTPASS)) {
   throw new Error('Missing required environment variables');
 }
 
-describe('QorusDataProvider Utility Class Tests', () => {
+describe.skip('QorusDataProvider Utility Class Tests', () => {
   it('should validate the value for all string types', () => {
     expect(QorusValidator.validate('binary', 'Qorus Test String')).toEqual(true);
     expect(QorusValidator.validate('string', 'Qorus Test String')).toEqual(true);

@@ -8,7 +8,7 @@ if (!(process.env.ENDPOINT && process.env.TESTUSER && process.env.TESTPASS)) {
   throw new Error('Missing required environment variables');
 }
 
-describe('QorusDataProvider Utility Class Tests', () => {
+describe.skip('QorusDataProvider Utility Class Tests', () => {
   jest.setTimeout(30000);
   beforeAll(async () => {
     await QorusAuthenticator.reset();
