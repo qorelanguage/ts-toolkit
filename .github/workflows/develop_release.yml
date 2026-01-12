@@ -63,6 +63,10 @@ jobs:
       # Run unit tests
       - name: Running tests
         id: tests
+        env:
+          ENDPOINT: ${{ secrets.ENDPOINT }}
+          TESTUSER: ${{ secrets.TESTUSER }}
+          TESTPASS: ${{ secrets.TESTPASS }}
         run: yarn test
 
       # Publish to NPM

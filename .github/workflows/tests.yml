@@ -54,12 +54,12 @@ jobs:
 
       # Run Unit Tests
       - name: Running tests
-        env:
-          ENDPOINT_API: ${{ secrets.ENDPOINT_API}}
-          API_USER_NAME: ${{ secrets.API_USER_NAME}}
-          API_USER_PASS: ${{ secrets.API_USER_PASS }}
         id: tests
-        run: yarn run test
+        env:
+          ENDPOINT: ${{ secrets.ENDPOINT }}
+          TESTUSER: ${{ secrets.TESTUSER }}
+          TESTPASS: ${{ secrets.TESTPASS }}
+        run: yarn test
 
       # Test the build
       - name: Build test
