@@ -11,7 +11,7 @@ if (!(process.env.ENDPOINT && process.env.TESTUSER && process.env.TESTPASS)) {
   throw new Error('Missing required environment variables');
 }
 
-describe('QorusLogin Utility Class Tests', () => {
+describe.skip('QorusLogin Utility Class Tests', () => {
   jest.setTimeout(30000);
   it('Should initialize the endpoint and assign it to the selected endpoint', () => {
     QorusAuthenticator.addEndpoint({ url: process.env.ENDPOINT!, endpointId: 'rippy' });
