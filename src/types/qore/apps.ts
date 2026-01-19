@@ -22,6 +22,9 @@ export interface IQoreSwaggerConfig {
     // (LM_ACCEPT_QUERY_OBJECTS = accept "object" as a valid type for query parameters like OpenAPI 3.0)
     parse_flags?: number;
 
+    // if response headers should be included in the response schema
+    include_response_headers?: boolean;
+
     // if date/time values should be serialized in UTC as Swagger query args
     utc_dates?: boolean;
 
