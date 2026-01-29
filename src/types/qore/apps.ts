@@ -162,6 +162,9 @@ export interface IQoreRestConnectionConfig {
 
   oauth2_pkce?: string;
 
+  // If set to true, the state parameter provided in the OAuth2 redirect URL will be passed through
+  oauth2_redirect_passthrough_state?: boolean;
+
   // The OAuth2 authorization URL used for the "authorization_code" grant type. This is ignored if a token
   // is provided directly.
   oauth2_auth_url?: string;
