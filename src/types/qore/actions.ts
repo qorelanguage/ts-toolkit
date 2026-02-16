@@ -3,12 +3,11 @@ import {
   TCustomConnOptions,
   TQoreAppActionOption,
   TQoreAppActionOverrideOption,
-  TQoreGetDynamicTypeFunction,
   TQoreMappedOptions,
   TQoreOptions,
   TQoreOptionsNotLocalized,
 } from './options';
-import { TQoreTypeObject } from './types';
+import { TQoreType, TQoreTypeObject } from './types';
 
 export interface IQoreBaseAppAction<CustomConnOptions extends TCustomConnOptions = TCustomConnOptions>
   extends IQoreAppShared {
@@ -52,11 +51,11 @@ export interface IQoreAppActionWithEventOrWebhook<Options extends TQoreOptions =
   action_code: EQoreAppActionCode.EVENT;
   event_info: TQoreAppActionWithEventOrWebhookEventInfo;
   options?: Options;
-  get_dynamic_type?: TQoreGetDynamicTypeFunction<TCustomConnOptions>;
-  // Triggers use get_dynamic_type instead
-  get_example_event_data?: (
+  // Method syntax for bivariant type checking under strictFunctionTypes
+  get_dynamic_type?(context?: TQoreAppActionFunctionContext<TCustomConnOptions>): TQoreType | Promise<TQoreType>;
+  get_example_event_data?(
     context: TQoreAppActionFunctionContext<TCustomConnOptions, Options>,
-  ) => Record<string, any> | Promise<Record<string, any>>;
+  ): Record<string, any> | Promise<Record<string, any>>;
 }
 
 export type TQoreAppActionWithEventOrWebhookEventInfo = {
@@ -71,8 +70,16 @@ export interface IQoreAppActionWithWebhookBase<
 > extends IQoreAppActionWithEventOrWebhook<Options> {
   webhook_method: TWebhookHttpMethod;
   webhook_auth?: EQoreAppActionWebhookAuthType;
-  webhook_register: TWebhookRegisterFunction<CustomConnOptions, Options>;
-  webhook_deregister: TWebhookDeregisterFunction<CustomConnOptions>;
+  // Method syntax for bivariant type checking under strictFunctionTypes
+  webhook_register(
+    context: TQoreAppActionFunctionContext<CustomConnOptions, Options>,
+    url: string,
+  ): Promise<Record<string, any> | void>;
+  webhook_deregister(
+    context: TQoreAppActionFunctionContext<CustomConnOptions>,
+    url: string,
+    regInfo: Record<string, any>,
+  ): Promise<void>;
   // webhook event location in dot notation (ex: 'data.account.events')
   webhook_event_loc?: string;
   webhook_echo_header?: string;
@@ -98,7 +105,10 @@ export interface IQoreAppActionWithWebhookBase<
    * Called after webhook_event_loc extraction but before passing to workflow.
    * Return null/undefined to skip the event entirely.
    */
-  format_event_data?: TWebhookFormatEventDataFunction<CustomConnOptions, Options>;
+  format_event_data?(
+    context: TQoreAppActionFunctionContext<CustomConnOptions, Options>,
+    eventData: Record<string, any>,
+  ): Promise<Record<string, any> | null | undefined> | Record<string, any> | null | undefined;
 }
 
 export type TWebhookRegisterFunction<
@@ -148,11 +158,12 @@ export type TQoreAppActionWithWebhook<Options extends TQoreOptions = TQoreOption
 
 export interface IQoreAppActionWithEvent<Options extends TQoreOptions = TQoreOptions>
   extends IQoreAppActionWithEventOrWebhook<Options> {
-  event_function: (
+  // Method syntax for bivariant type checking under strictFunctionTypes
+  event_function(
     context: TQoreAppActionFunctionContext<TCustomConnOptions, Options>,
     update: (event_data: Record<string, any>) => void,
     should_stop: () => boolean,
-  ) => void;
+  ): void;
 }
 
 export type TQoreResponseType = string | TQoreTypeObject;
@@ -181,8 +192,13 @@ export type TQoreResponseDataConverterFunction<
 export interface IQoreAppActionWithFunction<Options extends TQoreOptions = TQoreOptions, _Response = TQoreResponseType>
   extends IQoreBaseAppAction {
   action_code: EQoreAppActionCode.ACTION;
-  api_function: TQoreAppActionFunction<Options>;
-  get_dynamic_response_type?: TQoreGetDynamicResponseTypeFunction;
+  // Method syntax for bivariant type checking under strictFunctionTypes
+  api_function(
+    obj?: Partial<TQoreMappedOptions<Options>>,
+    options?: never,
+    context?: TQoreAppActionFunctionContext<TCustomConnOptions, Options>,
+  ): any;
+  get_dynamic_response_type?(context?: TQoreAppActionFunctionContext): TQoreResponseType | Promise<TQoreResponseType>;
   options?: Options;
   io_timeout_secs?: number;
 }
@@ -193,9 +209,18 @@ export interface IQoreAppActionWithSwaggerPath<Options extends TQoreOptions = TQ
   swagger_schema?: string;
   // optional list of vars in swagger_path (ex: '/{id}/{key}') that should not have option dependencies created
   independent_path_vars?: string[];
-  get_dynamic_request_type?: TQoreGetDynamicRequestTypeFunction;
-  request_data_converter?: TQoreRequestDataConverterFunction<TCustomConnOptions, Options>;
-  response_data_converter?: TQoreResponseDataConverterFunction<TCustomConnOptions, Options>;
+  // Method syntax for bivariant type checking under strictFunctionTypes
+  get_dynamic_request_type?(
+    context?: TQoreAppActionFunctionContext,
+  ): TQoreOptionsNotLocalized | Promise<TQoreOptionsNotLocalized>;
+  request_data_converter?(
+    request: Partial<TQoreMappedOptions<Options>>,
+    ctx: TQoreAppActionFunctionContext<TCustomConnOptions, Options>,
+  ): Record<string, any>;
+  response_data_converter?(
+    response: { body?: Record<string, any>; headers?: Record<string, any>; 'headers-raw'?: Record<string, any> },
+    ctx: TQoreAppActionFunctionContext<TCustomConnOptions, Options>,
+  ): any;
 }
 
 export interface IQorePartialAppActionWithSwaggerPath extends Omit<IQoreBaseAppAction, 'app'> {

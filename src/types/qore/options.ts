@@ -136,7 +136,29 @@ export type TQoreOptionMessage = {
   intent: 'info' | 'warning' | 'success';
 };
 
-export interface IQoreAppActionBaseOption<CustomConnOptions extends TCustomConnOptions> extends IQoreSharedObject {
+/** Base interface for bivariant get_allowed_values method (defined once, inherited by all option types) */
+export interface IQoreWithAllowedValues<CustomConnOptions extends TCustomConnOptions, TypeValue> {
+  get_allowed_values?(
+    context?: TQoreAppActionFunctionContext<CustomConnOptions>,
+  ): IQoreAllowedValue<TypeValue>[] | Promise<IQoreAllowedValue<TypeValue>[]>;
+  get_default_value?(context?: TQoreAppActionFunctionContext<CustomConnOptions>): TypeValue | Promise<TypeValue>;
+}
+
+/** Base interface for bivariant get_element_allowed_values method (for list options) */
+export interface IQoreWithElementAllowedValues<CustomConnOptions extends TCustomConnOptions, TypeValue> {
+  get_element_allowed_values?(
+    context?: TQoreAppActionFunctionContext<CustomConnOptions>,
+  ): IQoreAllowedValue<TypeValue>[] | Promise<IQoreAllowedValue<TypeValue>[]>;
+}
+
+/** Base interface for bivariant get_dynamic_type method */
+export interface IQoreWithDynamicType<CustomConnOptions extends TCustomConnOptions> {
+  get_dynamic_type?(context?: TQoreAppActionFunctionContext<CustomConnOptions>): TQoreType | Promise<TQoreType>;
+}
+
+export interface IQoreAppActionBaseOption<CustomConnOptions extends TCustomConnOptions>
+  extends IQoreSharedObject,
+    IQoreWithDynamicType<CustomConnOptions> {
   get_dependent_options?: TQoreGetDependentOptionsFunction;
   // Mutually-exclusive with 'get_allowed_values'
   rest_get_allowed_values?: IQoreRestGetAllowedValues;
@@ -148,115 +170,91 @@ export interface IQoreAppActionBaseOption<CustomConnOptions extends TCustomConnO
   sensitive?: boolean;
   required_groups?: string[];
   on_change?: TQoreOptionOnChangeEvents[];
-  get_dynamic_type?: TQoreGetDynamicTypeFunction<CustomConnOptions>;
 }
 
 export interface IQoreAppActionStringOption<CustomConnOptions extends TCustomConnOptions>
-  extends IQoreAppActionBaseOption<CustomConnOptions> {
+  extends IQoreAppActionBaseOption<CustomConnOptions>,
+    IQoreWithAllowedValues<CustomConnOptions, string> {
   type: TQoreStringCompatibleType;
   example_value?: string;
   allowed_values?: IQoreAllowedValue<string>[];
   default_value?: string;
-  /** Mutually-exclusive with 'rest_get_allowed_values'
-   */
-  get_allowed_values?: TQoreGetAllowedValuesFunction<CustomConnOptions, string>;
-  get_default_value?: TQoreGetDefaultValueFunction<CustomConnOptions, string>;
 }
 
 export interface IQoreAppActionBooleanOption<CustomConnOptions extends TCustomConnOptions>
-  extends IQoreAppActionBaseOption<CustomConnOptions> {
+  extends IQoreAppActionBaseOption<CustomConnOptions>,
+    IQoreWithAllowedValues<CustomConnOptions, boolean> {
   type: TQoreBooleanCompatibleType;
   example_value?: boolean;
   allowed_values?: IQoreAllowedValue<boolean>[];
   default_value?: boolean;
-  /** Mutually-exclusive with 'rest_get_allowed_values'
-   */
-  get_allowed_values?: TQoreGetAllowedValuesFunction<CustomConnOptions, boolean>;
-  get_default_value?: TQoreGetDefaultValueFunction<CustomConnOptions, boolean>;
 }
 
 export interface IQoreAppActionListOption<CustomConnOptions extends TCustomConnOptions>
-  extends IQoreAppActionBaseOption<CustomConnOptions> {
+  extends IQoreAppActionBaseOption<CustomConnOptions>,
+    IQoreWithAllowedValues<CustomConnOptions, unknown>,
+    IQoreWithElementAllowedValues<CustomConnOptions, unknown> {
   type: TQoreListCompatibleType | IQoreTypeObjectList;
   example_value?: unknown[];
   allowed_values?: IQoreAllowedValue<unknown>[];
   default_value?: unknown[];
-  /** Mutually-exclusive with 'rest_get_allowed_values'
-   */
-  get_allowed_values?: TQoreGetAllowedValuesFunction<CustomConnOptions, unknown>;
-  get_default_value?: TQoreGetDefaultValueFunction<CustomConnOptions, unknown[]>;
-  get_element_allowed_values?: TQoreGetAllowedValuesFunction<CustomConnOptions, unknown>;
   rest_get_element_allowed_values?: IQoreRestGetAllowedValues;
   element_allowed_values?: IQoreAllowedValue<unknown>[];
   element_allowed_values_creatable?: boolean;
 }
 
 export interface IQoreAppActionObjectOption<CustomConnOptions extends TCustomConnOptions>
-  extends IQoreAppActionBaseOption<CustomConnOptions> {
+  extends IQoreAppActionBaseOption<CustomConnOptions>,
+    IQoreWithAllowedValues<CustomConnOptions, Record<string, unknown>> {
   type: TQoreHashCompatibleType | IQoreTypeObjectNonList;
   example_value?: Record<string, unknown>;
   allowed_values?: IQoreAllowedValue<Record<string, unknown>>[];
   default_value?: Record<string, unknown>;
-  /** Mutually-exclusive with 'rest_get_allowed_values'
-   */
-  get_allowed_values?: TQoreGetAllowedValuesFunction<CustomConnOptions, Record<string, unknown>>;
-  get_default_value?: TQoreGetDefaultValueFunction<CustomConnOptions, Record<string, unknown>>;
 }
 
 export interface IQoreAppActionNumberOption<CustomConnOptions extends TCustomConnOptions>
-  extends IQoreAppActionBaseOption<CustomConnOptions> {
+  extends IQoreAppActionBaseOption<CustomConnOptions>,
+    IQoreWithAllowedValues<CustomConnOptions, number> {
   type: TQoreNumberCompatibleType;
   example_value?: number;
   allowed_values?: IQoreAllowedValue<number>[];
   default_value?: number;
-  /** Mutually-exclusive with 'rest_get_allowed_values'
-   */
-  get_allowed_values?: TQoreGetAllowedValuesFunction<CustomConnOptions, number>;
-  get_default_value?: TQoreGetDefaultValueFunction<CustomConnOptions, number>;
 }
 
 export interface IQoreAppActionNullOption<CustomConnOptions extends TCustomConnOptions>
-  extends IQoreAppActionBaseOption<CustomConnOptions> {
+  extends IQoreAppActionBaseOption<CustomConnOptions>,
+    IQoreWithAllowedValues<CustomConnOptions, never> {
   type: TQoreNullableType;
   example_value?: never;
   allowed_values?: IQoreAllowedValue<never>[];
   default_value?: never;
-  /** Mutually-exclusive with 'rest_get_allowed_values'
-   */
-  get_allowed_values?: TQoreGetAllowedValuesFunction<CustomConnOptions, never>;
-  get_default_value?: TQoreGetDefaultValueFunction<CustomConnOptions, never>;
 }
 
 export interface IQoreAppActionAnyOption<CustomConnOptions extends TCustomConnOptions>
-  extends IQoreAppActionBaseOption<CustomConnOptions> {
+  extends IQoreAppActionBaseOption<CustomConnOptions>,
+    IQoreWithAllowedValues<CustomConnOptions, any> {
   type: TQoreAnyType;
   example_value?: any;
   allowed_values?: IQoreAllowedValue<any>[];
   default_value?: any;
-  /** Mutually-exclusive with 'rest_get_allowed_values'
-   */
-  get_allowed_values?: TQoreGetAllowedValuesFunction<CustomConnOptions, any>;
-  get_default_value?: TQoreGetDefaultValueFunction<CustomConnOptions, any>;
 }
 
 export interface IQoreAppActionFileOption<CustomConnOptions extends TCustomConnOptions>
-  extends IQoreAppActionBaseOption<CustomConnOptions> {
+  extends IQoreAppActionBaseOption<CustomConnOptions>,
+    IQoreWithAllowedValues<CustomConnOptions, TQoreFile> {
   type: TQoreFileType;
   example_value?: TQoreFile;
   allowed_values?: IQoreAllowedValue<TQoreFile>[];
   default_value?: TQoreFile;
-  get_allowed_values?: TQoreGetAllowedValuesFunction<CustomConnOptions, TQoreFile>;
-  get_default_value?: TQoreGetDefaultValueFunction<CustomConnOptions, TQoreFile>;
 }
 
 export interface IQoreAppActionColorOption<CustomConnOptions extends TCustomConnOptions>
-  extends IQoreAppActionBaseOption<CustomConnOptions> {
+  extends IQoreAppActionBaseOption<CustomConnOptions>,
+    IQoreWithAllowedValues<CustomConnOptions, TQoreRgbColor> {
   type: TQoreRgbColorType;
   example_value?: TQoreRgbColor;
   allowed_values?: IQoreAllowedValue<TQoreRgbColor>[];
   default_value?: TQoreRgbColor;
-  get_allowed_values?: TQoreGetAllowedValuesFunction<CustomConnOptions, TQoreRgbColor>;
-  get_default_value?: TQoreGetDefaultValueFunction<CustomConnOptions, TQoreRgbColor>;
 }
 
 export type TQoreAppActionOption<CustomConnOptions extends TCustomConnOptions = TCustomConnOptions> =

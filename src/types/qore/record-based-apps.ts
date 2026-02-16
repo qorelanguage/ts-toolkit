@@ -144,7 +144,8 @@ export interface TQoreRecordBasedApp<
    * }
    * ```
    */
-  get_table_list: TQoreGetTableListFunction<RestModifierOptions>;
+  // Method syntax for bivariant type checking under strictFunctionTypes
+  get_table_list(context: TQoreAppActionFunctionContext<RestModifierOptions>): Promise<string[]> | string[];
 
   /**
    * Allows an explicit transaction to be started.
@@ -160,7 +161,7 @@ export interface TQoreRecordBasedApp<
    * }
    * ```
    */
-  begin_transaction?: (context: Omit<TQoreAppActionFunctionContext<RestModifierOptions>, 'opts'>) => Promise<void>;
+  begin_transaction?(context: Omit<TQoreAppActionFunctionContext<RestModifierOptions>, 'opts'>): Promise<void>;
 
   /**
    * Allows a transaction to be committed.
@@ -176,7 +177,7 @@ export interface TQoreRecordBasedApp<
    * }
    * ```
    */
-  commit?: (context: Omit<TQoreAppActionFunctionContext<RestModifierOptions>, 'opts'>) => Promise<void>;
+  commit?(context: Omit<TQoreAppActionFunctionContext<RestModifierOptions>, 'opts'>): Promise<void>;
 
   /**
    * Allows a transaction to be rolled back.
@@ -192,7 +193,7 @@ export interface TQoreRecordBasedApp<
    * }
    * ```
    */
-  rollback?: (context: Omit<TQoreAppActionFunctionContext<RestModifierOptions>, 'opts'>) => Promise<void>;
+  rollback?(context: Omit<TQoreAppActionFunctionContext<RestModifierOptions>, 'opts'>): Promise<void>;
 
   /**
    * Required for record-based action support. Returns the record type definition for a given table.
@@ -225,7 +226,10 @@ export interface TQoreRecordBasedApp<
    * }
    * ```
    */
-  get_record_type: TQoreGetRecordTypeFunction<RestModifierOptions>;
+  get_record_type(
+    context: TQoreAppActionFunctionContext<RestModifierOptions>,
+    tableName: string,
+  ): Promise<TQoreTypeObject> | TQoreTypeObject;
 
   expressions: TQoreSearchRecordsExpressions;
 
@@ -266,11 +270,32 @@ export interface TQoreRecordBasedApp<
    * }
    * ```
    */
-  search_records?: TQoreSearchRecordsFunction<RestModifierOptions>;
-  update_records?: TQoreUpdateRecordsFunction<RestModifierOptions>;
-  delete_records?: TQoreDeleteRecordsFunction<RestModifierOptions>;
-  create_records?: TQoreCreateRecordsFunction<RestModifierOptions>;
-  upsert_records?: TQoreUpsertRecordsFunction<RestModifierOptions>;
+  search_records?(
+    context: TQoreAppActionFunctionContext<RestModifierOptions>,
+    where_cond?: TQoreSearchRecordsWhereConditions,
+    search_opts?: { table: string; limit?: number; [key: string]: unknown } & TQoreMappedOptions<TQoreOptions>,
+  ): Promise<TQoreSearchRecordsIterator<RestModifierOptions>>;
+  update_records?(
+    context: TQoreAppActionFunctionContext<RestModifierOptions>,
+    update_fields: Record<string, any>,
+    where_cond?: TQoreSearchRecordsWhereConditions,
+    update_opts?: { table: string; limit?: number; [key: string]: unknown } & TQoreMappedOptions<TQoreOptions>,
+  ): Promise<number>;
+  delete_records?(
+    context: TQoreAppActionFunctionContext<RestModifierOptions>,
+    where_cond?: TQoreSearchRecordsWhereConditions,
+    delete_opts?: { table: string; limit?: number; [key: string]: unknown } & TQoreMappedOptions<TQoreOptions>,
+  ): Promise<number>;
+  create_records?(
+    context: TQoreAppActionFunctionContext<RestModifierOptions>,
+    records: Record<string, any[]>,
+    create_opts?: { table: string; limit?: number; [key: string]: unknown } & TQoreMappedOptions<TQoreOptions>,
+  ): Promise<Record<string, any[]>>;
+  upsert_records?(
+    context: TQoreAppActionFunctionContext<RestModifierOptions>,
+    records: Record<string, any[]>,
+    upsert_opts?: { table: string; limit?: number; [key: string]: unknown } & TQoreMappedOptions<TQoreOptions>,
+  ): Promise<TQoreUpsertRecordsResultCode[]>;
   search_options?: TQoreCrudOptions;
   upsert_options?: TQoreCrudOptions;
   create_options?: TQoreCrudOptions;
