@@ -26,7 +26,13 @@ export type TQorusHashCompatibleUIType = 'hash' | 'data' | 'rgbcolor' | 'free-ha
 export type TQorusNullCompatibleUIType = 'null' | 'nothing';
 export type TQorusAnyCompatibleUIType = 'any' | 'auto';
 export type TQorusBooleanCompatibleUIType = 'bool' | 'boolean';
-export type TQorusSpecialUIType = 'richtext' | 'data-provider' | 'context' | 'file';
+export type TQorusSpecialUIType =
+  | 'richtext'
+  | 'data-provider'
+  | 'context'
+  | 'file'
+  | 'processor-mappings'
+  | 'code-editor';
 
 export type TQorusType =
   | TQorusInterfaces
