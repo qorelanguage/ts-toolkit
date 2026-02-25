@@ -95,6 +95,8 @@ export interface IQorusFormFieldSchemaBase {
   supports_styling?: boolean;
   supports_expressions?: boolean;
 
+  default_view?: 'template' | 'expression';
+
   // URL to fetch expressions and operators for this field
   expressions?: IQorusExpressionSchema[];
   expressions_url?: string;

@@ -67,6 +67,8 @@ export type TQoreRgbColor = {
   a: number;
 };
 
+export type TQoreSpecialTypes = 'processor-mappings' | 'code-editor';
+
 export type TQoreSimpleType = TQoreSimpleTypeNonList | TQoreListCompatibleType;
 
 export type TQoreSimpleTypeNonList =
@@ -77,7 +79,8 @@ export type TQoreSimpleTypeNonList =
   | TQoreNullableType
   | TQoreFileType
   | TQoreRgbColorType
-  | TQoreAnyType;
+  | TQoreAnyType
+  | TQoreSpecialTypes;
 
 export type TQoreType = TQoreSimpleType | TQoreTypeObject;
 
