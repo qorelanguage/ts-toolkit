@@ -143,6 +143,8 @@ export interface IQorusFormFieldSchemaBase {
     return_value?: string;
     useWebSocket?: boolean;
   };
+
+  stretch?: boolean;
 }
 
 export type TQorusFormFieldSchema =

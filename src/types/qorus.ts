@@ -16,7 +16,11 @@ export type TQorusInterfaces =
   | 'sla'
   | 'step'
   | 'type'
-  | 'value-map';
+  | 'value-map'
+  | 'qog'
+  | 'ai-collection'
+  | 'ai-endpoint'
+  | 'ai-guardrail';
 
 /* Types used in UIs, these are not 1:1 to Qore types */
 export type TQorusStringCompatibleUIType = 'binary' | 'date' | 'email' | 'string' | 'long-string' | 'enum' | 'url';
@@ -32,6 +36,7 @@ export type TQorusSpecialUIType =
   | 'context'
   | 'file'
   | 'processor-mappings'
+  | 'tool-catalog'
   | 'code-editor';
 
 export type TQorusType =
