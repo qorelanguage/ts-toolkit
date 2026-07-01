@@ -109,6 +109,41 @@ export interface IQorusFormFieldSchemaBase {
   has_dependents?: boolean;
   on_change?: TQorusFormFieldOnChangeEvents[];
 
+  /**
+   * Map of {@code <prop-name-on-this-field's-renderer>} → {@code
+   * <sibling-field-name>} that the form engine resolves at render time:
+   * for each entry, the sibling field's current value is forwarded as a
+   * runtime prop of the same name to this field's renderer. JSON-pure
+   * (no closures, no transforms) — the receiving renderer decides how to
+   * use the value.
+   *
+   * Distinct from {@link type_depends_on} (which triggers a schema refetch
+   * when the named sibling changes) and {@link depends_on} (which gates
+   * whether this field renders or validates). {@code inherit_props} only
+   * threads values as render-time props.
+   *
+   * @example
+   * ```ts
+   * // A code-editor field whose syntax highlighting tracks a sibling
+   * // language picker without an `on_change`/refetch round-trip:
+   * {
+   *   source: {
+   *     ui_type: 'code-editor',
+   *     inherit_props: { language: 'lang' },
+   *   },
+   *   lang: {
+   *     ui_type: 'string',
+   *     default_value: 'qore',
+   *     allowed_values: [
+   *       { value: 'qore',   display_name: 'Qore'   },
+   *       { value: 'python', display_name: 'Python' },
+   *     ],
+   *   },
+   * }
+   * ```
+   */
+  inherit_props?: Record<string, string>;
+
   display_name?: string;
   short_desc?: string;
   sort?: number;
