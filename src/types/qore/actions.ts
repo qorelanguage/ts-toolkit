@@ -15,6 +15,14 @@ export interface IQoreBaseAppAction<CustomConnOptions extends TCustomConnOptions
   app: string;
   action: string;
   action_code: EQoreAppActionCode;
+  /**
+   * Whether executing the action can change provider or external state.
+   *
+   * Producers must derive this value from the action implementation or protocol contract. Action identifiers,
+   * display names, descriptions, and translated presentation text are not valid evidence of mutation behavior.
+   * Consumers must treat an omitted value conservatively.
+   */
+  mutates_state?: boolean;
   override_options?: Record<string, TQoreAppActionOverrideOption<CustomConnOptions>>;
   ignore_options?: string[];
   response_type?: TQoreResponseType;
