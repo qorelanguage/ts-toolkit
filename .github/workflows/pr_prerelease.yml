@@ -45,10 +45,17 @@ jobs:
         with:
           node-version: 20.19.5
 
-      # --frozen-lockfile so the published artifact is built from the exact dependency
-      # tree the PR committed, not whatever the range happens to resolve to today.
+      # Plain `yarn install`, matching tests.yml and develop_release.yml.
+      #
+      # --frozen-lockfile would be preferable — it guarantees the published artifact is
+      # built from the exact tree the PR committed — but this repo's lockfile is not
+      # currently authoritative: it is missing entries package.json asks for, so a
+      # frozen install fails outright, and resyncing it changes the resolved tree
+      # enough to fail 8 existing tests. Fixing that is worth doing and is not this
+      # PR's job; adding prerelease publishing should not also re-resolve every
+      # dependency. Revisit once the lockfile is trustworthy.
       - name: Install modules
-        run: yarn install --frozen-lockfile
+        run: yarn install
 
       # Gate the publish on the checks the PR itself must pass. Without this a red PR
       # still ships an installable package, and a consumer pinning it inherits the
