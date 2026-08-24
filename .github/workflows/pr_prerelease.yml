@@ -63,7 +63,14 @@ jobs:
       - name: Lint
         run: yarn lint
 
+      # The suite talks to a live endpoint, so it needs the same credentials
+      # tests.yml gives it. Without them 8 tests fail on missing configuration and the
+      # job reports a broken package that is in fact fine.
       - name: Test
+        env:
+          ENDPOINT: ${{ secrets.ENDPOINT }}
+          TESTUSER: ${{ secrets.TESTUSER }}
+          TESTPASS: ${{ secrets.TESTPASS }}
         run: yarn test
 
       - name: Build
